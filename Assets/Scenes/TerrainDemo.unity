@@ -149,7 +149,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshSettings: {fileID: 11400000, guid: bb554aaa58975590da4015e8cd435304, type: 2}
-  terrainSettings: {fileID: 11400000, guid: 6a14958fbf2219a0e8b577d9c1aaa994, type: 2}
   LODTarget: {fileID: 433492332}
 --- !u!4 &1244975
 Transform:
@@ -486,6 +485,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrainComputeShader: {fileID: 7200000, guid: 98b4a03e47b2cf02d9161fd1a57a0a03, type: 3}
   meshSettings: {fileID: 11400000, guid: bb554aaa58975590da4015e8cd435304, type: 2}
+  terrainSettings: {fileID: 11400000, guid: 6a14958fbf2219a0e8b577d9c1aaa994, type: 2}
 --- !u!4 &1041054069
 Transform:
   m_ObjectHideFlags: 0
@@ -511,7 +511,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2057769575}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

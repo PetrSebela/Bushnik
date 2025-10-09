@@ -24,11 +24,6 @@ namespace Terrain
         public MeshSettings meshSettings;
         
         /// <summary>
-        /// Terrain settings
-        /// </summary>
-        public TerrainSettings terrainSettings;
-        
-        /// <summary>
         /// LOD target 
         /// </summary>
         public Transform LODTarget;
@@ -64,9 +59,9 @@ namespace Terrain
         /// </summary>
         private void Start()
         {
-            int nodeCount = Mathf.CeilToInt(terrainSettings.size / meshSettings.size);
+            int nodeCount = Mathf.CeilToInt(TerrainGenerator.Instance.terrainSettings.size / meshSettings.size);
             int targetDepth = (int)Mathf.Log(nodeCount, 2);
-            _terrainRoot = Chunk.GetChunk(Vector3.zero, transform, terrainSettings.size, targetDepth);
+            _terrainRoot = Chunk.GetChunk(Vector3.zero, transform, TerrainGenerator.Instance.terrainSettings.size, targetDepth);
         }
 
         /// <summary>
