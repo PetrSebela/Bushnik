@@ -20,7 +20,7 @@ namespace Terrain
         public static TerrainGenerator Instance => _instance;
 
         [Tooltip("Compute shader used for generation of terrain heightmap and meshes")]
-        [SerializeField] private ComputeShader terrainComputeShader;
+        public ComputeShader TerrainComputeShader;
 
         /// <summary>
         /// Index of terrain mesh kernel (heightmap + meshes)
@@ -70,7 +70,7 @@ namespace Terrain
         /// </summary>
         private void Start()
         {
-            _terrainMeshKernel = terrainComputeShader.FindKernel("TerrainMesh");
+            _terrainMeshKernel = TerrainComputeShader.FindKernel("TerrainMesh");
 
             int vertexCount = (int)Mathf.Pow(meshSettings.resolution, 2);
             int indicesCount = (int)Mathf.Pow(meshSettings.resolution - 1, 2) * 6;
@@ -80,10 +80,10 @@ namespace Terrain
             _terrainNormalBuffer = new ComputeBuffer(vertexCount, sizeof(float) * 3);
             _terrainDataBuffer = new ComputeBuffer(vertexCount, sizeof(float) * 2);
 
-            terrainComputeShader.SetBuffer(_terrainMeshKernel, "VertexBuffer", _terrainVertexBuffer);
-            terrainComputeShader.SetBuffer(_terrainMeshKernel, "IndexBuffer", _terrainIndexBuffer);
-            terrainComputeShader.SetBuffer(_terrainMeshKernel, "NormalBuffer", _terrainNormalBuffer);
-            terrainComputeShader.SetBuffer(_terrainMeshKernel, "DataBuffer", _terrainDataBuffer);
+            TerrainComputeShader.SetBuffer(_terrainMeshKernel, "VertexBuffer", _terrainVertexBuffer);
+            TerrainComputeShader.SetBuffer(_terrainMeshKernel, "IndexBuffer", _terrainIndexBuffer);
+            TerrainComputeShader.SetBuffer(_terrainMeshKernel, "NormalBuffer", _terrainNormalBuffer);
+            TerrainComputeShader.SetBuffer(_terrainMeshKernel, "DataBuffer", _terrainDataBuffer);
 
             UpdateTerrainSettings();
         }
@@ -104,7 +104,7 @@ namespace Terrain
         /// </summary>
         private void UpdateTerrainSettings()
         {
-            terrainComputeShader.SetFloat("TerrainSize", terrainSettings.size);
+            TerrainComputeShader.SetFloat("TerrainSize", terrainSettings.size);
         }
 
         /// <summary>
@@ -116,11 +116,11 @@ namespace Terrain
         /// <returns></returns>
         public Mesh GetTerrainMesh(Vector3 position, float size, int depth)
         {
-            terrainComputeShader.SetFloat("ChunkSize", size);
-            terrainComputeShader.SetFloats("ChunkPosition", position.x, position.y, position.z);
-            terrainComputeShader.SetInt("ChunkDepth", depth);
+            TerrainComputeShader.SetFloat("ChunkSize", size);
+            TerrainComputeShader.SetFloats("ChunkPosition", position.x, position.y, position.z);
+            TerrainComputeShader.SetInt("ChunkDepth", depth);
 
-            terrainComputeShader.Dispatch(_terrainMeshKernel, 1, 1, 1);
+            TerrainComputeShader.Dispatch(_terrainMeshKernel, 1, 1, 1);
 
             Vector3[] vertices = new Vector3[_terrainVertexBuffer.count];
             _terrainVertexBuffer.GetData(vertices);
@@ -156,17 +156,17 @@ namespace Terrain
         public RenderTexture PreviewHeightmap(int previewSize)
         {
             UpdateTerrainSettings();
-            int previewKernelIndex = terrainComputeShader.FindKernel("PreviewHeightmap");
+            int previewKernelIndex = TerrainComputeShader.FindKernel("PreviewHeightmap");
 
             var preview = new RenderTexture(previewSize, previewSize, 0, RenderTextureFormat.ARGB32);
             preview.enableRandomWrite = true;
             preview.Create();
 
-            terrainComputeShader.SetTexture(previewKernelIndex, "HeightmapPreview", preview);
-            terrainComputeShader.SetInt("PreviewSize", previewSize);
+            TerrainComputeShader.SetTexture(previewKernelIndex, "HeightmapPreview", preview);
+            TerrainComputeShader.SetInt("PreviewSize", previewSize);
 
             int groups = previewSize / 32;
-            terrainComputeShader.Dispatch(previewKernelIndex, groups, 1, groups);
+            TerrainComputeShader.Dispatch(previewKernelIndex, groups, 1, groups);
             return preview;
         }
     }
