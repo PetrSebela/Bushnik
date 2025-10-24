@@ -22,7 +22,7 @@ The desired island shape is achived by using "falloff" map. This is done by usin
 This would normally be described by this equation derived from the analytic equation for circle $$\sqrt{x^2-y^2}$$
 
 By using this function we can achieve the desired look, however the result leaves lot of space in the corners and looks rather circular (duh). This can be fixe by using equation for so called squicle. 
-$$ \lvert \frac{x^4}{r_x} \rvert + \lvert \frac{y^4}{r_y} \rvert$$
+$$ | \frac{x^4}{r_x} | + | \frac{y^4}{r_y} |$$
 
 By using this equation we get this result.
 
