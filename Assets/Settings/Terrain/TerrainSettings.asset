@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59f13e1fe7f4e358dad7b729fdd5d387, type: 3}
   m_Name: TerrainSettings
   m_EditorClassIdentifier: 
-  size: 8192
+  size: 16384
   material: {fileID: 2100000, guid: b0a7b78988221db469a1822db1243527, type: 2}

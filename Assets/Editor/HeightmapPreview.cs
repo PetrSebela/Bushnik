@@ -62,7 +62,7 @@ namespace Editor
             if(!_valid)
                 return;
 
-            const int size = 512;
+            const int size = 1024;
             position = new Rect(position.x, position.y, size, size);
             EditorGUI.DrawPreviewTexture(new Rect(0,0,size, size), _terrainGenerator.PreviewHeightmap(size));
         }

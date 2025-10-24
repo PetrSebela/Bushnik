@@ -6,13 +6,11 @@
 
 #define MESH_RESOLUTION 32
 
-
 // === Common terrain settings ===
 
-// Terrain 
+// Size of the generated terrain
 float TerrainSize;
 
-/// Gaussian function with center at 0.5
 float Gaussian(float t, float center = 0.5f, float falloff = 0.1f)
 {
     return exp(-pow(t - center, 2) / pow(falloff, 2));
@@ -25,38 +23,63 @@ float Sigmoid(float t, float center, float steepness)
     return 1 / (1 + exp(-t));
 }
 
+// Simplex noise with values in range (0, 1)
 float NormalizedNoise(float2 position)
 {
     return (1 + SimplexNoise(position)) / 2;
 }
 
+// Inspired by https://thebookofshaders.com/13/
+float CreaseNoise(float2 position)
+{
+    return 1 - abs(SimplexNoise(position));
+}
+
+// Returns sample of falloff map
 float FalloffMap(float2 position)
 {
+    // Squircle equation 
     float p = 3;
     return abs(pow(abs(position.x) / (TerrainSize / 2), p)) + abs(pow(abs(position.y) / (TerrainSize / 2), p));
 }
 
+// Implementation of FBM with 
 float GetTerrainHeight(float2 position)
 {
     int sample_count = 20;
+
     float sample = 0;
+    float amplitude_sum = 0;
+
     float frequency = 0.0005f;
     float amplitude = 1;
-    float amplitude_sum = 0;
 
     for (int i = 0; i < sample_count; ++i)
     {
-        sample += NormalizedNoise((float2(TerrainSize * 1000, TerrainSize * 1000) + position) * frequency) * amplitude;
+        // TODO: parametrize 
+        float2 warp_offset = float2(
+            NormalizedNoise(position * 0.001 + float2(100,0)),
+            NormalizedNoise(position * 0.001 + float2(0,100))
+        ) * 275;
+        
+        float2 seed = float2(TerrainSize * 1000, TerrainSize * 1000);
+        float2 sample_position = seed + position + warp_offset;
+        float current = 0;
+        current += CreaseNoise(sample_position * frequency) * amplitude; 
+        current += NormalizedNoise(sample_position * frequency) * amplitude;
+        current /= 1.5;
+        sample += current;
+        
         frequency *= 1.35f;
         amplitude_sum += amplitude;
         amplitude *= 0.65f;
     }
+    
     sample /= amplitude_sum;
-
+    sample *= sample;
     sample -= FalloffMap(position);
-    return sample * 500;
+    return sample;
 }
-
 
 // === Chunk specific settings ===
 RWStructuredBuffer<float3> VertexBuffer;
@@ -74,27 +97,17 @@ void TerrainMesh(uint3 id : SV_DispatchThreadID)
     float3 chunkPosition = id * ChunkSize / (MESH_RESOLUTION - 1) - ChunkSize / 2.0f;
     float3 worldPosition = ChunkPosition + chunkPosition;
     float2 flatWorldPosition = float2(worldPosition.x, worldPosition.z);
-
-
-    float local = GetTerrainHeight(flatWorldPosition);
+    
+    float local = GetTerrainHeight(flatWorldPosition) * 500;
 
     float offset = ChunkSize / (MESH_RESOLUTION - 1);
-    float right = GetTerrainHeight(flatWorldPosition + float2(offset, 0));
-    // float left = GetTerrainHeight(flatWorldPosition + float2(-1, 0));
-    float forward = GetTerrainHeight(flatWorldPosition + float2(offset, 1));
-    // float back = GetTerrainHeight(flatWorldPosition + float2(0, -1));
-
-    float da = (local - right) / offset;
-    float db = (local - forward) / offset;
-    float3 normal = float3(da, 1, db);
-    normal = normalize(normal);
     
     chunkPosition.y = local;
 
     int vertex_index = id.x + id.z * MESH_RESOLUTION;
     VertexBuffer[vertex_index] = chunkPosition;
     
-    NormalBuffer[vertex_index] = normal;
+    NormalBuffer[vertex_index] = float3(0,1,0);
 
     DataBuffer[vertex_index] = float2(ChunkDepth, 0);
 
@@ -126,18 +139,26 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
     float2 flatWorldPosition = normalizedPosition * TerrainSize;
 
     float value = GetTerrainHeight(flatWorldPosition);
+    value = FalloffMap(flatWorldPosition);
     float3 color = float3(value, value, value);
-
+    
     if (value >= 1)
     {
         HeightmapPreview[id.xz] = float3(1, 1 - value, 1 - value);
     }
     else if (value <= 0)
     {
-        HeightmapPreview[id.xz] = float3(0.25f, 0.25f, 0.75f);
+        HeightmapPreview[id.xz] = float3(0.05f, 0.15f, 0.05f);
     }
     else
     {
-        HeightmapPreview[id.xz] = color;
+        if ((value * 500) % 50 <= 3)
+        {
+            HeightmapPreview[id.xz] = float3(0,1,0);
+        }
+        else
+        {
+            HeightmapPreview[id.xz] = color;
+        }
     }
 }
