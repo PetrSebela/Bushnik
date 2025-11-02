@@ -1,4 +1,5 @@
 using System;
+using Terrain.Foliage;
 using UnityEngine;
 
 namespace Terrain
@@ -6,6 +7,7 @@ namespace Terrain
     /// <summary>
     /// Class responsible for generation and management of terrain LODs 
     /// </summary>
+    [RequireComponent(typeof(FoliageManager))]
     public class TerrainManager : MonoBehaviour
     {
         /// <summary>
@@ -22,7 +24,10 @@ namespace Terrain
         /// Mesh settings
         /// </summary>
         public MeshSettings meshSettings;
-        
+
+        [Tooltip("Terrain settings")]
+        public TerrainSettings terrainSettings;
+
         /// <summary>
         /// LOD target 
         /// </summary>
@@ -32,7 +37,7 @@ namespace Terrain
         /// Highest LOD
         /// </summary>
         private Chunk _terrainRoot;
-
+        
         /// <summary>
         /// Singleton initialization
         /// </summary>

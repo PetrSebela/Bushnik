@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 namespace Terrain
@@ -168,6 +169,27 @@ namespace Terrain
             int groups = previewSize / 32;
             TerrainComputeShader.Dispatch(previewKernelIndex, groups, 1, groups);
             return preview;
+        }
+
+        /// <summary>
+        /// Samples heightmap at specified positions
+        /// </summary>
+        /// <param name="points">Reference to array of points, their .y component will be modified</param>
+        public void SamplePoints(ref Vector3[] points)
+        {
+            int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
+            var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
+            buffer.SetData(points);
+            
+            TerrainComputeShader.SetBuffer(sampleKernel, "Points", buffer);
+            TerrainComputeShader.SetInt("PointsSize", points.Length);
+            
+            int groups = Mathf.CeilToInt(points.Length / 32f);
+            TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);
+            
+            buffer.GetData(points);
+            
+            buffer.Dispose();
         }
     }
 }

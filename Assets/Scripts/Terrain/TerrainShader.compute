@@ -1,5 +1,6 @@
 #pragma kernel TerrainMesh
 #pragma kernel PreviewHeightmap
+#pragma kernel SamplePoints
 
 #include "Packages/jp.keijiro.noiseshader/Shader/ClassicNoise2D.hlsl"
 #include "Packages/jp.keijiro.noiseshader/Shader/SimplexNoise2D.hlsl"
@@ -161,4 +162,21 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
             HeightmapPreview[id.xz] = color;
         }
     }
+}
+
+
+// === Sample points ===
+
+RWStructuredBuffer<float3> Points;
+int PointsSize;
+
+[numthreads(32, 1, 1)]
+void SamplePoints(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= PointsSize)
+        return;
+
+    float3 sample = Points[id.x];
+    float2 worldPosition = float2(sample.x, sample.z);
+    Points[id.x].y = GetTerrainHeight(worldPosition) * 500;
 }
