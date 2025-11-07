@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foliagePrefab: {fileID: 919132149155446097, guid: dbe7749fb3c4c3fb9a57b6d4fbf14e5f, type: 3}
   billboardMaterial: {fileID: 2100000, guid: 5976475b6a630c82fa0cbe4656aa2e4d, type: 2}
+  billboardSize: 2.3992934

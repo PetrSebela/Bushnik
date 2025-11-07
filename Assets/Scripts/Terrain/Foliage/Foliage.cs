@@ -9,5 +9,6 @@ namespace Terrain.Foliage
     {
         public GameObject foliagePrefab;
         public Material billboardMaterial;
+        public float billboardSize;
     }
 }

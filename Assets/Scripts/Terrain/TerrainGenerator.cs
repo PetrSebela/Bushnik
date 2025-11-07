@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 
 namespace Terrain
@@ -175,7 +176,8 @@ namespace Terrain
         /// Samples heightmap at specified positions
         /// </summary>
         /// <param name="points">Reference to array of points, their .y component will be modified</param>
-        public void SamplePoints(ref Vector3[] points)
+        /// <returns>List of points that are valid</returns>
+        public Vector3[] SamplePoints(ref Vector3[] points)
         {
             int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
             var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
@@ -188,8 +190,9 @@ namespace Terrain
             TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);
             
             buffer.GetData(points);
-            
             buffer.Dispose();
+
+            return points.Where(point => point.y >= 0).ToArray();
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using Terrain.Foliage;
 using UnityEditor;
@@ -28,19 +30,26 @@ namespace Utility
         /// Billboard texture resolution
         /// </summary>
         private readonly int _resolution = 1024;
+
+        public MeshRenderer _previewRenderer;
         
+        private Bounds _boundingBox;
+        
+        /// <summary>
+        /// Generates billboard material and size
+        /// </summary>
         public void GenerateBillboard()
         {
             // Check is there is valid target
             if (!target.foliagePrefab)
-            {
-                Debug.LogWarning("Foliage Prefab is missing");
-                return;
-            }
+                throw new Exception("Foliage Prefab is missing");
 
-            // Create tmp render texture
-            RenderTexture tmpTexture = new RenderTexture(_resolution, _resolution,32,  RenderTextureFormat.ARGB32);
-            tmpTexture.Create();
+            // Create render texture
+            RenderTexture renderTarget = new RenderTexture(_resolution, _resolution,32,  RenderTextureFormat.ARGB32);
+            renderTarget.Create();
+            var lastRenderTarget = RenderTexture.active;
+            Camera.main.targetTexture = renderTarget;
+            RenderTexture.active = renderTarget;
             
             // Clear previous target
             if (_targetInstance)
@@ -56,21 +65,27 @@ namespace Utility
 
             // Instantiate target
             _targetInstance = Instantiate(target.foliagePrefab);
-
+            float size = GetCameraSide(_targetInstance);
             
-            // Shoot billboards
-            Camera.main.targetTexture = tmpTexture;
-            RenderTexture.active = tmpTexture;
-            float spacing = 180f / (_samples + 1);
+            // Camera setup
+            Camera.main.orthographicSize = size / 2;
             
+            cameraDolly.transform.position = new Vector3(
+                cameraDolly.transform.position.x,
+                size / 2,
+                cameraDolly.transform.position.z);
+            
+            
+            // Shoot billboard pictures
+            float spacing = 180f / (_samples + 1); // Only take pictures on one half, since billboards render both sides
             for (int i = 0; i < _samples; i++)
             {
                 float angle = spacing * i;
                 cameraDolly.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
                 Camera.main.Render();
-
-                var texture = textures[i];
                 
+                // Copy from GPU to CPU 
+                var texture = textures[i];
                 texture.ReadPixels(new Rect(0, 0, _resolution, _resolution), 0, 0);
                 texture.Apply();
             }
@@ -97,8 +112,71 @@ namespace Utility
             AssetDatabase.CreateAsset(material, $"{path}/{targetName}_material.asset");
 
             target.billboardMaterial = material;
+            target.billboardSize = size / 2f;
             
             AssetDatabase.SaveAssets();
+            
+            // Cleanup
+            RenderTexture.active = lastRenderTarget;
+            renderTarget.Release();
+
+
+            // Preview the billboard
+            _previewRenderer.sharedMaterial = material;
+            _previewRenderer.transform.localScale = Vector3.one * size / 2f;
+        }
+
+        /// <summary>
+        /// Computes bounding box for gameobject hierarchy
+        /// </summary>
+        /// <param name="computed">Object for which the AABB will be computed</param>
+        /// <returns>AABB</returns>
+        Bounds ComputeBoundingBox(GameObject computed)
+        {
+            List<MeshRenderer> meshes = new(computed.GetComponentsInChildren<MeshRenderer>());
+            MeshRenderer origin = computed.GetComponent<MeshRenderer>();
+            if(origin)
+                meshes.Add(origin);
+            
+            Bounds bounds = new();
+            foreach (var mesh in meshes)
+                bounds.Encapsulate(mesh.bounds);
+            
+            return bounds;
+        }
+
+        /// <summary>
+        /// Figures out size of the camera needed to fit the model
+        /// </summary>
+        /// <param name="computed"></param>
+        /// <returns>Size</returns>
+        private float GetCameraSide(GameObject computed)
+        {
+            Bounds bounds = ComputeBoundingBox(computed);
+            float[] comps =
+            {
+                bounds.max.x,
+                bounds.max.y,
+                bounds.max.z,
+            };
+            return Mathf.Max(comps);
+        }
+        
+        /// <summary>
+        /// Debug view of the AABBs
+        /// </summary>
+        private void OnDrawGizmos()
+        {
+            if(!_targetInstance)
+                return;
+            
+            Bounds bounds = ComputeBoundingBox(_targetInstance);
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(bounds.center, bounds.size);
+            
+            float size = GetCameraSide(_targetInstance);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(Vector3.up * size / 2, Vector3.one * size);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Terrain.Foliage
             // else
             //     _state = LODState.Pruned;
 
-            int count = 512;
+            int count = 1024;
             Vector3[] samples = new Vector3[count];
             
             for (int i = 0; i < count; i++)
@@ -38,9 +38,9 @@ namespace Terrain.Foliage
                 samples[i] = point;
             }
             
-            TerrainGenerator.Instance.SamplePoints(ref samples);
+            var validSamples = TerrainGenerator.Instance.SamplePoints(ref samples);
 
-            _test = new(FoliageManager.Instance.TestingModel.billboardMaterial, samples);
+            _test = new(FoliageManager.Instance.TestingModel, validSamples);
         }
 
         public void Update()

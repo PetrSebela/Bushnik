@@ -11,17 +11,17 @@ namespace Terrain.Foliage
         /// <summary>
         /// Create instances for billboards
         /// </summary>
-        /// <param name="material"></param>
+        /// <param name="foliage"></param>
         /// <param name="points"></param>
-        public Instances(Material material, Vector3[] points)
+        public Instances(Foliage foliage, Vector3[] points)
         {
             _meshes = new Mesh[] { FoliageManager.Instance.BillboardModel };
-            _materials = new Material[] { material };
+            _materials = new Material[] { foliage.billboardMaterial };
             
             Matrix4x4[] instances = new Matrix4x4[points.Length];
             for (int sampleIndex = 0; sampleIndex < points.Length; sampleIndex++)
             {
-                Matrix4x4 matrix = Matrix4x4.TRS(points[sampleIndex], Quaternion.identity, Vector3.one * 10);
+                Matrix4x4 matrix = Matrix4x4.TRS(points[sampleIndex], Quaternion.identity, Vector3.one * foliage.billboardSize);
                 instances[sampleIndex] = matrix;
             }
             _matrices = new Matrix4x4[1][];
