@@ -177,6 +177,17 @@ void SamplePoints(uint3 id : SV_DispatchThreadID)
         return;
 
     float3 sample = Points[id.x];
+    
+    // float minHeight = 10;
+    // float maxHeight = 400;
+    float2 flatWorldPosition = float2(sample.x, sample.z);
     float2 worldPosition = float2(sample.x, sample.z);
-    Points[id.x].y = GetTerrainHeight(worldPosition) * 500;
+    
+    float height = -1;
+    if (CreaseNoise(flatWorldPosition * 0.001f) < 0.5f)
+    {
+        height = GetTerrainHeight(worldPosition) * 500;
+    }
+    
+    Points[id.x].y = height ;
 }

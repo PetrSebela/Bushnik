@@ -5,8 +5,12 @@ using Terrain.Foliage;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Utility
 {
+    /// <summary>
+    /// Component for semi-automatic generation of billboard from models
+    /// </summary>
     [ExecuteInEditMode]
     public class BillboardGenerator : MonoBehaviour
     {
@@ -24,14 +28,14 @@ namespace Utility
         /// <summary>
         /// Number of billboards
         /// </summary>
-        private readonly int _samples = 4;
+        private readonly int _samples = 2;
         
         /// <summary>
         /// Billboard texture resolution
         /// </summary>
         private readonly int _resolution = 1024;
 
-        public MeshRenderer _previewRenderer;
+        public MeshRenderer[] previews;
         
         private Bounds _boundingBox;
         
@@ -52,7 +56,7 @@ namespace Utility
             RenderTexture.active = renderTarget;
             
             // Clear previous target
-            if (_targetInstance)
+            if (_targetInstance != null)
                 DestroyImmediate(_targetInstance);
             
             // Initialize textures
@@ -77,7 +81,7 @@ namespace Utility
             
             
             // Shoot billboard pictures
-            float spacing = 180f / (_samples + 1); // Only take pictures on one half, since billboards render both sides
+            float spacing = 180f / (_samples); // Only take pictures on one half, since billboards render both sides
             for (int i = 0; i < _samples; i++)
             {
                 float angle = spacing * i;
@@ -91,23 +95,23 @@ namespace Utility
             }
             
             // Convert to 2d texture array
-            Texture2DArray _outputArray = new Texture2DArray(_resolution, _resolution, _samples, TextureFormat.ARGB32, false);
+            Texture2DArray outputTextures = new Texture2DArray(_resolution, _resolution, _samples, TextureFormat.ARGB32, false);
             for (int i = 0; i < _samples; i++)
             {
                 var pixels = textures[i].GetPixels();
-                _outputArray.SetPixels(pixels, i);
+                outputTextures.SetPixels(pixels, i);
             }
-            _outputArray.Apply();
+            outputTextures.Apply();
 
             // Save to asset database
             var raw = AssetDatabase.GetAssetPath(target);
             var path = Path.GetDirectoryName(raw);
             var targetName = Path.GetFileNameWithoutExtension(raw);
             
-            AssetDatabase.CreateAsset(_outputArray, $"{path}/{targetName}_lods.asset");
+            AssetDatabase.CreateAsset(outputTextures, $"{path}/{targetName}_lods.asset");
             
             Material material = new Material(Shader.Find("Shader Graphs/BillboardShader"));
-            material.SetTexture("_Billboard_texture", _outputArray);
+            material.SetTexture("_Billboard_texture", outputTextures);
             material.enableInstancing = true;
             AssetDatabase.CreateAsset(material, $"{path}/{targetName}_material.asset");
 
@@ -119,15 +123,17 @@ namespace Utility
             // Cleanup
             RenderTexture.active = lastRenderTarget;
             renderTarget.Release();
-
-
+            
             // Preview the billboard
-            _previewRenderer.sharedMaterial = material;
-            _previewRenderer.transform.localScale = Vector3.one * size / 2f;
+            foreach (var preview in previews)
+            {
+                preview.sharedMaterial = material;
+                preview.transform.localScale = Vector3.one * size / 2f;
+            }
         }
 
         /// <summary>
-        /// Computes bounding box for gameobject hierarchy
+        /// Computes bounding box for game object hierarchy
         /// </summary>
         /// <param name="computed">Object for which the AABB will be computed</param>
         /// <returns>AABB</returns>
@@ -180,3 +186,4 @@ namespace Utility
         }
     }
 }
+#endif

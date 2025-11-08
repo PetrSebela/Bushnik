@@ -24,7 +24,7 @@ namespace Terrain.Foliage
             // else
             //     _state = LODState.Pruned;
 
-            int count = 1024;
+            int count = 1024 * 8 * 4;
             Vector3[] samples = new Vector3[count];
             
             for (int i = 0; i < count; i++)

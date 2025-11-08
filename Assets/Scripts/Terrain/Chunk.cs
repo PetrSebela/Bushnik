@@ -117,7 +117,8 @@ namespace Terrain
                 _forced = true;
             }
 
-            if (Vector3.SqrMagnitude(position - transform.position) > Mathf.Pow(_size, 2) && !_forced)
+            Vector3 flatPosition = new Vector3(position.x, 0, position.z);
+            if (Vector3.SqrMagnitude(flatPosition - transform.position) > Mathf.Pow(_size, 2) && !_forced)
             {
                 foreach(var child in _children)
                     child?.gameObject.SetActive(false);
