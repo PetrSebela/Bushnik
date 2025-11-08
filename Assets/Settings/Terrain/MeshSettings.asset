@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: MeshSettings
   m_EditorClassIdentifier: 
   resolution: 32
-  maxSize: 512
-  size: 16
+  LODLevels: 5
+  size: 64

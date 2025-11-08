@@ -21,7 +21,12 @@ namespace Terrain.Foliage
             Matrix4x4[] instances = new Matrix4x4[points.Length];
             for (int sampleIndex = 0; sampleIndex < points.Length; sampleIndex++)
             {
-                Matrix4x4 matrix = Matrix4x4.TRS(points[sampleIndex], Quaternion.identity, Vector3.one * foliage.billboardSize);
+                float scale = Random.Range(2f, 3f);
+                float rotation = Random.Range(0, 360);
+                Matrix4x4 matrix = Matrix4x4.TRS(
+                    points[sampleIndex], 
+                    Quaternion.AngleAxis(rotation, Vector3.up), 
+                    Vector3.one * foliage.billboardSize * scale);
                 instances[sampleIndex] = matrix;
             }
             _matrices = new Matrix4x4[1][];

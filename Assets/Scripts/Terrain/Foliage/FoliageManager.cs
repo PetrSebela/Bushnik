@@ -54,7 +54,6 @@ namespace Terrain.Foliage
         /// TODO: If performance on generation is issus (which it will be), convert this into coroutine and split load across multiple frames 
         public void Start()
         {
-            return;
             float terrainSize = TerrainManager.Instance.terrainSettings.size;
             int chunkCount = Mathf.CeilToInt(terrainSize / foliageSettings.chunkSize);
             float foliageSize = chunkCount * foliageSettings.chunkSize;

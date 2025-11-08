@@ -75,7 +75,7 @@ namespace Terrain
             _size = size;
             _depth = depth;
 
-            if (_size > TerrainManager.Instance.meshSettings.maxSize)
+            if (_depth > TerrainManager.Instance.meshSettings.LODLevels)
                 return;
             
             _meshFilter = gameObject.AddComponent<MeshFilter>();
@@ -111,7 +111,7 @@ namespace Terrain
             if(_depth <= 0)
                 return;
 
-            if (_size > TerrainManager.Instance.meshSettings.maxSize)
+            if (_depth > TerrainManager.Instance.meshSettings.LODLevels)
             {
                 Fragment();
                 _forced = true;

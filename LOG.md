@@ -70,3 +70,32 @@ All the techniques above mashed into one.
 
 #### Future
 Combine multple terrain functions based on biomes inside the terrain.
+
+## 2.11.2025 Automatic billboard generation from 3D models
+If we want to populate the terrain with any substatial amount of foliage, we will need to reduce the amount of triangles that need to be rendered. 
+To do so, we utilize so billbaords. Single billboard consists consist of two perpendicular planes that display image of represented object. 
+Using this we can have good enough approximation of original full resolution model with just 4 triangles.
+
+| Original                                          | Billboard                                 |
+|---------------------------------------------------|-------------------------------------------|
+| ![Original model](/Image/Billboards/Original.png) | ![Billboard model](/Image/Billboards/Billboard.png) 
+
+
+To properly scale the final billboard we first need to find the longest side of the AABB that is centered at models origin.
+Then we can just set the camera size, rotate it around the model in incrementing steps and render individual textures for billboard.
+
+![AABBs](/Image/Billboards/AABB.png) 
+
+The final textures are converted into array that is indexed inside shader that is responsible for rendering of the billboard. 
+To determine which texture should be assigned each plane, we encode the array indices into the mesh UV channel.
+
+## 8.11.2025 Instancing
+To render large amount of trees into we need to use mesh instancing to save drawcalls. 
+Terrain is subdiveded into chunks that are responsible for managment of individual instances. 
+By using chunks we can achive more granular control over which models should be rendered as billboards or their full resolution model.
+
+| ![Original model](/Image/LODs/Highground.png) | ![Billboard model](/Image/LODs/Valley.png) 
+|-----------------------------------------------|-------------------------------------------|
+
+So far, the game manages to render $50Km^2$ map between 30 - 40 FPS. 
+At this moment the game renders all trees are rendered at once, so in the future they will need to be culled.
