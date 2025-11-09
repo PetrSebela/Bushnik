@@ -145,8 +145,8 @@ namespace Terrain
             };
             
             // TODO: do normal calculation on GPU to avoid mesh seams
-            mesh.RecalculateNormals();
-
+            // mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
             return mesh;
         }
 
