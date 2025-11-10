@@ -90,9 +90,9 @@ float3 GetTerrainNormal(float2 position, float delta)
     float back = GetTerrainHeight(position + float2(0, -1) * delta) * 1500;
     
     float3 normal  = float3(
-        (right - left) / (2.0 * delta),
+        (left - right) / (2.0 * delta),
         1.0,
-        (front - back) / (2.0 * delta)
+        (back - front) / (2.0 * delta)
     );
     
     return normalize(normal);
