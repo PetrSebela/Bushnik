@@ -147,10 +147,10 @@ namespace Terrain
             float b = _depth * 820002012312 % 255f / 255f * 0.75f;
 
             Gizmos.color = new Color(r, g, b, 0.25f);
-            Gizmos.DrawCube(transform.position, new Vector3(_size,1f/ (_depth + 1),_size));
+            Gizmos.DrawCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1),_size));
             
             Gizmos.color = new Color(r, g, b, 0.75f);
-            Gizmos.DrawWireCube(transform.position, new Vector3(_size,1f/ (_depth + 1),_size));
+            Gizmos.DrawWireCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1), _size));
         }
     }
 }

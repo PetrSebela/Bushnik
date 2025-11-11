@@ -56,6 +56,11 @@ namespace Terrain
         public TerrainSettings terrainSettings;
 
         /// <summary>
+        /// Count thread groups on single axis for mesh generation
+        /// </summary>
+        private int ThreadGroups = 1;
+
+        /// <summary>
         /// Singleton initialization
         /// </summary>
         /// <exception cref="Exception">Exception when there would be two singletons</exception>
@@ -88,6 +93,8 @@ namespace Terrain
             TerrainComputeShader.SetBuffer(_terrainMeshKernel, "DataBuffer", _terrainDataBuffer);
 
             UpdateTerrainSettings();
+            
+            ThreadGroups = Mathf.CeilToInt(meshSettings.resolution / 32f);
         }
 
         /// <summary>
@@ -107,6 +114,7 @@ namespace Terrain
         private void UpdateTerrainSettings()
         {
             TerrainComputeShader.SetFloat("TerrainSize", terrainSettings.size);
+            TerrainComputeShader.SetInt("MeshResolution", meshSettings.resolution);
         }
 
         /// <summary>
@@ -122,7 +130,7 @@ namespace Terrain
             TerrainComputeShader.SetFloats("ChunkPosition", position.x, position.y, position.z);
             TerrainComputeShader.SetInt("ChunkDepth", depth);
 
-            TerrainComputeShader.Dispatch(_terrainMeshKernel, 1, 1, 1);
+            TerrainComputeShader.Dispatch(_terrainMeshKernel, ThreadGroups, 1, ThreadGroups);
 
             Vector3[] vertices = new Vector3[_terrainVertexBuffer.count];
             _terrainVertexBuffer.GetData(vertices);

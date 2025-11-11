@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Terrain
@@ -9,7 +10,7 @@ namespace Terrain
     public class MeshSettings : ScriptableObject
     {
         [Tooltip("Resolution of chunks")]
-        [Range(1,32)]
+        [Range(1, 128)]
         public int resolution;
         
         [Tooltip("LOD levels")]
@@ -17,5 +18,11 @@ namespace Terrain
         
         [Tooltip("Minimum size of LOD chunks (highest detail)")]
         public float size;
+
+        private void OnValidate()
+        {
+            if (resolution % 2 != 1)
+                throw new Exception("Mesh resolution must be even");
+        }
     }
 }

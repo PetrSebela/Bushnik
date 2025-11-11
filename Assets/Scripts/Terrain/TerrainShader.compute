@@ -5,7 +5,7 @@
 #include "Packages/jp.keijiro.noiseshader/Shader/ClassicNoise2D.hlsl"
 #include "Packages/jp.keijiro.noiseshader/Shader/SimplexNoise2D.hlsl"
 
-#define MESH_RESOLUTION 31
+#define THREAD_GROUP_SIZE 32u
 
 // === Common terrain settings ===
 
@@ -105,56 +105,60 @@ RWStructuredBuffer<float3> NormalBuffer;
 RWStructuredBuffer<float2> DataBuffer;
 
 float ChunkSize;
-int ChunkDepth;
+uint ChunkDepth;
+uint MeshResolution;
 float3 ChunkPosition;
 
-[numthreads(MESH_RESOLUTION, 1, MESH_RESOLUTION)]
+[numthreads(THREAD_GROUP_SIZE, 1, THREAD_GROUP_SIZE)]
 void TerrainMesh(uint3 id : SV_DispatchThreadID)
 {
-    float3 chunkPosition = id * ChunkSize / (MESH_RESOLUTION - 1) - ChunkSize / 2.0f;
+    if (id.x >= MeshResolution || id.z >= MeshResolution)
+        return;
+    
+    float3 chunkPosition = id * ChunkSize / (MeshResolution - 1) - ChunkSize / 2.0f;
     float3 worldPosition = ChunkPosition + chunkPosition;
     float2 flatWorldPosition = float2(worldPosition.x, worldPosition.z);
     
     float local = GetTerrainHeight(flatWorldPosition) * 1500;
 
-    float offset = ChunkSize / (MESH_RESOLUTION - 1);
+    float offset = ChunkSize / (MeshResolution - 1);
     
     chunkPosition.y = local;
 
-    int vertex_index = id.x + id.z * MESH_RESOLUTION;
+    int vertex_index = id.x + id.z * MeshResolution;
     VertexBuffer[vertex_index] = chunkPosition;
     
     NormalBuffer[vertex_index] = float3(0,1,0);
-    NormalBuffer[vertex_index] = GetTerrainNormal(flatWorldPosition, ChunkSize / (MESH_RESOLUTION - 1));
+    NormalBuffer[vertex_index] = GetTerrainNormal(flatWorldPosition, ChunkSize / (MeshResolution - 1));
 
     DataBuffer[vertex_index] = float2(ChunkDepth, 0);
 
-    if (id.x >= MESH_RESOLUTION - 1 || id.z >= MESH_RESOLUTION - 1)
+    if (id.x >= MeshResolution - 1 || id.z >= MeshResolution - 1)
     {
         return;
     }
 
-    int triangle_index = (id.x + id.z * (MESH_RESOLUTION - 1)) * 6;
+    int triangle_index = (id.x + id.z * (MeshResolution - 1)) * 6;
 
-    if (triangle_index % 4u == 0)
+    if (id.z % 2u == 0 ^ id.x % 2u == 0 )
     {
         IndexBuffer[triangle_index + 0] = vertex_index;
-        IndexBuffer[triangle_index + 1] = vertex_index + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 1] = vertex_index + MeshResolution;
         IndexBuffer[triangle_index + 2] = vertex_index + 1;
 
         IndexBuffer[triangle_index + 3] = vertex_index + 1;
-        IndexBuffer[triangle_index + 4] = vertex_index + MESH_RESOLUTION;
-        IndexBuffer[triangle_index + 5] = vertex_index + 1 + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 4] = vertex_index + MeshResolution;
+        IndexBuffer[triangle_index + 5] = vertex_index + 1 + MeshResolution;
     }
     else
     {
         IndexBuffer[triangle_index + 0] = vertex_index;
-        IndexBuffer[triangle_index + 1] = vertex_index + 1 + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 1] = vertex_index + 1 + MeshResolution;
         IndexBuffer[triangle_index + 2] = vertex_index + 1;
         
         IndexBuffer[triangle_index + 3] = vertex_index;
-        IndexBuffer[triangle_index + 4] = vertex_index + MESH_RESOLUTION;
-        IndexBuffer[triangle_index + 5] = vertex_index + 1 + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 4] = vertex_index + MeshResolution;
+        IndexBuffer[triangle_index + 5] = vertex_index + 1 + MeshResolution;
     }
 }
 
@@ -163,7 +167,7 @@ void TerrainMesh(uint3 id : SV_DispatchThreadID)
 RWTexture2D<float3> HeightmapPreview;
 int PreviewSize;
 
-[numthreads(MESH_RESOLUTION, 1, MESH_RESOLUTION)]
+[numthreads(THREAD_GROUP_SIZE, 1, THREAD_GROUP_SIZE)]
 void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
 {
     float2 normalizedPosition = float2(id.x / (float)PreviewSize, id.z / (float)PreviewSize) - float2(0.5f, 0.5f);
