@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85833833db9e61b29820b4d951885a8d, type: 3}
   m_Name: MeshSettings
   m_EditorClassIdentifier: 
-  resolution: 32
+  resolution: 31
   LODLevels: 5
   size: 64

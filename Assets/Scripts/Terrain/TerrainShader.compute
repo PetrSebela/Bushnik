@@ -5,7 +5,7 @@
 #include "Packages/jp.keijiro.noiseshader/Shader/ClassicNoise2D.hlsl"
 #include "Packages/jp.keijiro.noiseshader/Shader/SimplexNoise2D.hlsl"
 
-#define MESH_RESOLUTION 32
+#define MESH_RESOLUTION 31
 
 // === Common terrain settings ===
 
@@ -136,13 +136,26 @@ void TerrainMesh(uint3 id : SV_DispatchThreadID)
 
     int triangle_index = (id.x + id.z * (MESH_RESOLUTION - 1)) * 6;
 
-    IndexBuffer[triangle_index + 0] = vertex_index;
-    IndexBuffer[triangle_index + 1] = vertex_index + MESH_RESOLUTION;
-    IndexBuffer[triangle_index + 2] = vertex_index + 1;
+    if (triangle_index % 4u == 0)
+    {
+        IndexBuffer[triangle_index + 0] = vertex_index;
+        IndexBuffer[triangle_index + 1] = vertex_index + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 2] = vertex_index + 1;
 
-    IndexBuffer[triangle_index + 3] = vertex_index + 1;
-    IndexBuffer[triangle_index + 4] = vertex_index + MESH_RESOLUTION;
-    IndexBuffer[triangle_index + 5] = vertex_index + 1 + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 3] = vertex_index + 1;
+        IndexBuffer[triangle_index + 4] = vertex_index + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 5] = vertex_index + 1 + MESH_RESOLUTION;
+    }
+    else
+    {
+        IndexBuffer[triangle_index + 0] = vertex_index;
+        IndexBuffer[triangle_index + 1] = vertex_index + 1 + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 2] = vertex_index + 1;
+        
+        IndexBuffer[triangle_index + 3] = vertex_index;
+        IndexBuffer[triangle_index + 4] = vertex_index + MESH_RESOLUTION;
+        IndexBuffer[triangle_index + 5] = vertex_index + 1 + MESH_RESOLUTION;
+    }
 }
 
 
