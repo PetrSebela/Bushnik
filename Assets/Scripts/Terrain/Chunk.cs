@@ -120,13 +120,15 @@ namespace Terrain
             Vector3 flatPosition = new Vector3(position.x, 0, position.z);
             if (Vector3.SqrMagnitude(flatPosition - transform.position) > Mathf.Pow(_size, 2) && !_forced)
             {
+                EnableTerrain();
                 foreach(var child in _children)
                     child?.gameObject.SetActive(false);
                 return;
             }
 
             Fragment();
-
+            DisableTerrain();
+            
             foreach (var child in _children)
             {
                 child.gameObject.SetActive(true);
@@ -151,6 +153,29 @@ namespace Terrain
             
             Gizmos.color = new Color(r, g, b, 0.75f);
             Gizmos.DrawWireCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1), _size));
+        }
+
+
+        /// <summary>
+        /// Enable terrain mesh rendering
+        /// </summary>
+        private void EnableTerrain()
+        {
+            if(!_meshRenderer)
+                return;
+            
+            _meshRenderer.enabled = true;
+        }
+
+        /// <summary>
+        /// Disables terrain mesh rendering
+        /// </summary>
+        private void DisableTerrain()
+        {            
+            if(!_meshRenderer)
+                return;
+            
+            _meshRenderer.enabled = false;
         }
     }
 }

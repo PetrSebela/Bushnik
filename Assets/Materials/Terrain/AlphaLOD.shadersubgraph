@@ -140,6 +140,9 @@
     "m_StickyNoteDatas": [
         {
             "m_Id": "7e05c17f137041f7b9a1a87583c5bff5"
+        },
+        {
+            "m_Id": "d71d785601ed41ca83b3914519745166"
         }
     ],
     "m_Edges": [
@@ -1169,8 +1172,8 @@
     "m_ObjectId": "1525e4ae80294dfeb79708494d64e26f",
     "m_Title": "Distance calculation",
     "m_Position": {
-        "x": -3356.0,
-        "y": 211.0
+        "x": -3355.999755859375,
+        "y": 210.99998474121095
     }
 }
 
@@ -2980,8 +2983,8 @@
     "m_ObjectId": "6afda060e39d446ebe271bda63e7c013",
     "m_Title": "Chunk depth",
     "m_Position": {
-        "x": -679.0,
-        "y": -154.0
+        "x": -678.9998779296875,
+        "y": -153.99996948242188
     }
 }
 
@@ -4617,6 +4620,26 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
+    }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "d71d785601ed41ca83b3914519745166",
+    "m_Title": "LOD morphing",
+    "m_Content": "Morhp vertices into higher level LOD\nScrap overlaping LODs",
+    "m_TextSize": 0,
+    "m_Theme": 0,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": -1786.0,
+        "y": -196.0,
+        "width": 200.0,
+        "height": 160.0
+    },
+    "m_Group": {
+        "m_Id": ""
     }
 }
 

@@ -63,7 +63,9 @@ float GetTerrainHeight(float2 position)
             NormalizedNoise(position * 0.001 + float2(0,100))
         ) * 275;
         
-        float2 seed = float2(TerrainSize * 1000, TerrainSize * 1000);
+        // Avoid large seed values because of float resolution issues
+        float2 seed = float2(TerrainSize, TerrainSize);
+        
         float2 sample_position = seed + position + warp_offset;
         float current = 0;
         current += CreaseNoise(sample_position * frequency) * amplitude; 
