@@ -70,6 +70,7 @@ float GetTerrainHeight(float2 position)
         float current = 0;
         current += CreaseNoise(sample_position * frequency) * amplitude; 
         current += NormalizedNoise(sample_position * frequency) * amplitude;
+        
         current /= 1.5;
         sample += current;
         
@@ -214,18 +215,14 @@ void SamplePoints(uint3 id : SV_DispatchThreadID)
 
     float3 sample = Points[id.x];
     
-    // float minHeight = 10;
-    // float maxHeight = 400;
-    float2 flatWorldPosition = float2(sample.x, sample.z);
     float2 worldPosition = float2(sample.x, sample.z);
     
-    float height = GetTerrainHeight(worldPosition) * 1500;
-    // float value = CreaseNoise(flatWorldPosition * 0.0005f); 
-    // if (value < 0.5f)
-    // {
-    //     
-    // }
-        // if ( (sin(flatWorldPosition * 10000) + 1) / 2 < 1 - value)
+    float3 normal = GetTerrainNormal(worldPosition, 10);
     
-    Points[id.x].y = height ;
+    if (dot(normal, float3(0,1,0)) > 0.95f)
+    {
+        Points[id.x].y = GetTerrainHeight(worldPosition) * 1500;
+        return;
+    }
+    Points[id.x].y = -1;
 }

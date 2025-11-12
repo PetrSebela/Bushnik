@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Terrain.Foliage
@@ -28,8 +29,11 @@ namespace Terrain.Foliage
         /// Singleton getter
         /// </summary>
         public static FoliageManager Instance => _instance;
+
+        private Dictionary<Vector3, FoliageChunk> _chunks = new();
         
-        public Foliage TestingModel;
+        public Foliage[] Tests;
+        
         public Mesh BillboardModel;
         
         /// <summary>
@@ -65,10 +69,45 @@ namespace Terrain.Foliage
                 for (int z = 0; z < chunkCount; z++)
                 {
                     Vector3 position = start + new Vector3(x, 0, z) * foliageSettings.chunkSize;
-                    GameObject chunk = new GameObject("Chunk", typeof(FoliageChunk));
+                    GameObject chunk = new GameObject("Chunk");
+                    var foliageChunk = chunk.AddComponent<FoliageChunk>();
                     chunk.transform.SetParent(_foliageParent.transform);
                     chunk.transform.localPosition = position;
+                    
+                    _chunks.Add(new Vector3(position.x, 0, position.z), foliageChunk);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Updates foliage chunks
+        /// </summary>
+        private void Update()
+        {
+            var target = TerrainManager.Instance.LODTarget.position;
+            var flat = new Vector3(target.x, 0, target.z);
+
+            foreach (var pair in _chunks)
+            {
+                var chunk = pair.Value;
+                var position = pair.Key;
+                var distance = Vector3.Distance(flat, position);
+                
+                if (distance < 1000)
+                {
+                    chunk.SetState(LODState.Active);       
+                }
+                else if (distance < 7500)
+                {
+                    chunk.SetState(LODState.Reduced);
+                }
+                else
+                {
+                    chunk.SetState(LODState.Suspended);
+                }
+
+                float cull = Mathf.Clamp01(distance / 7500f);
+                chunk.Render(cull);
             }
         }
     }

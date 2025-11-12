@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_FogMode: 3
-  m_FogDensity: 0.01
+  m_Fog: 1
+  m_FogColor: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
+  m_FogMode: 2
+  m_FogDensity: 0.0001
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -180,7 +180,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foliageSettings: {fileID: 11400000, guid: a133b43f9a5c03b948f821be96988ae5, type: 2}
-  TestingModel: {fileID: 11400000, guid: cff1e7c4710101b1fbf5e31705c8adba, type: 2}
+  Tests:
+  - {fileID: 11400000, guid: cff1e7c4710101b1fbf5e31705c8adba, type: 2}
+  - {fileID: 11400000, guid: 0609c18306ff86a2eb4323982a4a1452, type: 2}
   BillboardModel: {fileID: -2049535571509378001, guid: 7e4b4b2fc0c97793a80c974c2708acd8, type: 3}
 --- !u!1 &53475955
 GameObject:

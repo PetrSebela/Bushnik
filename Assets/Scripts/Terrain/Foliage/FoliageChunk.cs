@@ -10,42 +10,51 @@ namespace Terrain.Foliage
     {
         private LODState _state = LODState.Active;
 
-        private Instances _test;
+        private Instances[] _test;
         public void Start()
         {
-            // float distance = transform.position.magnitude;
-            
-            // if(distance < 500)
-            //     _state = LODState.Active;
-            // else if (distance < 2000)
-            //     _state = LODState.Reduced;
-            // else if (distance < 5000)
-            //     _state = LODState.Suspended;
-            // else
-            //     _state = LODState.Pruned;
 
-            int count = 1024 * 8 * 8;
-            Vector3[] samples = new Vector3[count];
-            
-            for (int i = 0; i < count; i++)
+            var modelCount = FoliageManager.Instance.Tests.Length;
+            _test = new Instances[modelCount];
+
+            float area = Mathf.Pow(FoliageManager.Instance.foliageSettings.chunkSize, 2);
+            float density = 20f; //Trees per 10000m^2
+            int count = Mathf.CeilToInt((area / 10000f) * density / modelCount);
+
+
+            int totalCount = 0;
+            for (int i = 0; i < modelCount; i++)
             {
-                Vector3 offset = new Vector3(
-                    Random.Range(-1f, 1f),
-                    0,
-                    Random.Range(-1f, 1f));
+                Vector3[] samples = new Vector3[count];
+                
+                for (int j = 0; j < count; j++)
+                {
+                    Vector3 offset = new Vector3(
+                        Random.Range(-1f, 1f),
+                        0,
+                        Random.Range(-1f, 1f));
 
-                Vector3 point = transform.position + offset * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
-                samples[i] = point;
+                    Vector3 point = transform.position + offset * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
+                    samples[j] = point;
+                }
+                
+                var valid = TerrainGenerator.Instance.SamplePoints(ref samples);
+                totalCount += valid.Length; 
+                
+                _test[i] = new(FoliageManager.Instance.Tests[i], valid);
             }
-            
-            var validSamples = TerrainGenerator.Instance.SamplePoints(ref samples);
-
-            _test = new(FoliageManager.Instance.TestingModel, validSamples);
+         
+            if (totalCount == 0)
+                _state = LODState.Pruned;
         }
-
-        public void Update()
+        
+        public void Render(float culled)
         {
-            _test.Render();
+            if (_state == LODState.Suspended || _state == LODState.Pruned)
+                return;
+            
+            foreach (var instances in _test)
+                instances.Render(culled);
         }
 
         private void OnDrawGizmos()
@@ -71,20 +80,21 @@ namespace Terrain.Foliage
             
             float size = FoliageManager.Instance.foliageSettings.chunkSize;
             Gizmos.DrawWireCube(transform.position, new Vector3(size, size, size));
+        }
+
+        public void SetState(LODState state)
+        {
+            if (_state == LODState.Pruned)
+                return;
             
-            // if(_samples == null)
-            //     return;
-            //
-            // Gizmos.color = Color.magenta;
-            // foreach(var point in _samples)
-            //     Gizmos.DrawSphere(point, 10f);
+            _state = state;
         }
     }
 
     /// <summary>
     /// Represents state of foliage chunk
     /// </summary>
-    enum LODState
+    public enum LODState
     {
         Active,
         Reduced,

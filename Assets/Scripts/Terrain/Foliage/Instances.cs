@@ -65,15 +65,21 @@ namespace Terrain.Foliage
             }
         }
 
-        public void Render()
+        public void Render(float culled=0)
         {
             for (int i = 0; i < _meshes.Length; i++)
             {
+                var instances = _matrices[i];
+                var count = Mathf.CeilToInt((1 - culled) * instances.Length);
+                Matrix4x4[] left = new Matrix4x4[count];
+                for (int j = 0; j < count; j++)
+                    left[j] = instances[j];
+                
                 Graphics.DrawMeshInstanced(
                     _meshes[i],
                     0,
                     _materials[i],
-                    _matrices[i]);
+                    left);
             }    
         }
     }
