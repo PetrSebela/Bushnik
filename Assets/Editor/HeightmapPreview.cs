@@ -9,7 +9,7 @@ using UnityEngine;
 public class HeightmapPreview : EditorWindow
 {
     private FileSystemWatcher _watcher;
-    private TerrainGenerator _terrainGenerator;
+    private ComputeProxy _computeProxy;
     private bool _valid = false; 
     
     [MenuItem ("Debug/Heightmap preview")]
@@ -23,9 +23,9 @@ public class HeightmapPreview : EditorWindow
     /// </summary>
     public void Awake()
     {
-        _terrainGenerator = FindFirstObjectByType<TerrainGenerator>();
+        _computeProxy = FindFirstObjectByType<ComputeProxy>();
         
-        _valid = _terrainGenerator != null;
+        _valid = _computeProxy != null;
 
         if (!_valid)
         {
@@ -35,7 +35,7 @@ public class HeightmapPreview : EditorWindow
         
         _watcher = new FileSystemWatcher();
         _watcher.NotifyFilter = NotifyFilters.LastWrite;
-        var generator = FindFirstObjectByType<TerrainGenerator>();
+        var generator = FindFirstObjectByType<ComputeProxy>();
         var shader = generator.TerrainComputeShader;
         var projectPath = Application.dataPath.Replace("Assets", "");
         var path = projectPath + AssetDatabase.GetAssetPath(shader);
@@ -61,6 +61,6 @@ public class HeightmapPreview : EditorWindow
 
         const int size = 1024;
         position = new Rect(position.x, position.y, size, size);
-        EditorGUI.DrawPreviewTexture(new Rect(0,0,size, size), _terrainGenerator.PreviewHeightmap(size));
+        EditorGUI.DrawPreviewTexture(new Rect(0,0,size, size), _computeProxy.PreviewHeightmap(size));
     }
 }

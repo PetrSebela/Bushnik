@@ -2,24 +2,25 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Terrain.Data;
 using Unity.Mathematics;
 
 namespace Terrain
 {
     /// <summary>
-    /// Class responsible for generation of terrain heightmaps and meshes
+    /// Class responsible for interfacing with terrain compute shader
     /// </summary>
-    public class TerrainGenerator : MonoBehaviour
+    public class ComputeProxy : MonoBehaviour
     {
         /// <summary>
         /// Private singleton instance
         /// </summary>
-        private static TerrainGenerator _instance;
+        private static ComputeProxy _instance;
         
         /// <summary>
         /// Singleton getter 
         /// </summary>
-        public static TerrainGenerator Instance => _instance;
+        public static ComputeProxy Instance => _instance;
 
         [Tooltip("Compute shader used for generation of terrain heightmap and meshes")]
         public ComputeShader TerrainComputeShader;
@@ -28,6 +29,16 @@ namespace Terrain
         /// Index of terrain mesh kernel (heightmap + meshes)
         /// </summary>
         private int _terrainMeshKernel;
+
+        /// <summary>
+        /// Index of sample kernel
+        /// </summary>
+        private int _sampleKernel;
+        
+        /// <summary>
+        /// Index of preview kernel
+        /// </summary>
+        private int _previewKernel;
         
         /// <summary>
         /// Compute buffer containing mesh vertices
@@ -48,12 +59,20 @@ namespace Terrain
         /// Compute buffer containing additional terrain data that are passed to the fragment and vertex shaders (use uv0)
         /// </summary>
         private ComputeBuffer _terrainDataBuffer;
+        
+        /// <summary>
+        /// Compute buffer storing biome data
+        /// </summary>
+        private ComputeBuffer _biomeDataBuffer;
 
         [Tooltip("Mesh settings")]
         public MeshSettings meshSettings;
         
         [Tooltip("Terrain settings")]
         public TerrainSettings terrainSettings;
+
+        [Tooltip("Terrain feature manager")]
+        public TerrainFeatureManager terrainFeatureManager;
 
         /// <summary>
         /// Count thread groups on single axis for mesh generation
@@ -77,8 +96,7 @@ namespace Terrain
         /// </summary>
         private void Start()
         {
-            _terrainMeshKernel = TerrainComputeShader.FindKernel("TerrainMesh");
-
+            GetKernelIDs();
             int vertexCount = (int)Mathf.Pow(meshSettings.resolution, 2);
             int indicesCount = (int)Mathf.Pow(meshSettings.resolution - 1, 2) * 6;
 
@@ -91,10 +109,20 @@ namespace Terrain
             TerrainComputeShader.SetBuffer(_terrainMeshKernel, "IndexBuffer", _terrainIndexBuffer);
             TerrainComputeShader.SetBuffer(_terrainMeshKernel, "NormalBuffer", _terrainNormalBuffer);
             TerrainComputeShader.SetBuffer(_terrainMeshKernel, "DataBuffer", _terrainDataBuffer);
-
+            
             UpdateTerrainSettings();
             
             ThreadGroups = Mathf.CeilToInt(meshSettings.resolution / 32f);
+        }
+
+        /// <summary>
+        /// Updates kernel ids
+        /// </summary>
+        private void GetKernelIDs()
+        {
+            _terrainMeshKernel = TerrainComputeShader.FindKernel("TerrainMesh");
+            _sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
+            _previewKernel = TerrainComputeShader.FindKernel("PreviewHeightmap");
         }
 
         /// <summary>
@@ -106,6 +134,7 @@ namespace Terrain
             _terrainIndexBuffer?.Dispose();
             _terrainNormalBuffer?.Dispose();
             _terrainDataBuffer?.Dispose();
+            _biomeDataBuffer?.Dispose();
         }
 
         /// <summary>
@@ -113,8 +142,33 @@ namespace Terrain
         /// </summary>
         private void UpdateTerrainSettings()
         {
+            GetKernelIDs();
             TerrainComputeShader.SetFloat("TerrainSize", terrainSettings.size);
             TerrainComputeShader.SetInt("MeshResolution", meshSettings.resolution);
+            
+            var biomes = terrainFeatureManager.GetBiomes();
+
+            // Create compute buffer
+            int biomeDataSize = sizeof(float) * 2 + sizeof(int);
+            _biomeDataBuffer?.Dispose();
+            _biomeDataBuffer = new ComputeBuffer(biomes.Length, biomeDataSize);
+            _biomeDataBuffer.SetData(biomes);
+            
+            // Set data to kernels
+            TerrainComputeShader.SetInt("BiomeDataSize", biomeDataSize);
+            SetBufferToAllKernels(_biomeDataBuffer, "BiomeDataBuffer");
+        }
+
+        /// <summary>
+        /// Sets passed buffer to be used across all kernels
+        /// </summary>
+        /// <param name="buffer">Buffer to be set</param>
+        /// <param name="bname">Name of said buffer</param>
+        private void SetBufferToAllKernels(ComputeBuffer buffer, string bname)
+        {
+            TerrainComputeShader.SetBuffer(_terrainMeshKernel, bname, buffer);
+            TerrainComputeShader.SetBuffer(_previewKernel, bname, buffer);
+            TerrainComputeShader.SetBuffer(_sampleKernel, bname, buffer);
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace Terrain.Foliage
                     samples[j] = point;
                 }
                 
-                var valid = TerrainGenerator.Instance.SamplePoints(ref samples);
+                var valid = ComputeProxy.Instance.SamplePoints(ref samples);
                 totalCount += valid.Length; 
                 
                 _test[i] = new(FoliageManager.Instance.Tests[i], valid);

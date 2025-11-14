@@ -706,6 +706,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1041054069}
   - component: {fileID: 1041054068}
+  - component: {fileID: 1041054070}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -728,6 +729,7 @@ MonoBehaviour:
   TerrainComputeShader: {fileID: 7200000, guid: 98b4a03e47b2cf02d9161fd1a57a0a03, type: 3}
   meshSettings: {fileID: 11400000, guid: bb554aaa58975590da4015e8cd435304, type: 2}
   terrainSettings: {fileID: 11400000, guid: 6a14958fbf2219a0e8b577d9c1aaa994, type: 2}
+  terrainFeatureManager: {fileID: 1041054070}
 --- !u!4 &1041054069
 Transform:
   m_ObjectHideFlags: 0
@@ -743,6 +745,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2057769575}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1041054070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1041054067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065602dea1df3bafbbeac35d972529eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  biomeCount: 20
+  seed: 317
 --- !u!1 &1255753502
 GameObject:
   m_ObjectHideFlags: 0

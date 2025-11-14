@@ -80,8 +80,8 @@ namespace Terrain
             
             _meshFilter = gameObject.AddComponent<MeshFilter>();
             _meshRenderer = gameObject.AddComponent<MeshRenderer>();
-            _meshRenderer.material = TerrainGenerator.Instance.terrainSettings.material;
-            _meshFilter.sharedMesh = TerrainGenerator.Instance.GetTerrainMesh(transform.position, _size, _depth);
+            _meshRenderer.material = ComputeProxy.Instance.terrainSettings.material;
+            _meshFilter.sharedMesh = ComputeProxy.Instance.GetTerrainMesh(transform.position, _size, _depth);
         }
         
         /// <summary>

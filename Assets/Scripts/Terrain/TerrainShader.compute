@@ -7,11 +7,21 @@
 
 #define THREAD_GROUP_SIZE 32u
 
+struct BiomeData
+{
+    float2 position;
+    uint id;
+};
+
 // === Common terrain settings ===
 
 // Size of the generated terrain
 float TerrainSize;
 
+int BiomeDataSize;
+RWStructuredBuffer<BiomeData> BiomeDataBuffer;
+
+// === Helper functions ===
 float Gaussian(float t, float center = 0.5f, float falloff = 0.1f)
 {
     return exp(-pow(t - center, 2) / pow(falloff, 2));
@@ -42,6 +52,37 @@ float FalloffMap(float2 position)
     // Squircle equation 
     float p = 3;
     return abs(pow(abs(position.x) / (TerrainSize / 2), p)) + abs(pow(abs(position.y) / (TerrainSize / 2), p));
+}
+
+float GetBiome(float2 position)
+{
+    
+    BiomeData secondClosest;
+    secondClosest.position = float2(0,0);
+    secondClosest.id = -1;
+    
+    BiomeData closest;
+    closest.position = float2(0,0);
+    closest.id = -1;
+    
+    float closestDistance = TerrainSize*1000; // Could not find macro for largest possible value
+    
+    for (int i = 0; i < BiomeDataSize; ++i)
+    {
+        BiomeData data = BiomeDataBuffer[i];
+        
+        float d = distance(data.position, position);
+        if (d < closestDistance)
+        {
+            closestDistance = d;
+            secondClosest = closest;
+            closest = data;
+        }
+    }
+    
+    secondClosest.position * closest.position;
+    
+    return 10000 / closestDistance;
 }
 
 // Implementation of FBM with 
@@ -79,9 +120,11 @@ float GetTerrainHeight(float2 position)
         amplitude *= 0.65f;
     }
     
+    // Post processing
     sample /= amplitude_sum;
     sample = pow(sample, 3);
     sample -= FalloffMap(position);
+    
     return sample;
 }
 
@@ -122,17 +165,13 @@ void TerrainMesh(uint3 id : SV_DispatchThreadID)
     float3 worldPosition = ChunkPosition + chunkPosition;
     float2 flatWorldPosition = float2(worldPosition.x, worldPosition.z);
     
-    float local = GetTerrainHeight(flatWorldPosition) * 1500;
-
-    float offset = ChunkSize / (MeshResolution - 1);
-    
-    chunkPosition.y = local;
+    chunkPosition.y = GetTerrainHeight(flatWorldPosition) * 1500;
 
     int vertex_index = id.x + id.z * MeshResolution;
     VertexBuffer[vertex_index] = chunkPosition;
     
-    NormalBuffer[vertex_index] = float3(0,1,0);
-    NormalBuffer[vertex_index] = GetTerrainNormal(flatWorldPosition, ChunkSize / (MeshResolution - 1));
+    // Constant distance keeps visuals much more shable, while keeping good resolution
+    NormalBuffer[vertex_index] = GetTerrainNormal(flatWorldPosition, 1);
 
     DataBuffer[vertex_index] = float2(ChunkDepth, 0);
 
@@ -179,6 +218,22 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
     float value = GetTerrainHeight(flatWorldPosition);
     // value = FalloffMap(flatWorldPosition);
     float3 color = float3(value, value, value);
+    
+    float biomeID = GetBiome(flatWorldPosition);
+    
+    biomeID = clamp(biomeID, 0, 1);
+    color = float3(1,1,1) * biomeID;
+    
+    // float hue = (biomeID / BiomeDataSize) + 10;
+    
+    // color = float3(
+        // hue * 1043210 / 23 % 1,
+        // hue * 1001223 / 33 % 1,
+        // hue * 1043233 / 23 % 1);
+    
+    HeightmapPreview[id.xz] = color;
+    
+    return;
     
     if (value >= 1)
     {
