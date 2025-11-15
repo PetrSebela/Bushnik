@@ -24,10 +24,12 @@ namespace Terrain.Data
     /// <summary>
     /// Struct used for passing relevant information to the compute shader
     /// </summary>
+    [System.Serializable]
     public struct BiomeGPUData
     {
         // Central position of said biome
-        public Vector2 Position;    
+        public float NominalTemperature;
+        public float NominalHumidity;
         
         // Biome ID, only for debugging purposes
         public int BiomeID;

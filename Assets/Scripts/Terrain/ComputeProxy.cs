@@ -63,7 +63,7 @@ namespace Terrain
         /// <summary>
         /// Compute buffer storing biome data
         /// </summary>
-        private ComputeBuffer _biomeDataBuffer;
+        private ComputeBuffer _airstripBuffer;
 
         [Tooltip("Mesh settings")]
         public MeshSettings meshSettings;
@@ -110,9 +110,33 @@ namespace Terrain
             TerrainComputeShader.SetBuffer(_terrainMeshKernel, "NormalBuffer", _terrainNormalBuffer);
             TerrainComputeShader.SetBuffer(_terrainMeshKernel, "DataBuffer", _terrainDataBuffer);
             
-            UpdateTerrainSettings();
-            
             ThreadGroups = Mathf.CeilToInt(meshSettings.resolution / 32f);
+            
+
+            
+            UpdateTerrainSettings();
+            UpdateTerrainAffectors();
+        }
+
+        /// <summary>
+        /// Creates and sets terrain affector
+        /// This method requires
+        /// </summary>
+        private void UpdateTerrainAffectors()
+        {
+            UpdateTerrainSettings();
+
+            var runways = terrainFeatureManager.GetRunways();
+
+            // Create compute buffer
+            int runwayDataSize = (sizeof(float) * 3) * 2 + sizeof(float);
+            _airstripBuffer?.Dispose();
+            _airstripBuffer = new ComputeBuffer(runways.Length, runwayDataSize);
+            _airstripBuffer.SetData(runways);
+            
+            // Set data to kernels
+            TerrainComputeShader.SetInt("AirstripBufferSize", runways.Length);
+            SetBufferToAllKernels(_airstripBuffer, "AirstripBuffer");
         }
 
         /// <summary>
@@ -134,7 +158,7 @@ namespace Terrain
             _terrainIndexBuffer?.Dispose();
             _terrainNormalBuffer?.Dispose();
             _terrainDataBuffer?.Dispose();
-            _biomeDataBuffer?.Dispose();
+            _airstripBuffer?.Dispose();
         }
 
         /// <summary>
@@ -146,17 +170,11 @@ namespace Terrain
             TerrainComputeShader.SetFloat("TerrainSize", terrainSettings.size);
             TerrainComputeShader.SetInt("MeshResolution", meshSettings.resolution);
             
-            var biomes = terrainFeatureManager.GetBiomes();
-
-            // Create compute buffer
-            int biomeDataSize = sizeof(float) * 2 + sizeof(int);
-            _biomeDataBuffer?.Dispose();
-            _biomeDataBuffer = new ComputeBuffer(biomes.Length, biomeDataSize);
-            _biomeDataBuffer.SetData(biomes);
-            
-            // Set data to kernels
-            TerrainComputeShader.SetInt("BiomeDataSize", biomeDataSize);
-            SetBufferToAllKernels(_biomeDataBuffer, "BiomeDataBuffer");
+            // Default terrain does not account for runways and other affectors
+            TerrainComputeShader.SetInt("AirstripBufferSize", 0);
+            _airstripBuffer?.Dispose();
+            _airstripBuffer = new ComputeBuffer(1, 1);
+            SetBufferToAllKernels(_airstripBuffer, "AirstripBuffer");
         }
 
         /// <summary>
@@ -239,7 +257,7 @@ namespace Terrain
         /// </summary>
         /// <param name="points">Reference to array of points, their .y component will be modified</param>
         /// <returns>List of points that are valid</returns>
-        public Vector3[] SamplePoints(ref Vector3[] points)
+        public Vector3[] SamplePoints(ref Vector3[] points, float maxAngle = 90f)
         {
             int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
             var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
@@ -247,6 +265,8 @@ namespace Terrain
             
             TerrainComputeShader.SetBuffer(sampleKernel, "Points", buffer);
             TerrainComputeShader.SetInt("PointsSize", points.Length);
+            TerrainComputeShader.SetFloat("AngleLimit", maxAngle);
+            
             
             int groups = Mathf.CeilToInt(points.Length / 32f);
             TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);

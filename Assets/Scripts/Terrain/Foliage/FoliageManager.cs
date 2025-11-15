@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Terrain.Foliage
         /// Foliage settings
         /// </summary>
         public FoliageSettings foliageSettings;
-        
+
         /// <summary>
         /// Parent for foliage chunks (just to keep hierarchy clean)
         /// </summary>
@@ -31,11 +32,11 @@ namespace Terrain.Foliage
         public static FoliageManager Instance => _instance;
 
         private Dictionary<Vector3, FoliageChunk> _chunks = new();
-        
+
         public Foliage[] Tests;
-        
+
         public Mesh BillboardModel;
-        
+
         /// <summary>
         /// Manager setup and singleton init
         /// </summary>
@@ -58,27 +59,73 @@ namespace Terrain.Foliage
         /// TODO: If performance on generation is issus (which it will be), convert this into coroutine and split load across multiple frames 
         public void Start()
         {
+            StartCoroutine(GenerateFoliageChunks());
+        }
+
+        IEnumerator GenerateFoliageChunks()
+        {
             float terrainSize = TerrainManager.Instance.terrainSettings.size;
             int chunkCount = Mathf.CeilToInt(terrainSize / foliageSettings.chunkSize);
             float foliageSize = chunkCount * foliageSettings.chunkSize;
 
-            Vector3 start = new Vector3(-foliageSize / 2, 0, -foliageSize / 2) + new Vector3(foliageSettings.chunkSize/2, 0, foliageSettings.chunkSize/2);
+            Vector3 start = new Vector3(-foliageSize / 2, 0, -foliageSize / 2) +
+                            new Vector3(foliageSettings.chunkSize / 2, 0, foliageSettings.chunkSize / 2);
 
+            double iterationStart = Time.realtimeSinceStartupAsDouble;
             for (int x = 0; x < chunkCount; x++)
             {
                 for (int z = 0; z < chunkCount; z++)
                 {
                     Vector3 position = start + new Vector3(x, 0, z) * foliageSettings.chunkSize;
-                    GameObject chunk = new GameObject("Chunk");
-                    var foliageChunk = chunk.AddComponent<FoliageChunk>();
-                    chunk.transform.SetParent(_foliageParent.transform);
-                    chunk.transform.localPosition = position;
+                    CreateFoliageChunk(position);
                     
-                    _chunks.Add(new Vector3(position.x, 0, position.z), foliageChunk);
+                    double delta = Time.realtimeSinceStartupAsDouble - iterationStart;
+                    if (delta > 1 / 30f)
+                    {
+                        iterationStart = Time.realtimeSinceStartupAsDouble;
+                        yield return null;
+                    }
                 }
             }
+            
+            RemovePruned();
         }
 
+        /// <summary>
+        /// Creates new foliage chunk
+        /// </summary>
+        /// <param name="position">origin of created chunk</param>
+        void CreateFoliageChunk(Vector3 position)
+        {
+            GameObject chunk = new GameObject("Chunk");
+            var foliageChunk = chunk.AddComponent<FoliageChunk>();
+            chunk.transform.SetParent(_foliageParent.transform);
+            chunk.transform.localPosition = position;
+            foliageChunk.Generate();
+            _chunks.Add(new Vector3(position.x, 0, position.z), foliageChunk);
+        }
+
+        /// <summary>
+        /// Removes inactive chunks
+        /// </summary>
+        void RemovePruned()
+        {
+            List<KeyValuePair<Vector3,FoliageChunk>> pruned = new List<KeyValuePair<Vector3,FoliageChunk>>();
+            
+            foreach (var pair in _chunks)
+                if (pair.Value.GetState == LODState.Pruned)
+                    pruned.Add(pair);
+
+            float percentage = (float)pruned.Count / _chunks.Count * 100;
+            Debug.Log($"Pruning {pruned.Count} chunks ({percentage:F2}%)");
+            
+            foreach (var key in pruned)
+            {
+                Destroy(key.Value);
+                _chunks.Remove(key.Key);
+            }
+        }
+        
         /// <summary>
         /// Updates foliage chunks
         /// </summary>
@@ -86,7 +133,7 @@ namespace Terrain.Foliage
         {
             var target = TerrainManager.Instance.LODTarget.position;
             var flat = new Vector3(target.x, 0, target.z);
-
+            
             foreach (var pair in _chunks)
             {
                 var chunk = pair.Value;

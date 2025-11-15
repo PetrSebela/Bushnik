@@ -6,11 +6,20 @@
 #include "Packages/jp.keijiro.noiseshader/Shader/SimplexNoise2D.hlsl"
 
 #define THREAD_GROUP_SIZE 32u
+#define MAX_BIOME_COUNT 32u
 
-struct BiomeData
+struct Runway
 {
-    float2 position;
-    uint id;
+    float3 approachThreshold;
+    float3 departureThreshold;
+    float width;
+};
+
+struct TerrainMaterialOverride
+{
+    float height;
+    float material;
+    float distance;
 };
 
 // === Common terrain settings ===
@@ -18,13 +27,23 @@ struct BiomeData
 // Size of the generated terrain
 float TerrainSize;
 
-int BiomeDataSize;
-RWStructuredBuffer<BiomeData> BiomeDataBuffer;
+// Airstrips
+int AirstripBufferSize;
+RWStructuredBuffer<Runway> AirstripBuffer;
 
 // === Helper functions ===
 float Gaussian(float t, float center = 0.5f, float falloff = 0.1f)
 {
     return exp(-pow(t - center, 2) / pow(falloff, 2));
+}
+
+
+// Rewritten from https://easings.net/#easeInOutCubic
+float SmoothEase(float t)
+{
+    if (t < 0.5)
+        return 4 * pow(t, 3);
+    return 1 - pow(-2 * t + 2, 3) / 2;
 }
 
 float Sigmoid(float t, float center, float steepness)
@@ -54,39 +73,48 @@ float FalloffMap(float2 position)
     return abs(pow(abs(position.x) / (TerrainSize / 2), p)) + abs(pow(abs(position.y) / (TerrainSize / 2), p));
 }
 
-float GetBiome(float2 position)
+TerrainMaterialOverride ApplyRunways(float2 position, float value)
 {
+    TerrainMaterialOverride override;
+    override.height = value;
+    override.material = 0;
+    override.distance = 100000; // Arbitrary large enough value
     
-    BiomeData secondClosest;
-    secondClosest.position = float2(0,0);
-    secondClosest.id = -1;
     
-    BiomeData closest;
-    closest.position = float2(0,0);
-    closest.id = -1;
-    
-    float closestDistance = TerrainSize*1000; // Could not find macro for largest possible value
-    
-    for (int i = 0; i < BiomeDataSize; ++i)
+    for (int airstripIndex = 0; airstripIndex < AirstripBufferSize; airstripIndex++)
     {
-        BiomeData data = BiomeDataBuffer[i];
+        Runway runway = AirstripBuffer[airstripIndex];
         
-        float d = distance(data.position, position);
-        if (d < closestDistance)
-        {
-            closestDistance = d;
-            secondClosest = closest;
-            closest = data;
-        }
+        float2 flatApproachThreshold = float2(runway.approachThreshold.x, runway.approachThreshold.z);
+        float2 flatDepartureThreshold = float2(runway.departureThreshold.x, runway.departureThreshold.z);
+        
+        float2 direction = flatDepartureThreshold - flatApproachThreshold;
+        float2 relative = position - flatApproachThreshold;
+        
+        float projection = dot(relative, direction) / dot(direction, direction);
+        projection = clamp(projection, 0, 1);
+        float3 runwayPoint = runway.approachThreshold * (1 - projection) + runway.departureThreshold * projection; 
+
+        
+        float d = distance(direction * projection, relative);
+        
+        if (d + NormalizedNoise(position * 0.05f) * 20 < 50)
+            override.material = 1;
+        
+        if (d < 200)
+            override.distance = d;
+        
+        float fadeProgress = (d - 50) / 500;
+        fadeProgress = clamp(fadeProgress, 0, 1);
+        fadeProgress = SmoothEase(fadeProgress) * 0.9 + 0.1;
+        override.height = runwayPoint.y / 1500 * (1 - fadeProgress) + override.height * fadeProgress;
     }
     
-    secondClosest.position * closest.position;
-    
-    return 10000 / closestDistance;
+    return override;
 }
 
 // Implementation of FBM with 
-float GetTerrainHeight(float2 position)
+TerrainMaterialOverride GetTerrainHeight(float2 position)
 {
     int sample_count = 20;
 
@@ -96,7 +124,7 @@ float GetTerrainHeight(float2 position)
     float frequency = 0.0001f;
     float amplitude = 1;
 
-    for (int i = 0; i < sample_count; ++i)
+    for (int i = 0; i < sample_count; i++)
     {
         // TODO: parametrize 
         float2 warp_offset = float2(
@@ -120,20 +148,22 @@ float GetTerrainHeight(float2 position)
         amplitude *= 0.65f;
     }
     
+    
     // Post processing
     sample /= amplitude_sum;
     sample = pow(sample, 3);
     sample -= FalloffMap(position);
     
-    return sample;
+    return ApplyRunways(position, sample);
 }
+
 
 float3 GetTerrainNormal(float2 position, float delta)
 {
-    float right = GetTerrainHeight(position + float2(1, 0) * delta) * 1500;
-    float left = GetTerrainHeight(position + float2(-1, 0) * delta) * 1500;
-    float front = GetTerrainHeight(position + float2(0, 1) * delta) * 1500;
-    float back = GetTerrainHeight(position + float2(0, -1) * delta) * 1500;
+    float right = GetTerrainHeight(position + float2(1, 0) * delta).height * 1500;
+    float left = GetTerrainHeight(position + float2(-1, 0) * delta).height * 1500;
+    float front = GetTerrainHeight(position + float2(0, 1) * delta).height * 1500;
+    float back = GetTerrainHeight(position + float2(0, -1) * delta).height * 1500;
     
     float3 normal  = float3(
         (left - right) / (2.0 * delta),
@@ -165,23 +195,23 @@ void TerrainMesh(uint3 id : SV_DispatchThreadID)
     float3 worldPosition = ChunkPosition + chunkPosition;
     float2 flatWorldPosition = float2(worldPosition.x, worldPosition.z);
     
-    chunkPosition.y = GetTerrainHeight(flatWorldPosition) * 1500;
+    TerrainMaterialOverride sample = GetTerrainHeight(flatWorldPosition);
+    chunkPosition.y = sample.height * 1500;
 
     int vertex_index = id.x + id.z * MeshResolution;
     VertexBuffer[vertex_index] = chunkPosition;
     
-    // Constant distance keeps visuals much more shable, while keeping good resolution
+    // Constant distance keeps visuals much more stable
     NormalBuffer[vertex_index] = GetTerrainNormal(flatWorldPosition, 1);
-
-    DataBuffer[vertex_index] = float2(ChunkDepth, 0);
+    
+    DataBuffer[vertex_index] = float2(ChunkDepth, sample.material);
 
     if (id.x >= MeshResolution - 1 || id.z >= MeshResolution - 1)
-    {
         return;
-    }
-
+    
     int triangle_index = (id.x + id.z * (MeshResolution - 1)) * 6;
 
+    // Alternate quad diagonals
     if (id.z % 2u == 0 ^ id.x % 2u == 0 )
     {
         IndexBuffer[triangle_index + 0] = vertex_index;
@@ -215,34 +245,13 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
     float2 normalizedPosition = float2(id.x / (float)PreviewSize, id.z / (float)PreviewSize) - float2(0.5f, 0.5f);
     float2 flatWorldPosition = normalizedPosition * TerrainSize;
 
-    float value = GetTerrainHeight(flatWorldPosition);
-    // value = FalloffMap(flatWorldPosition);
+    float value = GetTerrainHeight(flatWorldPosition).height;
     float3 color = float3(value, value, value);
     
-    float biomeID = GetBiome(flatWorldPosition);
-    
-    biomeID = clamp(biomeID, 0, 1);
-    color = float3(1,1,1) * biomeID;
-    
-    // float hue = (biomeID / BiomeDataSize) + 10;
-    
-    // color = float3(
-        // hue * 1043210 / 23 % 1,
-        // hue * 1001223 / 33 % 1,
-        // hue * 1043233 / 23 % 1);
-    
-    HeightmapPreview[id.xz] = color;
-    
-    return;
-    
     if (value >= 1)
-    {
         HeightmapPreview[id.xz] = float3(1, 1 - value, 1 - value);
-    }
     else if (value <= 0)
-    {
         HeightmapPreview[id.xz] = float3(0.05f, 0.15f, 0.05f);
-    }
     else
     {
         if ((value * 500) % 50 <= 3)
@@ -256,11 +265,10 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
     }
 }
 
-
 // === Sample points ===
-
 RWStructuredBuffer<float3> Points;
 int PointsSize;
+float AngleLimit;
 
 [numthreads(32, 1, 1)]
 void SamplePoints(uint3 id : SV_DispatchThreadID)
@@ -271,13 +279,19 @@ void SamplePoints(uint3 id : SV_DispatchThreadID)
     float3 sample = Points[id.x];
     
     float2 worldPosition = float2(sample.x, sample.z);
-    
+
     float3 normal = GetTerrainNormal(worldPosition, 10);
+    float angle = degrees(acos(dot(normal, float3(0,1,0))));
     
-    if (dot(normal, float3(0,1,0)) > 0.95f)
+    if (angle < AngleLimit)
     {
-        Points[id.x].y = GetTerrainHeight(worldPosition) * 1500;
-        return;
+        TerrainMaterialOverride terrain = GetTerrainHeight(worldPosition);
+        if (terrain.distance > 150)
+        {
+            Points[id.x].y = terrain.height * 1500;
+            return;
+        }
     }
+    
     Points[id.x].y = -1;
 }

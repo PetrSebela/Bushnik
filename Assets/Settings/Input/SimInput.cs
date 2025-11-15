@@ -127,6 +127,15 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Boost"",
+                    ""type"": ""Button"",
+                    ""id"": ""1fbe4b79-0a6a-4dbf-a75b-31821e2995ec"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -281,6 +290,28 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""CameraMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bba638a4-a211-4d4a-b465-52d315e43e02"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Boost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d78b9cc-56ef-4474-9451-d43e67f24955"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -811,6 +842,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Demo_CameraJoystick = m_Demo.FindAction("CameraJoystick", throwIfNotFound: true);
         m_Demo_Vertical = m_Demo.FindAction("Vertical", throwIfNotFound: true);
         m_Demo_CameraMouse = m_Demo.FindAction("CameraMouse", throwIfNotFound: true);
+        m_Demo_Boost = m_Demo.FindAction("Boost", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -908,6 +940,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Demo_CameraJoystick;
     private readonly InputAction m_Demo_Vertical;
     private readonly InputAction m_Demo_CameraMouse;
+    private readonly InputAction m_Demo_Boost;
     /// <summary>
     /// Provides access to input actions defined in input action map "Demo".
     /// </summary>
@@ -935,6 +968,10 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Demo/CameraMouse".
         /// </summary>
         public InputAction @CameraMouse => m_Wrapper.m_Demo_CameraMouse;
+        /// <summary>
+        /// Provides access to the underlying input action "Demo/Boost".
+        /// </summary>
+        public InputAction @Boost => m_Wrapper.m_Demo_Boost;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -973,6 +1010,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @CameraMouse.started += instance.OnCameraMouse;
             @CameraMouse.performed += instance.OnCameraMouse;
             @CameraMouse.canceled += instance.OnCameraMouse;
+            @Boost.started += instance.OnBoost;
+            @Boost.performed += instance.OnBoost;
+            @Boost.canceled += instance.OnBoost;
         }
 
         /// <summary>
@@ -996,6 +1036,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @CameraMouse.started -= instance.OnCameraMouse;
             @CameraMouse.performed -= instance.OnCameraMouse;
             @CameraMouse.canceled -= instance.OnCameraMouse;
+            @Boost.started -= instance.OnBoost;
+            @Boost.performed -= instance.OnBoost;
+            @Boost.canceled -= instance.OnBoost;
         }
 
         /// <summary>
@@ -1259,6 +1302,13 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCameraMouse(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Boost" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBoost(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

@@ -694,7 +694,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9da4195d435c4a50b4334d326e7a927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraSpeed: 250
+  cameraSpeed: 75
+  cameraBoostSpeed: 750
   mouseSensitivity: 1
 --- !u!1 &1041054067
 GameObject:
@@ -757,8 +758,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065602dea1df3bafbbeac35d972529eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  biomeCount: 20
   seed: 317
+  RunwayOrientationSamples: 32
+  RunwayCount: 100
+  OversampleRatio: 1
 --- !u!1 &1255753502
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,9 +11,8 @@ namespace Terrain.Foliage
         private LODState _state = LODState.Active;
 
         private Instances[] _test;
-        public void Start()
+        public void Generate()
         {
-
             var modelCount = FoliageManager.Instance.Tests.Length;
             _test = new Instances[modelCount];
 
@@ -38,7 +37,7 @@ namespace Terrain.Foliage
                     samples[j] = point;
                 }
                 
-                var valid = ComputeProxy.Instance.SamplePoints(ref samples);
+                var valid = ComputeProxy.Instance.SamplePoints(ref samples, 20f);
                 totalCount += valid.Length; 
                 
                 _test[i] = new(FoliageManager.Instance.Tests[i], valid);
@@ -89,6 +88,8 @@ namespace Terrain.Foliage
             
             _state = state;
         }
+
+        public LODState GetState => _state;
     }
 
     /// <summary>

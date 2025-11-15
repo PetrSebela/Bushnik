@@ -10,13 +10,16 @@ namespace Terrain.Demo
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private float cameraSpeed = 10;
+        [SerializeField] private float cameraBoostSpeed = 100;
         [SerializeField] private float mouseSensitivity = 20;
 
         private Vector2 _attitude = Vector2.zero;
         private Vector3 _direction = Vector3.zero;
         private Vector2 _cameraInput = Vector2.zero;
-        
+
         private SimInput _input;
+ 
+        private bool _boosted = false;
 
         private void Awake()
         {
@@ -27,22 +30,23 @@ namespace Terrain.Demo
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
-        
+
         void FixedUpdate()
         {
             _attitude += _cameraInput * 3;
             _attitude = new Vector2(_attitude.x, Mathf.Clamp(_attitude.y, -90, 90));
-            
+
             var horizontalRotation = Quaternion.AngleAxis(_attitude.x, Vector3.up);
             var verticalRotation = Quaternion.AngleAxis(-_attitude.y, Vector3.right);
 
             var forward = horizontalRotation * Vector3.forward * _direction.x;
             var right = horizontalRotation * Vector3.right * _direction.z;
             var up = Vector3.up * _direction.y;
-            
+
             var attitude = horizontalRotation * verticalRotation;
             transform.rotation = attitude;
-            transform.position += Time.fixedDeltaTime * cameraSpeed * (forward + right + up);
+            float velocity = _boosted ? cameraBoostSpeed : cameraSpeed;
+            transform.position += Time.fixedDeltaTime * velocity * (forward + right + up);
         }
 
         void OnCameraJoystickPerformed(InputAction.CallbackContext context)
@@ -73,7 +77,7 @@ namespace Terrain.Demo
             var delta = context.ReadValue<Vector2>();
             _attitude += delta * mouseSensitivity;
         }
-        
+
         void OnAltitudePerformed(InputAction.CallbackContext context)
         {
             float direction = context.ReadValue<float>();
@@ -84,7 +88,17 @@ namespace Terrain.Demo
         {
             _direction = new Vector3(_direction.x, 0, _direction.z);
         }
-        
+
+        void OnBoostPerformed(InputAction.CallbackContext context)
+        {
+            _boosted = !_boosted;
+        }
+
+        void OnBoostCanceled(InputAction.CallbackContext context)
+        {
+            
+        }
+
         private void OnEnable()
         {
             _input.Demo.CameraJoystick.performed += OnCameraJoystickPerformed;
@@ -94,6 +108,8 @@ namespace Terrain.Demo
             _input.Demo.Movement.canceled += OnMovementCancelled;
             _input.Demo.Vertical.performed += OnAltitudePerformed;
             _input.Demo.Vertical.canceled += OnAltitudeCancelled;
+            _input.Demo.Boost.performed += OnBoostPerformed;
+            _input.Demo.Boost.canceled += OnBoostCanceled;
             _input.Enable();
         }
 
@@ -106,6 +122,8 @@ namespace Terrain.Demo
             _input.Demo.Vertical.canceled -= OnMovementCancelled;
             _input.Demo.Vertical.performed -= OnAltitudePerformed;
             _input.Demo.Vertical.canceled -= OnAltitudeCancelled;
+            _input.Demo.Boost.performed -= OnBoostPerformed;
+            _input.Demo.Boost.canceled -= OnBoostCanceled;
             _input.Disable();
         }
     }
