@@ -37,6 +37,8 @@ namespace Terrain.Foliage
 
         public Mesh BillboardModel;
 
+        public float RenderDistance = 6000;
+
         /// <summary>
         /// Manager setup and singleton init
         /// </summary>
@@ -64,28 +66,41 @@ namespace Terrain.Foliage
 
         IEnumerator GenerateFoliageChunks()
         {
+            yield return new WaitForEndOfFrame();
+            
             float terrainSize = TerrainManager.Instance.terrainSettings.size;
             int chunkCount = Mathf.CeilToInt(terrainSize / foliageSettings.chunkSize);
             float foliageSize = chunkCount * foliageSettings.chunkSize;
 
             Vector3 start = new Vector3(-foliageSize / 2, 0, -foliageSize / 2) +
                             new Vector3(foliageSettings.chunkSize / 2, 0, foliageSettings.chunkSize / 2);
-
-            double iterationStart = Time.realtimeSinceStartupAsDouble;
+            
+            List<Vector3> chunkOrigins = new List<Vector3>();
+            
             for (int x = 0; x < chunkCount; x++)
             {
                 for (int z = 0; z < chunkCount; z++)
                 {
                     Vector3 position = start + new Vector3(x, 0, z) * foliageSettings.chunkSize;
-                    CreateFoliageChunk(position);
-                    
-                    double delta = Time.realtimeSinceStartupAsDouble - iterationStart;
-                    if (delta > 1 / 30f)
-                    {
-                        iterationStart = Time.realtimeSinceStartupAsDouble;
-                        yield return null;
-                    }
+                    chunkOrigins.Add(position);
                 }
+            }
+
+            chunkOrigins.Sort((a, b) => a.sqrMagnitude.CompareTo(b.sqrMagnitude));
+            
+            Queue<Vector3> chunkOriginsQueue = new(chunkOrigins);
+            
+            double iterationStart = Time.realtimeSinceStartupAsDouble;
+            while (chunkOriginsQueue.Count > 0)
+            {
+                var origin = chunkOriginsQueue.Dequeue();
+                CreateFoliageChunk(origin);
+
+                if (Time.realtimeSinceStartupAsDouble - iterationStart < 0.1f) 
+                    continue;
+                
+                iterationStart = Time.realtimeSinceStartupAsDouble;
+                yield return null;
             }
             
             RemovePruned();
@@ -144,7 +159,7 @@ namespace Terrain.Foliage
                 {
                     chunk.SetState(LODState.Active);       
                 }
-                else if (distance < 7500)
+                else if (distance < RenderDistance)
                 {
                     chunk.SetState(LODState.Reduced);
                 }
@@ -153,7 +168,7 @@ namespace Terrain.Foliage
                     chunk.SetState(LODState.Suspended);
                 }
 
-                float cull = Mathf.Clamp01(distance / 7500f);
+                float cull = Mathf.Clamp01(distance / RenderDistance);
                 chunk.Render(cull);
             }
         }

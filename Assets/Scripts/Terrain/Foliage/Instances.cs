@@ -1,3 +1,4 @@
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace Terrain.Foliage
@@ -72,8 +73,10 @@ namespace Terrain.Foliage
                 var instances = _matrices[i];
                 var count = Mathf.CeilToInt((1 - culled) * instances.Length);
                 Matrix4x4[] left = new Matrix4x4[count];
-                for (int j = 0; j < count; j++)
-                    left[j] = instances[j];
+                
+                System.Array.Copy(instances,0,left,0,count);
+                // for (int j = 0; j < count; j++)
+                    // left[j] = instances[j];
                 
                 Graphics.DrawMeshInstanced(
                     _meshes[i],

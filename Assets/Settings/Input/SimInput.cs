@@ -136,6 +136,24 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeRenderDistance"",
+                    ""type"": ""Value"",
+                    ""id"": ""d923e567-1986-4630-b341-60e1101608e9"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ToggleFoliage"",
+                    ""type"": ""Button"",
+                    ""id"": ""6ad3ba12-d69a-4bc6-a527-fd62559fd333"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -312,6 +330,94 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Boost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""3b3a698b-03e9-4d61-8862-ca7277a0d105"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRenderDistance"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""23633850-1adf-4bef-a242-9df0c0d4b293"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRenderDistance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3665c1ed-0977-4c76-9452-70bf63032b56"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRenderDistance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""5d8b28c4-5011-4239-8841-03c1b5917024"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRenderDistance"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""f8a2d88f-967d-46d4-8407-c5afdcfd3291"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRenderDistance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""221cc12a-0c25-4eff-8bfa-4ca89ae06d97"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRenderDistance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f634eee5-a733-439f-b872-29565b8dbafe"",
+                    ""path"": ""<Keyboard>/f2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleFoliage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4b44759-4fe6-40c3-b850-405c0b22eb43"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleFoliage"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -843,6 +949,8 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Demo_Vertical = m_Demo.FindAction("Vertical", throwIfNotFound: true);
         m_Demo_CameraMouse = m_Demo.FindAction("CameraMouse", throwIfNotFound: true);
         m_Demo_Boost = m_Demo.FindAction("Boost", throwIfNotFound: true);
+        m_Demo_ChangeRenderDistance = m_Demo.FindAction("ChangeRenderDistance", throwIfNotFound: true);
+        m_Demo_ToggleFoliage = m_Demo.FindAction("ToggleFoliage", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -941,6 +1049,8 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Demo_Vertical;
     private readonly InputAction m_Demo_CameraMouse;
     private readonly InputAction m_Demo_Boost;
+    private readonly InputAction m_Demo_ChangeRenderDistance;
+    private readonly InputAction m_Demo_ToggleFoliage;
     /// <summary>
     /// Provides access to input actions defined in input action map "Demo".
     /// </summary>
@@ -972,6 +1082,14 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Demo/Boost".
         /// </summary>
         public InputAction @Boost => m_Wrapper.m_Demo_Boost;
+        /// <summary>
+        /// Provides access to the underlying input action "Demo/ChangeRenderDistance".
+        /// </summary>
+        public InputAction @ChangeRenderDistance => m_Wrapper.m_Demo_ChangeRenderDistance;
+        /// <summary>
+        /// Provides access to the underlying input action "Demo/ToggleFoliage".
+        /// </summary>
+        public InputAction @ToggleFoliage => m_Wrapper.m_Demo_ToggleFoliage;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1013,6 +1131,12 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Boost.started += instance.OnBoost;
             @Boost.performed += instance.OnBoost;
             @Boost.canceled += instance.OnBoost;
+            @ChangeRenderDistance.started += instance.OnChangeRenderDistance;
+            @ChangeRenderDistance.performed += instance.OnChangeRenderDistance;
+            @ChangeRenderDistance.canceled += instance.OnChangeRenderDistance;
+            @ToggleFoliage.started += instance.OnToggleFoliage;
+            @ToggleFoliage.performed += instance.OnToggleFoliage;
+            @ToggleFoliage.canceled += instance.OnToggleFoliage;
         }
 
         /// <summary>
@@ -1039,6 +1163,12 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Boost.started -= instance.OnBoost;
             @Boost.performed -= instance.OnBoost;
             @Boost.canceled -= instance.OnBoost;
+            @ChangeRenderDistance.started -= instance.OnChangeRenderDistance;
+            @ChangeRenderDistance.performed -= instance.OnChangeRenderDistance;
+            @ChangeRenderDistance.canceled -= instance.OnChangeRenderDistance;
+            @ToggleFoliage.started -= instance.OnToggleFoliage;
+            @ToggleFoliage.performed -= instance.OnToggleFoliage;
+            @ToggleFoliage.canceled -= instance.OnToggleFoliage;
         }
 
         /// <summary>
@@ -1309,6 +1439,20 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBoost(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChangeRenderDistance" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChangeRenderDistance(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleFoliage" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleFoliage(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

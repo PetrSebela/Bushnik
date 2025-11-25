@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using User;
 
 namespace Terrain.Demo
 {
@@ -9,28 +10,59 @@ namespace Terrain.Demo
     /// </summary>
     public class CameraController : MonoBehaviour
     {
+        /// <summary>
+        /// Normal camera speed
+        /// </summary>
         [SerializeField] private float cameraSpeed = 10;
+        
+        /// <summary>
+        /// Boosted movement speed
+        /// </summary>
         [SerializeField] private float cameraBoostSpeed = 100;
+        
+        /// <summary>
+        /// Sensitivity for camera rotation
+        /// </summary>
         [SerializeField] private float mouseSensitivity = 20;
+        
+        /// <summary>
+        /// Camera rigidbody
+        /// </summary>
+        [SerializeField] private Rigidbody cameraBody;
 
+        /// <summary>
+        /// Camera attitude in degrees
+        /// </summary>
         private Vector2 _attitude = Vector2.zero;
+        
+        /// <summary>
+        /// Camera direction vector
+        /// </summary>
         private Vector3 _direction = Vector3.zero;
+        
+        /// <summary>
+        /// Camera input vector in local space
+        /// </summary>
         private Vector2 _cameraInput = Vector2.zero;
-
-        private SimInput _input;
- 
+        
+        /// <summary>
+        /// Flag for boosted movement speed
+        /// </summary>
         private bool _boosted = false;
-
-        private void Awake()
-        {
-            _input = new SimInput();
-        }
-
+        
+        
+        /// <summary>
+        /// Initialization
+        /// </summary>
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            RegisterInput();
         }
 
+        /// <summary>
+        /// Updating camera position and rotation
+        /// </summary>
         void FixedUpdate()
         {
             _attitude += _cameraInput * 3;
@@ -44,15 +76,16 @@ namespace Terrain.Demo
             var up = Vector3.up * _direction.y;
 
             var attitude = horizontalRotation * verticalRotation;
-            transform.rotation = attitude;
+            cameraBody.rotation = attitude;
+            
             float velocity = _boosted ? cameraBoostSpeed : cameraSpeed;
-            transform.position += Time.fixedDeltaTime * velocity * (forward + right + up);
+            cameraBody.linearVelocity = velocity * (forward + right + up);
         }
 
         void OnCameraJoystickPerformed(InputAction.CallbackContext context)
         {
             var input = context.ReadValue<Vector2>();
-            // Invert tilt axis because of personal preference
+            // Invert joystick pitch axis because of personal preference
             _cameraInput = new Vector3(input.x, -input.y);
         }
 
@@ -94,37 +127,29 @@ namespace Terrain.Demo
             _boosted = !_boosted;
         }
 
-        void OnBoostCanceled(InputAction.CallbackContext context)
-        {
-            
-        }
 
-        private void OnEnable()
+        private void RegisterInput()
         {
-            _input.Demo.CameraJoystick.performed += OnCameraJoystickPerformed;
-            _input.Demo.CameraJoystick.canceled += OnCameraJoystickCancelled;
-            _input.Demo.CameraMouse.performed += OnCameraMousePerformed;
-            _input.Demo.Movement.performed += OnMovementPerformed;
-            _input.Demo.Movement.canceled += OnMovementCancelled;
-            _input.Demo.Vertical.performed += OnAltitudePerformed;
-            _input.Demo.Vertical.canceled += OnAltitudeCancelled;
-            _input.Demo.Boost.performed += OnBoostPerformed;
-            _input.Demo.Boost.canceled += OnBoostCanceled;
-            _input.Enable();
+            InputProvider.Instance.Input.Demo.CameraJoystick.performed += OnCameraJoystickPerformed;
+            InputProvider.Instance.Input.Demo.CameraJoystick.canceled += OnCameraJoystickCancelled;
+            InputProvider.Instance.Input.Demo.CameraMouse.performed += OnCameraMousePerformed;
+            InputProvider.Instance.Input.Demo.Movement.performed += OnMovementPerformed;
+            InputProvider.Instance.Input.Demo.Movement.canceled += OnMovementCancelled;
+            InputProvider.Instance.Input.Demo.Vertical.performed += OnAltitudePerformed;
+            InputProvider.Instance.Input.Demo.Vertical.canceled += OnAltitudeCancelled;
+            InputProvider.Instance.Input.Demo.Boost.performed += OnBoostPerformed;
         }
 
         private void OnDisable()
         {
-            _input.Demo.CameraJoystick.performed -= OnCameraJoystickPerformed;
-            _input.Demo.CameraJoystick.canceled -= OnCameraJoystickCancelled;
-            _input.Demo.CameraMouse.performed -= OnCameraMousePerformed;
-            _input.Demo.Movement.performed -= OnMovementPerformed;
-            _input.Demo.Vertical.canceled -= OnMovementCancelled;
-            _input.Demo.Vertical.performed -= OnAltitudePerformed;
-            _input.Demo.Vertical.canceled -= OnAltitudeCancelled;
-            _input.Demo.Boost.performed -= OnBoostPerformed;
-            _input.Demo.Boost.canceled -= OnBoostCanceled;
-            _input.Disable();
+            InputProvider.Instance.Input.Demo.CameraJoystick.performed -= OnCameraJoystickPerformed;
+            InputProvider.Instance.Input.Demo.CameraJoystick.canceled -= OnCameraJoystickCancelled;
+            InputProvider.Instance.Input.Demo.CameraMouse.performed -= OnCameraMousePerformed;
+            InputProvider.Instance.Input.Demo.Movement.performed -= OnMovementPerformed;
+            InputProvider.Instance.Input.Demo.Vertical.canceled -= OnMovementCancelled;
+            InputProvider.Instance.Input.Demo.Vertical.performed -= OnAltitudePerformed;
+            InputProvider.Instance.Input.Demo.Vertical.canceled -= OnAltitudeCancelled;
+            InputProvider.Instance.Input.Demo.Boost.performed -= OnBoostPerformed;
         }
     }
 }
