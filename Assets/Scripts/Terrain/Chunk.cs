@@ -87,10 +87,13 @@ namespace Terrain
         /// <summary>
         /// Creates higher LOD inside the tree
         /// </summary>
-        void Fragment()
+        /// <returns>
+        /// If chunk was fragmented
+        /// </returns>
+        bool Fragment()
         {
             if(_fragmented)
-                return;
+                return false;
             
             _fragmented = true;
             
@@ -99,6 +102,8 @@ namespace Terrain
                 var offset =  OffsetDirections[i] * _size / 4;
                 _children[i] = GetChunk(offset, transform, _size / 2, _depth - 1);
             }
+
+            return true;
         }
         
         /// <summary>
@@ -126,7 +131,9 @@ namespace Terrain
                 return;
             }
 
-            Fragment();
+            if (Fragment())
+                return;
+            
             DisableTerrain();
             
             foreach (var child in _children)

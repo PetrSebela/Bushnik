@@ -205,7 +205,7 @@ void TerrainMesh(uint3 id : SV_DispatchThreadID)
     NormalBuffer[vertex_index] = GetTerrainNormal(flatWorldPosition, 1);
     
     DataBuffer[vertex_index] = float2(ChunkDepth, sample.material);
-
+    
     if (id.x >= MeshResolution - 1 || id.z >= MeshResolution - 1)
         return;
     

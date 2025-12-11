@@ -30,8 +30,7 @@ void ColorPicker_float(
     float progress = clamp(angle / 30.0, 0.0, 1.0);
     color = grass * progress + light_grass * (1 - progress);
 
-    //
-    progress = clamp((height - 500) / 10, 0.0, 1.0);
+    progress = clamp((height - 500) / 1, 0.0, 1.0);
     color = snow * progress + color * (1 - progress);
 }
 

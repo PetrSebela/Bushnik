@@ -168,7 +168,7 @@ namespace Terrain.Foliage
                     chunk.SetState(LODState.Suspended);
                 }
 
-                float cull = Mathf.Clamp01(distance / RenderDistance);
+                float cull = Mathf.Clamp01((distance - RenderDistance / 2) / RenderDistance);
                 chunk.Render(cull);
             }
         }

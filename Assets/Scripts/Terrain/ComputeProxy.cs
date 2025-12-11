@@ -112,8 +112,6 @@ namespace Terrain
             
             ThreadGroups = Mathf.CeilToInt(meshSettings.resolution / 32f);
             
-
-            
             UpdateTerrainSettings();
             UpdateTerrainAffectors();
         }
@@ -212,7 +210,7 @@ namespace Terrain
 
             Vector3[] normals = new Vector3[_terrainNormalBuffer.count];
             _terrainNormalBuffer.GetData(normals);
-
+            
             Vector2[] data = new Vector2[_terrainDataBuffer.count];
             _terrainDataBuffer.GetData(data);
 
@@ -221,7 +219,7 @@ namespace Terrain
                 vertices = vertices,
                 triangles = indices,
                 normals = normals,
-                uv = data
+                uv2 = data
             };
             
             // TODO: do normal calculation on GPU to avoid mesh seams
