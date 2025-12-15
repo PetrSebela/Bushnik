@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 1244975}
   - component: {fileID: 1244974}
   - component: {fileID: 1244976}
+  - component: {fileID: 1244977}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -174,7 +175,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244973}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13ffa252d2a480998bd9993b15e02c76, type: 3}
   m_Name: 
@@ -185,6 +186,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0609c18306ff86a2eb4323982a4a1452, type: 2}
   BillboardModel: {fileID: -2049535571509378001, guid: 7e4b4b2fc0c97793a80c974c2708acd8, type: 3}
   RenderDistance: 6000
+--- !u!114 &1244977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8497e6dc481beac3a86c6f0ea25154ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &53475955
 GameObject:
   m_ObjectHideFlags: 0

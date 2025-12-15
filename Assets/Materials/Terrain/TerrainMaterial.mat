@@ -138,15 +138,17 @@ Material:
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
-    - _SnowAmplitude: 1
-    - _SnowAmplitudeGain: 1.97
-    - _SnowFq: 1
-    - _SnowFqGain: 0.3
+    - _SnowAmplitude: 1.37
+    - _SnowAmplitudeGain: 0.95
+    - _SnowFq: 0.01
+    - _SnowFqGain: 3.25
+    - _SnowOctaves: 8
+    - _SnowPadding: 500
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _TextureCellSize: 0
+    - _TextureCellSize: 0.51
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 1

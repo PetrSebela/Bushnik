@@ -21,11 +21,21 @@ namespace Terrain
         /// Size of the chunk
         /// </summary>
         private float _size;
+
+        /// <summary>
+        /// Size accessor
+        /// </summary>
+        public float Size => _size;
         
         /// <summary>
         /// Depth of the chunk inside LOD tree
         /// </summary>
         private int _depth;
+
+        /// <summary>
+        /// Depth accessor
+        /// </summary>
+        public int Depth => _depth;
         
         /// <summary>
         /// Flag representing if chunk has higher LOD available
@@ -42,6 +52,22 @@ namespace Terrain
         /// </summary>
         private bool _forced = false;
         
+        /// <summary>
+        /// If chunk has valid mesh
+        /// </summary>
+        private bool _isReady = false;
+
+        /// <summary>
+        /// Is Ready accessor
+        /// </summary>
+        private bool IsReady => _isReady;
+
+        private bool _canDisable = false;
+        
+        /// <summary>
+        /// Parent chunk
+        /// </summary>
+        private Chunk _parent;
         
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
@@ -61,7 +87,8 @@ namespace Terrain
             gameObject.transform.parent = parent;
             gameObject.transform.localPosition = offset;
             var chunk = gameObject.AddComponent<Chunk>();
-            chunk.Init(size, depth);
+            var parentChunk = parent.GetComponent<Chunk>();
+            chunk.Init(size, depth, parentChunk);
             return chunk;
         }
 
@@ -70,10 +97,12 @@ namespace Terrain
         /// </summary>
         /// <param name="size"> Size of the chunk </param>
         /// <param name="depth"> Depth of the chunk in LOD tree </param>
-        void Init(float size, int depth)
+        /// <param name="parent"> Parent chunk instance </param>
+        void Init(float size, int depth, Chunk parent)
         {
             _size = size;
             _depth = depth;
+            _parent = parent;
 
             if (_depth > TerrainManager.Instance.meshSettings.LODLevels)
                 return;
@@ -81,7 +110,28 @@ namespace Terrain
             _meshFilter = gameObject.AddComponent<MeshFilter>();
             _meshRenderer = gameObject.AddComponent<MeshRenderer>();
             _meshRenderer.material = ComputeProxy.Instance.terrainSettings.material;
-            _meshFilter.sharedMesh = ComputeProxy.Instance.GetTerrainMesh(transform.position, _size, _depth);
+            
+            // _meshFilter.sharedMesh = ComputeProxy.Instance.GetTerrainMesh(transform.position, _size, _depth);
+            LoadBalancer.Instance.RegisterRequest(this);
+        }
+
+        public void NotifyReady()
+        {
+            _canDisable = true;
+
+            foreach (var child in _children)
+                _canDisable &= child.IsReady;
+        }
+
+        /// <summary>
+        /// Sets chunk mesh
+        /// </summary>
+        /// <param name="mesh"> Mesh to be set </param>
+        public void SetMesh(Mesh mesh)
+        {
+            _meshFilter.sharedMesh = mesh;
+            _isReady = true;
+            _parent.NotifyReady();
         }
         
         /// <summary>
@@ -120,6 +170,7 @@ namespace Terrain
             {
                 Fragment();
                 _forced = true;
+                _canDisable = true;
             }
 
             Vector3 flatPosition = new Vector3(position.x, 0, position.z);
@@ -131,7 +182,9 @@ namespace Terrain
                 return;
             }
 
-            if (Fragment())
+            Fragment();
+            
+            if(!_canDisable)
                 return;
             
             DisableTerrain();

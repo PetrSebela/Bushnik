@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Terrain.Data;
@@ -59,6 +60,9 @@ namespace Terrain
         /// Compute buffer containing additional terrain data that are passed to the fragment and vertex shaders (use uv0)
         /// </summary>
         private ComputeBuffer _terrainDataBuffer;
+
+        private bool _pipelineClear = true;
+        public bool PipelineClear => _pipelineClear;
         
         /// <summary>
         /// Compute buffer storing biome data
@@ -193,27 +197,34 @@ namespace Terrain
         /// <param name="position">chunk position</param>
         /// <param name="size">chunk size</param>
         /// <param name="depth">chunk depth in LOD tree</param>
+        /// <param name="chunk"> Chunk to which the resulting mesh should be set </param>
         /// <returns></returns>
-        public Mesh GetTerrainMesh(Vector3 position, float size, int depth)
+        public IEnumerator GetTerrainMesh(Vector3 position, float size, int depth, Chunk chunk)
         {
+            _pipelineClear = false;
             TerrainComputeShader.SetFloat("ChunkSize", size);
             TerrainComputeShader.SetFloats("ChunkPosition", position.x, position.y, position.z);
             TerrainComputeShader.SetInt("ChunkDepth", depth);
 
             TerrainComputeShader.Dispatch(_terrainMeshKernel, ThreadGroups, 1, ThreadGroups);
-
+            yield return null;
+            
             Vector3[] vertices = new Vector3[_terrainVertexBuffer.count];
             _terrainVertexBuffer.GetData(vertices);
+            yield return null;
 
             int[] indices = new int[_terrainIndexBuffer.count];
             _terrainIndexBuffer.GetData(indices);
-
+            yield return null;
+            
             Vector3[] normals = new Vector3[_terrainNormalBuffer.count];
             _terrainNormalBuffer.GetData(normals);
+            yield return null;
             
             Vector2[] data = new Vector2[_terrainDataBuffer.count];
             _terrainDataBuffer.GetData(data);
-
+            yield return null;
+            
             Mesh mesh = new()
             {
                 vertices = vertices,
@@ -222,10 +233,10 @@ namespace Terrain
                 uv2 = data
             };
             
-            // TODO: do normal calculation on GPU to avoid mesh seams
-            // mesh.RecalculateNormals();
             mesh.RecalculateTangents();
-            return mesh;
+
+            chunk.SetMesh(mesh);
+            _pipelineClear = true;
         }
 
         /// <summary>
