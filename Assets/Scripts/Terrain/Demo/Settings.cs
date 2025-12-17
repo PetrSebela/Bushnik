@@ -1,6 +1,5 @@
 using System;
 using Terrain.Foliage;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using User;
@@ -18,9 +17,14 @@ namespace Terrain.Demo
         public bool RenderFoliage = true;
         
         /// <summary>
-        /// Actual foliage render ditance
+        /// Actual foliage render distance
         /// </summary>
-        public float FoliageRenderDistance = 1000;
+        private float _foliageRenderDistance = 6000;
+        
+        /// <summary>
+        /// FoliageRenderDistance accesor
+        /// </summary>
+        public float FoliageRenderDistance => _foliageRenderDistance;
         
         /// <summary>
         /// Increments for foliage render distance
@@ -29,6 +33,7 @@ namespace Terrain.Demo
         
         void Start()
         {
+            _foliageRenderDistance = FoliageManager.Instance.RenderDistance;
             RegisterInput();
         }
 
@@ -49,9 +54,10 @@ namespace Terrain.Demo
         void OnFoliageRenderDistanceChanged(InputAction.CallbackContext context)
         {
             float delta =  context.ReadValue<float>() * RenderDistanceIncrement;
-            FoliageRenderDistance += delta;
-            FoliageRenderDistance = Math.Max(0, FoliageRenderDistance);
-            FoliageManager.Instance.RenderDistance = FoliageRenderDistance;
+            _foliageRenderDistance += delta;
+            _foliageRenderDistance = Math.Max(0, _foliageRenderDistance);
+            
+            FoliageManager.Instance.SetRenderDistance(_foliageRenderDistance);
         }
         
         /// <summary>

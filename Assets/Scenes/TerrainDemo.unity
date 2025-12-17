@@ -175,7 +175,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244973}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13ffa252d2a480998bd9993b15e02c76, type: 3}
   m_Name: 
@@ -185,7 +185,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cff1e7c4710101b1fbf5e31705c8adba, type: 2}
   - {fileID: 11400000, guid: 0609c18306ff86a2eb4323982a4a1452, type: 2}
   BillboardModel: {fileID: -2049535571509378001, guid: 7e4b4b2fc0c97793a80c974c2708acd8, type: 3}
-  RenderDistance: 6000
 --- !u!114 &1244977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,7 +720,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c7b067295cd351d69946d080ee3fd13, type: 2}
+  - {fileID: 2100000, guid: b90b4cda8072a0cc386cc0712e081916, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

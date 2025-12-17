@@ -37,7 +37,8 @@ namespace Terrain.Foliage
 
         public Mesh BillboardModel;
 
-        public float RenderDistance = 6000;
+        private float _renderDistance = 6000;
+        public float RenderDistance => _renderDistance;
 
         /// <summary>
         /// Manager setup and singleton init
@@ -61,6 +62,7 @@ namespace Terrain.Foliage
         /// TODO: If performance on generation is issus (which it will be), convert this into coroutine and split load across multiple frames 
         public void Start()
         {
+            SetRenderDistance(_renderDistance);
             StartCoroutine(GenerateFoliageChunks());
         }
 
@@ -104,6 +106,20 @@ namespace Terrain.Foliage
             }
             
             RemovePruned();
+        }
+
+        /// <summary>
+        /// Updates render distance in foliage
+        /// </summary>
+        /// <param name="distance"> Desired render distance</param>
+        public void SetRenderDistance(float distance)
+        {
+            _renderDistance = distance;
+            foreach (var model in Tests)
+            {
+                model.billboardMaterial.SetFloat("_RenderDistance", distance);
+                model.billboardMaterial.SetFloat("_FadeDistance", distance * 0.1f);
+            }
         }
 
         /// <summary>
@@ -156,20 +172,15 @@ namespace Terrain.Foliage
                 var distance = Vector3.Distance(flat, position);
                 
                 if (distance < 1000)
-                {
                     chunk.SetState(LODState.Active);       
-                }
-                else if (distance < RenderDistance)
-                {
+                else if (distance < _renderDistance)
                     chunk.SetState(LODState.Reduced);
-                }
                 else
-                {
                     chunk.SetState(LODState.Suspended);
-                }
-
-                float cull = Mathf.Clamp01((distance - RenderDistance / 2) / RenderDistance);
-                chunk.Render(cull);
+                
+                // TODO: reduce tree amount further from the camera
+                float cull = Mathf.Clamp01((distance - _renderDistance / 2) / _renderDistance);
+                chunk.Render(0);
             }
         }
     }

@@ -27,7 +27,6 @@ namespace UI.Debug
         /// </summary>
         [SerializeField] private TMP_Text fpsDisplay;
         
-        
         /// <summary>
         /// Demo settings instance
         /// </summary>
@@ -44,7 +43,6 @@ namespace UI.Debug
         /// </summary>
         public TMP_Text RenderFlagText;
         
-        
         /// <summary>
         /// Camera rigidbody reference
         /// </summary>
@@ -60,7 +58,6 @@ namespace UI.Debug
         /// Text displaying camera velocity
         /// </summary>
         public TMP_Text CameraVelocityText;
-        
         
         /// <summary>
         /// Initial buffer filling
