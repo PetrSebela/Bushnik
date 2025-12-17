@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Terrain.Data;
 using Unity.Mathematics;
 using UnityEngine.Rendering;
@@ -192,6 +193,16 @@ namespace Terrain
             TerrainComputeShader.SetBuffer(_previewKernel, bname, buffer);
             TerrainComputeShader.SetBuffer(_sampleKernel, bname, buffer);
         }
+
+        private async Task<T[]> ReadBufferAsync<T>(ComputeBuffer buffer) where T : struct
+        {
+            var request = AsyncGPUReadback.Request(buffer);
+
+            while (!request.done)
+                await Task.Yield();
+            
+            return request.GetData<T>().ToArray();
+        }
         
         /// <summary>
         /// Constructs terrain mesh and heightmap using compute shaders for given chunk
@@ -201,7 +212,7 @@ namespace Terrain
         /// <param name="depth">chunk depth in LOD tree</param>
         /// <param name="chunk"> Chunk to which the resulting mesh should be set </param>
         /// <returns></returns>
-        public IEnumerator GetTerrainMesh(Vector3 position, float size, int depth, Chunk chunk)
+        public async Task GetTerrainMesh(Vector3 position, float size, int depth, Chunk chunk)
         {
             _pipelineClear = false;
             TerrainComputeShader.SetFloat("ChunkSize", size);
@@ -209,30 +220,20 @@ namespace Terrain
             TerrainComputeShader.SetInt("ChunkDepth", depth);
 
             TerrainComputeShader.Dispatch(_terrainMeshKernel, ThreadGroups, 1, ThreadGroups);
-            yield return null;
-            
-            AsyncGPUReadbackRequest verticesRequest = AsyncGPUReadback.Request(_terrainVertexBuffer);
-            yield return new WaitUntil(() => verticesRequest.done );
-            Vector3[] vertices = verticesRequest.GetData<Vector3>().ToArray();
-            
-            AsyncGPUReadbackRequest indicesRequest = AsyncGPUReadback.Request(_terrainIndexBuffer);
-            yield return new WaitUntil(() => indicesRequest.done );
-            int[] indices = indicesRequest.GetData<int>().ToArray();
-            
-            AsyncGPUReadbackRequest normalsRequest = AsyncGPUReadback.Request(_terrainNormalBuffer);
-            yield return new WaitUntil(() => normalsRequest.done );
-            Vector3[] normals = normalsRequest.GetData<Vector3>().ToArray();
-            
-            AsyncGPUReadbackRequest dataRequest = AsyncGPUReadback.Request(_terrainDataBuffer);
-            yield return new WaitUntil(() => dataRequest.done );
-            Vector2[] data = dataRequest.GetData<Vector2>().ToArray();
+
+            var verticesRequest = ReadBufferAsync<Vector3>(_terrainVertexBuffer);
+            var indicesRequest = ReadBufferAsync<int>(_terrainIndexBuffer);
+            var normalsRequest = ReadBufferAsync<Vector3>(_terrainNormalBuffer);
+            var dataRequest = ReadBufferAsync<Vector2>(_terrainDataBuffer);
+
+            await Task.WhenAll(verticesRequest, indicesRequest, normalsRequest, dataRequest);
             
             Mesh mesh = new()
             {
-                vertices = vertices,
-                triangles = indices,
-                normals = normals,
-                uv2 = data
+                vertices = verticesRequest.Result,
+                triangles = indicesRequest.Result,
+                normals = normalsRequest.Result,
+                uv2 = dataRequest.Result
             };
             
             mesh.RecalculateTangents();
