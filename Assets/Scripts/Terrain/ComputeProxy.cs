@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terrain.Data;
 using Unity.Mathematics;
+using UnityEngine.Rendering;
 
 namespace Terrain
 {
@@ -191,7 +192,7 @@ namespace Terrain
             TerrainComputeShader.SetBuffer(_previewKernel, bname, buffer);
             TerrainComputeShader.SetBuffer(_sampleKernel, bname, buffer);
         }
-
+        
         /// <summary>
         /// Constructs terrain mesh and heightmap using compute shaders for given chunk
         /// </summary>
@@ -210,21 +211,21 @@ namespace Terrain
             TerrainComputeShader.Dispatch(_terrainMeshKernel, ThreadGroups, 1, ThreadGroups);
             yield return null;
             
-            Vector3[] vertices = new Vector3[_terrainVertexBuffer.count];
-            _terrainVertexBuffer.GetData(vertices);
-            yield return null;
-
-            int[] indices = new int[_terrainIndexBuffer.count];
-            _terrainIndexBuffer.GetData(indices);
-            yield return null;
+            AsyncGPUReadbackRequest verticesRequest = AsyncGPUReadback.Request(_terrainVertexBuffer);
+            yield return new WaitUntil(() => verticesRequest.done );
+            Vector3[] vertices = verticesRequest.GetData<Vector3>().ToArray();
             
-            Vector3[] normals = new Vector3[_terrainNormalBuffer.count];
-            _terrainNormalBuffer.GetData(normals);
-            yield return null;
+            AsyncGPUReadbackRequest indicesRequest = AsyncGPUReadback.Request(_terrainIndexBuffer);
+            yield return new WaitUntil(() => indicesRequest.done );
+            int[] indices = indicesRequest.GetData<int>().ToArray();
             
-            Vector2[] data = new Vector2[_terrainDataBuffer.count];
-            _terrainDataBuffer.GetData(data);
-            yield return null;
+            AsyncGPUReadbackRequest normalsRequest = AsyncGPUReadback.Request(_terrainNormalBuffer);
+            yield return new WaitUntil(() => normalsRequest.done );
+            Vector3[] normals = normalsRequest.GetData<Vector3>().ToArray();
+            
+            AsyncGPUReadbackRequest dataRequest = AsyncGPUReadback.Request(_terrainDataBuffer);
+            yield return new WaitUntil(() => dataRequest.done );
+            Vector2[] data = dataRequest.GetData<Vector2>().ToArray();
             
             Mesh mesh = new()
             {
@@ -235,7 +236,6 @@ namespace Terrain
             };
             
             mesh.RecalculateTangents();
-
             chunk.SetMesh(mesh);
             _pipelineClear = true;
         }
