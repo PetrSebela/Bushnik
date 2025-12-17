@@ -10,9 +10,11 @@ namespace Terrain.Demo
     /// </summary>
     public class CameraController : MonoBehaviour
     {
+        [SerializeField] private Transform cameraTransform;
         /// <summary>
         /// Normal camera speed
         /// </summary>
+        [Header("Movement")]
         [SerializeField] private float cameraSpeed = 10;
         
         /// <summary>
@@ -23,8 +25,15 @@ namespace Terrain.Demo
         /// <summary>
         /// Sensitivity for camera rotation
         /// </summary>
+        [Header("Mouse")]
         [SerializeField] private float mouseSensitivity = 20;
         
+        /// <summary>
+        /// Camera sensitivity for joystick
+        /// </summary>
+        [Header("Controller")]
+        [SerializeField] private float joystickSensitivity = 20;
+
         /// <summary>
         /// Camera rigidbody
         /// </summary>
@@ -43,13 +52,19 @@ namespace Terrain.Demo
         /// <summary>
         /// Camera input vector in local space
         /// </summary>
-        private Vector2 _cameraInput = Vector2.zero;
+        private Vector2 _cameraJoystickInput = Vector2.zero;
         
         /// <summary>
         /// Flag for boosted movement speed
         /// </summary>
         private bool _boosted = false;
-        
+
+        /// <summary>
+        /// Camera rotation smooth factor
+        /// </summary>
+        [SerializeField] private float smoothFactor = 1;
+
+        private Vector2 _smoothInput = Vector2.zero;
         
         /// <summary>
         /// Initialization
@@ -65,33 +80,45 @@ namespace Terrain.Demo
         /// </summary>
         void FixedUpdate()
         {
-            _attitude += _cameraInput * 3;
+            _smoothInput = Vector2.Lerp(_smoothInput, _cameraJoystickInput, smoothFactor);
+            
+            _attitude += _smoothInput * joystickSensitivity;
             _attitude = new Vector2(_attitude.x, Mathf.Clamp(_attitude.y, -90, 90));
 
             var horizontalRotation = Quaternion.AngleAxis(_attitude.x, Vector3.up);
-            var verticalRotation = Quaternion.AngleAxis(-_attitude.y, Vector3.right);
 
             var forward = horizontalRotation * Vector3.forward * _direction.x;
             var right = horizontalRotation * Vector3.right * _direction.z;
             var up = Vector3.up * _direction.y;
 
-            var attitude = horizontalRotation * verticalRotation;
-            cameraBody.rotation = attitude;
+            // var attitude = horizontalRotation * verticalRotation;
+            // cameraBody.rotation = attitude;
             
             float velocity = _boosted ? cameraBoostSpeed : cameraSpeed;
-            cameraBody.linearVelocity = velocity * (forward + right + up);
+            var force = (forward + right + up) * velocity;
+            cameraBody.AddForce(force, ForceMode.Acceleration);
+            // cameraBody.linearVelocity = (forward + right + up) * (velocity * Time.deltaTime);
+        }
+
+        private void Update()
+        {
+            var horizontalRotation = Quaternion.AngleAxis(_attitude.x, Vector3.up);
+            var verticalRotation = Quaternion.AngleAxis(-_attitude.y, Vector3.right);
+            var attitude = horizontalRotation * verticalRotation;
+            
+            cameraTransform.SetPositionAndRotation(cameraBody.position, attitude);
         }
 
         void OnCameraJoystickPerformed(InputAction.CallbackContext context)
         {
             var input = context.ReadValue<Vector2>();
             // Invert joystick pitch axis because of personal preference
-            _cameraInput = new Vector3(input.x, -input.y);
+            _cameraJoystickInput = new Vector3(input.x, -input.y);
         }
 
         void OnCameraJoystickCancelled(InputAction.CallbackContext context)
         {
-            _cameraInput = Vector2.zero;
+            _cameraJoystickInput = Vector2.zero;
         }
 
         void OnMovementPerformed(InputAction.CallbackContext context)

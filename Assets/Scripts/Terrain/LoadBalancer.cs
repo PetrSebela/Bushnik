@@ -37,14 +37,8 @@ namespace Terrain
                 return; 
             
             var request = _requests.Pop();
-            // StartCoroutine(
-            // ComputeProxy.Instance.GetTerrainMesh(
-            //     request.transform.position, 
-            //     request.Size, 
-            //     request.Depth, 
-            //     request)
-            // );
-            ComputeProxy.Instance.GetTerrainMesh(
+
+            _ = ComputeProxy.Instance.GetTerrainMesh(
                 request.transform.position,
                 request.Size,
                 request.Depth,
