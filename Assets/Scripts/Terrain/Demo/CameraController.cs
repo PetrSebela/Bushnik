@@ -64,7 +64,27 @@ namespace Terrain.Demo
         /// </summary>
         [SerializeField] private float smoothFactor = 1;
 
+        /// <summary>
+        /// Smoothed camera rotation input
+        /// </summary>
         private Vector2 _smoothInput = Vector2.zero;
+
+        /// <summary>
+        /// If camera is zoomed in
+        /// </summary>
+        private bool _zoomed = false;
+
+        
+        /// <summary>
+        /// Unzoomed camera FOV
+        /// </summary>
+        [Header("Camera")] 
+        [SerializeField] private float normalFOV = 90;
+        
+        /// <summary>
+        /// Zoomed camera FOV
+        /// </summary>
+        [SerializeField] private float zoomedFOV = 25;
         
         /// <summary>
         /// Initialization
@@ -90,14 +110,10 @@ namespace Terrain.Demo
             var forward = horizontalRotation * Vector3.forward * _direction.x;
             var right = horizontalRotation * Vector3.right * _direction.z;
             var up = Vector3.up * _direction.y;
-
-            // var attitude = horizontalRotation * verticalRotation;
-            // cameraBody.rotation = attitude;
             
             float velocity = _boosted ? cameraBoostSpeed : cameraSpeed;
             var force = (forward + right + up) * velocity;
             cameraBody.AddForce(force, ForceMode.Acceleration);
-            // cameraBody.linearVelocity = (forward + right + up) * (velocity * Time.deltaTime);
         }
 
         private void Update()
@@ -154,6 +170,11 @@ namespace Terrain.Demo
             _boosted = !_boosted;
         }
 
+        void OnZoomPerformed(InputAction.CallbackContext context)
+        {
+            _zoomed = !_zoomed;
+            Camera.main.fieldOfView = _zoomed ? zoomedFOV : normalFOV;
+        }
 
         private void RegisterInput()
         {
@@ -165,6 +186,7 @@ namespace Terrain.Demo
             InputProvider.Instance.Input.Demo.Vertical.performed += OnAltitudePerformed;
             InputProvider.Instance.Input.Demo.Vertical.canceled += OnAltitudeCancelled;
             InputProvider.Instance.Input.Demo.Boost.performed += OnBoostPerformed;
+            InputProvider.Instance.Input.Demo.Zoom.performed += OnZoomPerformed;
         }
 
         private void OnDisable()
@@ -177,6 +199,7 @@ namespace Terrain.Demo
             InputProvider.Instance.Input.Demo.Vertical.performed -= OnAltitudePerformed;
             InputProvider.Instance.Input.Demo.Vertical.canceled -= OnAltitudeCancelled;
             InputProvider.Instance.Input.Demo.Boost.performed -= OnBoostPerformed;
+            InputProvider.Instance.Input.Demo.Zoom.performed -= OnZoomPerformed;
         }
     }
 }

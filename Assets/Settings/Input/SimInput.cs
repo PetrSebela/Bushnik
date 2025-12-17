@@ -154,6 +154,24 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HideDebug"",
+                    ""type"": ""Button"",
+                    ""id"": ""5f30d815-f633-432a-b5ae-8606f47e830b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Button"",
+                    ""id"": ""ebfea632-5b14-496c-b099-35aac6c3bdc8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -418,6 +436,50 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleFoliage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8baa6ee-8917-4ac5-8a84-7249651ce448"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HideDebug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9a527887-81fa-468f-962e-d60e11fccd5a"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HideDebug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""749b7ec8-548d-47bf-b459-2da1ab6e6aa2"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf0dd933-b730-4f04-8fb3-e8a9fdaf0c13"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -951,6 +1013,8 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Demo_Boost = m_Demo.FindAction("Boost", throwIfNotFound: true);
         m_Demo_ChangeRenderDistance = m_Demo.FindAction("ChangeRenderDistance", throwIfNotFound: true);
         m_Demo_ToggleFoliage = m_Demo.FindAction("ToggleFoliage", throwIfNotFound: true);
+        m_Demo_HideDebug = m_Demo.FindAction("HideDebug", throwIfNotFound: true);
+        m_Demo_Zoom = m_Demo.FindAction("Zoom", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1051,6 +1115,8 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Demo_Boost;
     private readonly InputAction m_Demo_ChangeRenderDistance;
     private readonly InputAction m_Demo_ToggleFoliage;
+    private readonly InputAction m_Demo_HideDebug;
+    private readonly InputAction m_Demo_Zoom;
     /// <summary>
     /// Provides access to input actions defined in input action map "Demo".
     /// </summary>
@@ -1090,6 +1156,14 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Demo/ToggleFoliage".
         /// </summary>
         public InputAction @ToggleFoliage => m_Wrapper.m_Demo_ToggleFoliage;
+        /// <summary>
+        /// Provides access to the underlying input action "Demo/HideDebug".
+        /// </summary>
+        public InputAction @HideDebug => m_Wrapper.m_Demo_HideDebug;
+        /// <summary>
+        /// Provides access to the underlying input action "Demo/Zoom".
+        /// </summary>
+        public InputAction @Zoom => m_Wrapper.m_Demo_Zoom;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1137,6 +1211,12 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @ToggleFoliage.started += instance.OnToggleFoliage;
             @ToggleFoliage.performed += instance.OnToggleFoliage;
             @ToggleFoliage.canceled += instance.OnToggleFoliage;
+            @HideDebug.started += instance.OnHideDebug;
+            @HideDebug.performed += instance.OnHideDebug;
+            @HideDebug.canceled += instance.OnHideDebug;
+            @Zoom.started += instance.OnZoom;
+            @Zoom.performed += instance.OnZoom;
+            @Zoom.canceled += instance.OnZoom;
         }
 
         /// <summary>
@@ -1169,6 +1249,12 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @ToggleFoliage.started -= instance.OnToggleFoliage;
             @ToggleFoliage.performed -= instance.OnToggleFoliage;
             @ToggleFoliage.canceled -= instance.OnToggleFoliage;
+            @HideDebug.started -= instance.OnHideDebug;
+            @HideDebug.performed -= instance.OnHideDebug;
+            @HideDebug.canceled -= instance.OnHideDebug;
+            @Zoom.started -= instance.OnZoom;
+            @Zoom.performed -= instance.OnZoom;
+            @Zoom.canceled -= instance.OnZoom;
         }
 
         /// <summary>
@@ -1453,6 +1539,20 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleFoliage(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HideDebug" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHideDebug(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Zoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnZoom(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

@@ -4,6 +4,8 @@ using System.Linq;
 using Terrain.Demo;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using User;
 
 namespace UI.Debug
 {
@@ -60,6 +62,16 @@ namespace UI.Debug
         public TMP_Text CameraVelocityText;
         
         /// <summary>
+        /// Flag if debug menu is hidden
+        /// </summary>
+        private bool _hidden = false;
+
+        /// <summary>
+        /// Topmost menu container
+        /// </summary>
+        [SerializeField] private GameObject debugMenuContainer;
+        
+        /// <summary>
         /// Initial buffer filling
         /// </summary>
         private void Start()
@@ -67,6 +79,8 @@ namespace UI.Debug
             // Initialize sample buffer
             for (int i = 0; i < _samples; i++)
                 _deltas.Add(0);
+            
+            RegisterInput();
         }
 
         /// <summary>
@@ -85,6 +99,22 @@ namespace UI.Debug
 
             CameraPositionText.text = $"Position: x={(int)_cameraBody.position.x} y= {(int)_cameraBody.position.y} z= {(int)_cameraBody.position.z}";
             CameraVelocityText.text = $"Velocity: {(int)_cameraBody.linearVelocity.magnitude} mps ";
+        }
+
+        private void OnDebugHide(InputAction.CallbackContext context)
+        {
+            _hidden = !_hidden;
+            debugMenuContainer.SetActive(!_hidden);
+        }
+        
+        private void RegisterInput()
+        {
+            InputProvider.Instance.Input.Demo.HideDebug.performed += OnDebugHide;
+        }
+
+        private void OnDisable()
+        {
+            InputProvider.Instance.Input.Demo.HideDebug.performed -= OnDebugHide;
         }
     }
 }
