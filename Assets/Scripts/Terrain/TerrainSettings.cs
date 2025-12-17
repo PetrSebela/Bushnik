@@ -13,5 +13,11 @@ namespace Terrain
         
         [Tooltip("Material used for terrain rendering")]
         public Material material;
+
+        [Tooltip("Maximum terrain height")] 
+        public float height;
+
+        [Tooltip("Snow height")] 
+        public float snowHeight;
     }
 }

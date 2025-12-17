@@ -181,6 +181,7 @@ RWStructuredBuffer<float3> NormalBuffer;
 RWStructuredBuffer<float2> DataBuffer;
 
 float ChunkSize;
+float TerrainHeight;
 uint ChunkDepth;
 uint MeshResolution;
 float3 ChunkPosition;
@@ -196,7 +197,7 @@ void TerrainMesh(uint3 id : SV_DispatchThreadID)
     float2 flatWorldPosition = float2(worldPosition.x, worldPosition.z);
     
     TerrainMaterialOverride sample = GetTerrainHeight(flatWorldPosition);
-    chunkPosition.y = sample.height * 1500;
+    chunkPosition.y = sample.height * TerrainHeight;
 
     int vertex_index = id.x + id.z * MeshResolution;
     VertexBuffer[vertex_index] = chunkPosition;
@@ -288,7 +289,7 @@ void SamplePoints(uint3 id : SV_DispatchThreadID)
         TerrainMaterialOverride terrain = GetTerrainHeight(worldPosition);
         if (terrain.distance > 150)
         {
-            Points[id.x].y = terrain.height * 1500;
+            Points[id.x].y = terrain.height * TerrainHeight;
             return;
         }
     }

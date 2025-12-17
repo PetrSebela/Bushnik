@@ -23,6 +23,9 @@
         },
         {
             "m_Id": "4a5f8b9ead1b4f56bd1aaa8f3b0c85fe"
+        },
+        {
+            "m_Id": "34c955816d7e418f8032dd2c635061b4"
         }
     ],
     "m_Keywords": [],
@@ -164,6 +167,9 @@
         },
         {
             "m_Id": "e81441c85a614f56b6104b7c64058d72"
+        },
+        {
+            "m_Id": "2799e545d85a4131a8afb7ca71c1c08a"
         }
     ],
     "m_GroupDatas": [
@@ -261,6 +267,20 @@
                     "m_Id": "b1df213a075845f89455442171be64f4"
                 },
                 "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "2799e545d85a4131a8afb7ca71c1c08a"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "d0046b552f8d4a54a84aaee20733b0b0"
+                },
+                "m_SlotId": 9
             }
         },
         {
@@ -1094,8 +1114,8 @@
     "m_ObjectId": "1ba67af415544cb092753d77455301cc",
     "m_Title": "Height offset",
     "m_Position": {
-        "x": -3261.000244140625,
-        "y": 0.000057220458984375
+        "x": -3261.0,
+        "y": 0.0
     }
 }
 
@@ -1395,6 +1415,42 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "2799e545d85a4131a8afb7ca71c1c08a",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -665.0,
+            "y": 341.9999694824219,
+            "width": 139.0,
+            "height": 34.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "b93dad3f427244908880cc302bd6f1d8"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "34c955816d7e418f8032dd2c635061b4"
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.NormalMaterialSlot",
     "m_ObjectId": "2a06b50f26e049d6bd0f0df88b240454",
     "m_Id": 4,
@@ -1600,7 +1656,35 @@
     "m_Title": "Normal angle",
     "m_Position": {
         "x": -2189.000244140625,
-        "y": 967.0000610351563
+        "y": 967.0001220703125
+    }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "34c955816d7e418f8032dd2c635061b4",
+    "m_Guid": {
+        "m_GuidSerialized": "4ccb3bf9-463f-4dff-8e48-611fb38ef1c0"
+    },
+    "m_Name": "ShowHeight",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "ShowHeight",
+    "m_DefaultReferenceName": "_ShowHeight",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 500.0,
+    "m_FloatType": 0,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
     }
 }
 
@@ -1859,6 +1943,21 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "479c63a5ba9b4319938f0baccfb67bfe",
+    "m_Id": 9,
+    "m_DisplayName": "snowHeightThreshold",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "snowHeightThreshold",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "47f0b27e26514325a7639b10fbe4a78c",
     "m_Group": {
@@ -1919,6 +2018,9 @@
         },
         {
             "m_Id": "4a5f8b9ead1b4f56bd1aaa8f3b0c85fe"
+        },
+        {
+            "m_Id": "34c955816d7e418f8032dd2c635061b4"
         }
     ]
 }
@@ -2870,8 +2972,8 @@
     "m_ObjectId": "7f17e88c54f0482085e36d76f55be5a0",
     "m_Title": "Runway material mixing",
     "m_Position": {
-        "x": 248.9999237060547,
-        "y": 115.00004577636719
+        "x": 248.999755859375,
+        "y": 115.0
     }
 }
 
@@ -3685,6 +3787,21 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "b93dad3f427244908880cc302bd6f1d8",
+    "m_Id": 0,
+    "m_DisplayName": "ShowHeight",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "b98c0b613ec34ffc8f42a1d60855c283",
     "m_Id": 0,
@@ -4030,16 +4147,13 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -404.0,
-            "y": 79.0,
-            "width": 220.0,
-            "height": 262.0
+            "x": -403.9999694824219,
+            "y": 77.99999237060547,
+            "width": 219.99996948242188,
+            "height": 285.9999694824219
         }
     },
     "m_Slots": [
-        {
-            "m_Id": "98907772be2147aea496c61ee0c5fc66"
-        },
         {
             "m_Id": "ebc57dd78a7145498ee6b959ff732f6c"
         },
@@ -4062,7 +4176,13 @@
             "m_Id": "192bfb04e45542faaf7bbf2b95465d04"
         },
         {
+            "m_Id": "479c63a5ba9b4319938f0baccfb67bfe"
+        },
+        {
             "m_Id": "dd26cb5043cb47888085330c33f838a6"
+        },
+        {
+            "m_Id": "98907772be2147aea496c61ee0c5fc66"
         }
     ],
     "synonyms": [

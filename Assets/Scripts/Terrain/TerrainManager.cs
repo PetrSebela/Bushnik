@@ -64,6 +64,9 @@ namespace Terrain
         /// </summary>
         private void Start()
         {
+            // TODO: decide on material management and move this to propper module
+            terrainSettings.material.SetFloat("_ShowHeight", terrainSettings.snowHeight);
+            
             int nodeCount = Mathf.CeilToInt(ComputeProxy.Instance.terrainSettings.size / meshSettings.size);
             int targetDepth = (int)Mathf.Log(nodeCount, 2);
             Debug.Log($"Using {targetDepth} quad-tree layer");

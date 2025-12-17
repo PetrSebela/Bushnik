@@ -171,6 +171,7 @@ namespace Terrain
             GetKernelIDs();
             TerrainComputeShader.SetFloat("TerrainSize", terrainSettings.size);
             TerrainComputeShader.SetInt("MeshResolution", meshSettings.resolution);
+            TerrainComputeShader.SetFloat("TerrainHeight", terrainSettings.height);
             
             // Default terrain does not account for runways and other affectors
             TerrainComputeShader.SetInt("AirstripBufferSize", 0);

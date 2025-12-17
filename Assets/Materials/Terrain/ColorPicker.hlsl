@@ -9,6 +9,7 @@ void ColorPicker_float(
     float3 light_rock,
     float3 snow, 
     float height, 
+    float snowHeightThreshold,
     float angle, 
     out float3 color)
 {
@@ -30,7 +31,7 @@ void ColorPicker_float(
     float progress = clamp(angle / 30.0, 0.0, 1.0);
     color = grass * progress + light_grass * (1 - progress);
 
-    progress = clamp((height - 500) / 25, 0.0, 1.0);
+    progress = clamp((height - snowHeightThreshold) / 25, 0.0, 1.0);
     color = snow * progress + color * (1 - progress);
 }
 
