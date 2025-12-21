@@ -115,12 +115,23 @@ namespace Terrain
             LoadBalancer.Instance.RegisterRequest(this);
         }
 
-        public void NotifyReady()
+        /// <summary>
+        /// Triggers check if this chunk can be safely disabled
+        /// </summary>
+        private void NotifyReady()
         {
             _canDisable = true;
 
             foreach (var child in _children)
                 _canDisable &= child.IsReady;
+        }
+
+        /// <summary>
+        /// Cancels potential request of disabled chunks
+        /// </summary>
+        private void OnDisable()
+        {
+            LoadBalancer.Instance.CancelRequest(this);
         }
 
         /// <summary>
@@ -158,6 +169,7 @@ namespace Terrain
         
         /// <summary>
         /// Updates LOD tree structure so that the highest LOD is rendered close to the 'position'
+        /// TODO: limit highest chunk resolution based on target velocity
         /// </summary>
         /// <param name="position"> Target LOD position </param>
         public void UpdateLOD(Vector3 position)

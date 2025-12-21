@@ -194,6 +194,12 @@ namespace Terrain
             TerrainComputeShader.SetBuffer(_sampleKernel, bname, buffer);
         }
 
+        /// <summary>
+        /// Creates request for compute buffer readback
+        /// </summary>
+        /// <param name="buffer">Compute buffer to be read</param>
+        /// <typeparam name="T">Datatype stored in compute buffer</typeparam>
+        /// <returns>Task corresponding to said request</returns>
         private async Task<T[]> ReadBufferAsync<T>(ComputeBuffer buffer) where T : struct
         {
             var request = AsyncGPUReadback.Request(buffer);
@@ -237,7 +243,7 @@ namespace Terrain
             };
             
             mesh.RecalculateTangents();
-            chunk.SetMesh(mesh);
+            chunk?.SetMesh(mesh);
             _pipelineClear = true;
         }
 

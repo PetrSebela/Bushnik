@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Terrain
@@ -19,24 +20,34 @@ namespace Terrain
         /// </summary>
         public static LoadBalancer Instance => _instance;
 
-        private Stack<Chunk> _requests = new();
+        /// <summary>
+        /// List of all requests
+        /// </summary>
+        private List<Chunk> _requests = new();
         
+        /// <summary>
+        /// Singleton init
+        /// </summary>
         private void Awake()
         {
             _instance = this;
         }
-
-        void FixedUpdate()
+        
+        void LateUpdate()
         {
             ProcessRequest();
         }
 
+        /// <summary>
+        /// Tries to fulfill next request
+        /// </summary>
         private void ProcessRequest()
         {
             if(!ComputeProxy.Instance.PipelineClear || _requests.Count == 0)
                 return; 
             
-            var request = _requests.Pop();
+            var request = _requests[^1];
+            _requests.RemoveAt(_requests.Count - 1);
 
             _ = ComputeProxy.Instance.GetTerrainMesh(
                 request.transform.position,
@@ -45,9 +56,22 @@ namespace Terrain
                 request);
         }
         
+        /// <summary>
+        /// Adds chunk to request queue
+        /// </summary>
+        /// <param name="chunk">Requested chunk</param>
         public void RegisterRequest(Chunk chunk)
         {
-            _requests.Push(chunk);
+            _requests.Add(chunk);
+        }
+
+        /// <summary>
+        /// Cancels any requests for said chunk 
+        /// </summary>
+        /// <param name="chunk">Chunk for which the requests will be cancelled</param>
+        public void CancelRequest(Chunk chunk)
+        {
+            _requests.Remove(chunk);
         }
     }
 }
