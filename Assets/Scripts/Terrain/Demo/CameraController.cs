@@ -91,6 +91,8 @@ namespace Terrain.Demo
         /// </summary>
         private void Start()
         {
+            QualitySettings.vSyncCount = 1;
+            Application.targetFrameRate = 60;
             Cursor.lockState = CursorLockMode.Locked;
             RegisterInput();
         }

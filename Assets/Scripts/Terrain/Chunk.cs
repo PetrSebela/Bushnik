@@ -71,7 +71,8 @@ namespace Terrain
         
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
-
+        private MeshCollider _meshCollider;
+        
         /// <summary>
         /// Creates and initializes chunk instance
         /// TODO: use prefab instancing
@@ -83,7 +84,7 @@ namespace Terrain
         /// <returns></returns>
         public static Chunk GetChunk(Vector3 offset, Transform parent, float size, int depth)
         {
-            var gameObject = new GameObject(offset.GetHashCode().ToString());
+            var gameObject = new GameObject(depth.ToString());
             gameObject.transform.parent = parent;
             gameObject.transform.localPosition = offset;
             var chunk = gameObject.AddComponent<Chunk>();
@@ -110,6 +111,9 @@ namespace Terrain
             _meshFilter = gameObject.AddComponent<MeshFilter>();
             _meshRenderer = gameObject.AddComponent<MeshRenderer>();
             _meshRenderer.material = ComputeProxy.Instance.terrainSettings.material;
+            
+            if(_depth == 0 || _depth == TerrainManager.Instance.meshSettings.LODLevels)
+                _meshCollider = gameObject.AddComponent<MeshCollider>();
             
             // _meshFilter.sharedMesh = ComputeProxy.Instance.GetTerrainMesh(transform.position, _size, _depth);
             LoadBalancer.Instance.RegisterRequest(this);
@@ -141,6 +145,10 @@ namespace Terrain
         public void SetMesh(Mesh mesh)
         {
             _meshFilter.sharedMesh = mesh;
+            
+            if(_meshCollider)
+                _meshCollider.sharedMesh = mesh;    // This tanks performance because of collision mesh baking
+            
             _isReady = true;
             _parent.NotifyReady();
         }

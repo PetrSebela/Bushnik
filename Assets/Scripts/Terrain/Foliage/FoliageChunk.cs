@@ -8,43 +8,43 @@ namespace Terrain.Foliage
 {
     public class FoliageChunk : MonoBehaviour
     {
+        /// <summary>
+        /// Current chunk state ( maybe discard later )
+        /// </summary>
         private LODState _state = LODState.Active;
 
-        private Instances[] _test;
+        /// <summary>
+        /// Array of all foliage instances in this chunk
+        /// </summary>
+        private Instances[] _instances;
+        
+        /// <summary>
+        /// Generates foliage in chunk
+        /// </summary>
         public void Generate()
         {
             var modelCount = FoliageManager.Instance.Tests.Length;
-            _test = new Instances[modelCount];
-
+            _instances = new Instances[modelCount];
+            
             float area = Mathf.Pow(FoliageManager.Instance.foliageSettings.chunkSize, 2);
             float density = 20f; //Trees per 10000m^2
             int count = Mathf.CeilToInt((area / 10000f) * density / modelCount);
-
-
+            
+            Vector3 minCube = transform.position - Vector3.one * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
+            Vector3 maxCube = transform.position + Vector3.one * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
+            
             int totalCount = 0;
             for (int i = 0; i < modelCount; i++)
             {
-                Vector3[] samples = new Vector3[count];
-                
-                for (int j = 0; j < count; j++)
-                {
-                    Vector3 offset = new Vector3(
-                        Random.Range(-1f, 1f),
-                        0,
-                        Random.Range(-1f, 1f));
-
-                    Vector3 point = transform.position + offset * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
-                    samples[j] = point;
-                }
-                
+                Vector3[] samples = Utility.RandomProvider.GetRandomPointsIn(minCube, maxCube, count);
                 var valid = ComputeProxy.Instance.SamplePoints(ref samples, 20f);
-                totalCount += valid.Length; 
-                
-                _test[i] = new(FoliageManager.Instance.Tests[i], valid);
+                totalCount += valid.Length;
+                _instances[i] = new(FoliageManager.Instance.Tests[i], valid);
             }
          
             if (totalCount == 0)
                 _state = LODState.Pruned;
+            
         }
         
         public void Render(float culled)
@@ -52,7 +52,7 @@ namespace Terrain.Foliage
             if (_state == LODState.Suspended || _state == LODState.Pruned)
                 return;
             
-            foreach (var instances in _test)
+            foreach (var instances in _instances)
                 instances.Render(culled);
         }
 

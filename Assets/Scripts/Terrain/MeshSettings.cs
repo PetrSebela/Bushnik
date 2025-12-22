@@ -14,7 +14,7 @@ namespace Terrain
         public int resolution;
         
         [Tooltip("LOD levels")]
-        public float LODLevels;
+        public int LODLevels;
         
         [Tooltip("Minimum size of LOD chunks (highest detail)")]
         public float size;

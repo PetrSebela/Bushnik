@@ -63,7 +63,14 @@ namespace Terrain
         /// </summary>
         private ComputeBuffer _terrainDataBuffer;
 
+        /// <summary>
+        /// Mesh generation clear flag
+        /// </summary>
         private bool _pipelineClear = true;
+        
+        /// <summary>
+        /// Flag signalizing that the mesh generation pipeline is ready to accept request
+        /// </summary>
         public bool PipelineClear => _pipelineClear;
         
         /// <summary>
@@ -220,6 +227,9 @@ namespace Terrain
         /// <returns></returns>
         public async Task GetTerrainMesh(Vector3 position, float size, int depth, Chunk chunk)
         {
+            if (!_pipelineClear)
+                throw new Exception("Mesh generation pipeline is not clear");
+            
             _pipelineClear = false;
             TerrainComputeShader.SetFloat("ChunkSize", size);
             TerrainComputeShader.SetFloats("ChunkPosition", position.x, position.y, position.z);
