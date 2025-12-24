@@ -71,7 +71,7 @@ namespace Terrain
         
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
-        private MeshCollider _meshCollider;
+        private MeshCollider _collider;
         
         /// <summary>
         /// Creates and initializes chunk instance
@@ -111,11 +111,10 @@ namespace Terrain
             _meshFilter = gameObject.AddComponent<MeshFilter>();
             _meshRenderer = gameObject.AddComponent<MeshRenderer>();
             _meshRenderer.material = ComputeProxy.Instance.terrainSettings.material;
+
+            if (_depth == 0 || _depth == TerrainManager.Instance.meshSettings.LODLevels)
+                _collider = gameObject.AddComponent<MeshCollider>();
             
-            if(_depth == 0 || _depth == TerrainManager.Instance.meshSettings.LODLevels)
-                _meshCollider = gameObject.AddComponent<MeshCollider>();
-            
-            // _meshFilter.sharedMesh = ComputeProxy.Instance.GetTerrainMesh(transform.position, _size, _depth);
             LoadBalancer.Instance.RegisterRequest(this);
         }
 
@@ -145,11 +144,11 @@ namespace Terrain
         public void SetMesh(Mesh mesh)
         {
             _meshFilter.sharedMesh = mesh;
-            
-            if(_meshCollider)
-                _meshCollider.sharedMesh = mesh;    // This tanks performance because of collision mesh baking
-            
             _isReady = true;
+            
+            if (_collider)
+                _collider.sharedMesh = mesh;
+            
             _parent.NotifyReady();
         }
         
