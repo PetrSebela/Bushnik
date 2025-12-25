@@ -8,7 +8,7 @@ using UnityEngine;
 namespace UI.HUD
 {
     /// <summary>
-    /// Class for controling HUD tape element
+    /// Class for controlling HUD tape element
     /// </summary>
     public class Tape : MonoBehaviour
     {
@@ -108,6 +108,12 @@ namespace UI.HUD
             valueDisplay.text = Mathf.RoundToInt(value).ToString(CultureInfo.InvariantCulture);
             float offset = (minValue - value) / tickNumericalSpacing * tickSpacing;
             tapeParent.transform.localPosition = new Vector3(0, offset, 0);
+
+            foreach (var label in _labels)
+            {
+                bool active = Mathf.Abs(float.Parse(label.text, CultureInfo.InvariantCulture) - value) < 250;
+                label.gameObject.SetActive(active);
+            }
         }
     }
 }

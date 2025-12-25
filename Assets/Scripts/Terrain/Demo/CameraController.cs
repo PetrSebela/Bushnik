@@ -91,8 +91,6 @@ namespace Terrain.Demo
         /// </summary>
         private void Start()
         {
-            QualitySettings.vSyncCount = 1;
-            Application.targetFrameRate = 60;
             Cursor.lockState = CursorLockMode.Locked;
             RegisterInput();
         }
@@ -127,6 +125,11 @@ namespace Terrain.Demo
             cameraTransform.SetPositionAndRotation(cameraBody.position, attitude);
         }
 
+        /// <summary>
+        /// Returns angle from north
+        /// </summary>
+        public float GetCardinalDirection => _attitude.x;
+        
         void OnCameraJoystickPerformed(InputAction.CallbackContext context)
         {
             var input = context.ReadValue<Vector2>();
