@@ -137,6 +137,7 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
         
         float2 sample_position = seed + position + warp_offset;
         float current = 0;
+        
         current += CreaseNoise(sample_position * frequency) * amplitude; 
         current += NormalizedNoise(sample_position * frequency) * amplitude;
         

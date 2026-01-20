@@ -776,7 +776,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1690400460
+--- !u!1001 &1268172295
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -786,31 +786,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2848648095011263602, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.056
+      value: -0.19909956
       objectReference: {fileID: 0}
     - target: {fileID: 2848648095011263602, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.65
+      value: 1.4664526
       objectReference: {fileID: 0}
     - target: {fileID: 2848648095011263602, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.21921945
       objectReference: {fileID: 0}
     - target: {fileID: 2848648095011263602, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.99239314
       objectReference: {fileID: 0}
     - target: {fileID: 2848648095011263602, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.000018860657
       objectReference: {fileID: 0}
     - target: {fileID: 2848648095011263602, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.00006007411
       objectReference: {fileID: 0}
     - target: {fileID: 2848648095011263602, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.12310905
       objectReference: {fileID: 0}
     - target: {fileID: 2848648095011263602, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -824,17 +824,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2911622572519375958, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
-      propertyPath: m_Convex
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3225631718065901256, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
       propertyPath: m_Name
       value: Bushplane
-      objectReference: {fileID: 0}
-    - target: {fileID: 6601352179502975848, guid: 6db21f14b934ca48981a15b9e6f6b80e, type: 3}
-      propertyPath: m_Convex
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -956,7 +948,7 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 17106174}
   - {fileID: 330585546}
-  - {fileID: 1690400460}
   - {fileID: 225570049}
   - {fileID: 1029970464}
   - {fileID: 1915764019}
+  - {fileID: 1268172295}

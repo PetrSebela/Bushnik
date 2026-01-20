@@ -253,7 +253,7 @@ namespace Terrain
             };
             
             mesh.RecalculateTangents();
-            chunk?.SetMesh(mesh);
+            MeshBaker.Instance.Bake(chunk, mesh);
             _pipelineClear = true;
         }
 

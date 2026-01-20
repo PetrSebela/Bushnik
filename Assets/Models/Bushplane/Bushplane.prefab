@@ -60,14 +60,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bushplane
       objectReference: {fileID: 0}
-    - target: {fileID: 1414757605734531039, guid: 5c3bcdba74b2358d7b58a77a961b1ff0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.257
-      objectReference: {fileID: 0}
-    - target: {fileID: 1651735469353963524, guid: 5c3bcdba74b2358d7b58a77a961b1ff0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.257
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
