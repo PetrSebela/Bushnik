@@ -46,6 +46,7 @@ namespace Terrain
         /// <returns>Array of valid runways</returns>
         public RunwayData[] GetRunways()
         {
+            // throw new NotImplementedException("Runway generation is depreceated, rewrite to use async code");
             Random.InitState(seed);
             
             int totalPointCount = 2 * RunwayOrientationSamples * RunwayCount;
@@ -76,7 +77,7 @@ namespace Terrain
                 }
             }
 
-            ComputeProxy.Instance.SamplePoints(ref points);
+            // ComputeProxy.Instance.SamplePoints(ref points);
             
             RunwayData[] runways = new RunwayData[RunwayCount];
             

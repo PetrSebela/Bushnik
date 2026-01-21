@@ -1,4 +1,3 @@
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace Terrain.Foliage
@@ -7,7 +6,9 @@ namespace Terrain.Foliage
     {
         private readonly Mesh _mesh;
         private readonly Material _materials;
-        private readonly Matrix4x4[]_matrices;
+        private readonly Foliage _foliage;
+        private Matrix4x4[] _matrices;
+        private PointsRequest _request;
         
         /// <summary>
         /// Create instances for billboards
@@ -16,13 +17,25 @@ namespace Terrain.Foliage
         /// <param name="points"></param>
         public Instances(Foliage foliage, Vector3[] points)
         {
+            _foliage = foliage;
             _mesh = FoliageManager.Instance.BillboardModel;
             _materials = foliage.billboardMaterial;
             
+            PointsRequest request = new PointsRequest(points, foliage);
+            request.OnRequestComplete += SetPoints;
+            LoadBalancer.Instance.RegisterRequest(request);
+        }
+        
+        /// <summary>
+        /// Callback for receiving generated point from GPU
+        /// </summary>
+        /// <param name="points"></param>
+        private void SetPoints(Vector3[] points)
+        {
             Matrix4x4[] instances = new Matrix4x4[points.Length];
             for (int sampleIndex = 0; sampleIndex < points.Length; sampleIndex++)
             {
-                float scale = Random.Range(foliage.minSize, foliage.maxSize);
+                float scale = Random.Range(_foliage.minSize, _foliage.maxSize);
                 float rotation = Random.Range(0, 360);
                 Matrix4x4 matrix = Matrix4x4.TRS(
                     points[sampleIndex], 
@@ -34,7 +47,10 @@ namespace Terrain.Foliage
         }
 
         public void Render()
-        {
+        {   
+            if(_matrices == null)
+                return;
+            
             Graphics.DrawMeshInstanced(
                 _mesh,
                 0,

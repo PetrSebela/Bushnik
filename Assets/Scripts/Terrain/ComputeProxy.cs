@@ -66,12 +66,22 @@ namespace Terrain
         /// <summary>
         /// Mesh generation clear flag
         /// </summary>
-        private bool _pipelineClear = true;
+        private bool _terrainPipelineClear = true;
         
         /// <summary>
         /// Flag signalizing that the mesh generation pipeline is ready to accept request
         /// </summary>
-        public bool PipelineClear => _pipelineClear;
+        public bool TerrainPipelineClear => _terrainPipelineClear;
+
+        /// <summary>
+        /// Flag if point sample kernel is free
+        /// </summary>
+        private bool _pointsPipelineClear = true;
+        
+        /// <summary>
+        /// Flag if point sample kernel is free
+        /// </summary>
+        public bool PointsPipelineClear => _pointsPipelineClear;
         
         /// <summary>
         /// Compute buffer storing biome data
@@ -233,10 +243,10 @@ namespace Terrain
         /// <returns></returns>
         public async Task GetTerrainMesh(Vector3 position, float size, int depth, Chunk chunk)
         {
-            if (!_pipelineClear)
+            if (!_terrainPipelineClear)
                 throw new Exception("Mesh generation pipeline is not clear");
             
-            _pipelineClear = false;
+            _terrainPipelineClear = false;
             TerrainComputeShader.SetFloat("ChunkSize", size);
             TerrainComputeShader.SetFloats("ChunkPosition", position.x, position.y, position.z);
             TerrainComputeShader.SetInt("ChunkDepth", depth);
@@ -260,7 +270,7 @@ namespace Terrain
             
             mesh.RecalculateTangents();
             MeshBaker.Instance.Bake(chunk, mesh);
-            _pipelineClear = true;
+            _terrainPipelineClear = true;
         }
 
         /// <summary>
@@ -290,8 +300,9 @@ namespace Terrain
         /// </summary>
         /// <param name="points">Reference to array of points, their .y component will be modified</param>
         /// <returns>List of points that are valid</returns>
-        public Vector3[] SamplePoints(ref Vector3[] points)
+        public async Task SamplePoints(Vector3[] points, Action<Vector3[]> callback)
         {
+            _pointsPipelineClear = false;
             int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
             var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
             buffer.SetData(points);
@@ -303,14 +314,19 @@ namespace Terrain
             TerrainComputeShader.SetFloat("MaxHeight", 0f);
             TerrainComputeShader.SetBool("IgnoreAirstrips", true);
             
-            
             int groups = Mathf.CeilToInt(points.Length / 32f);
             TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);
             
-            buffer.GetData(points);
+            var pointsRequest = ReadBufferAsync<Vector3>(buffer);
+            await Task.WhenAll(pointsRequest);
+            points = pointsRequest.Result;
+            
+            // buffer.GetData(points);
             buffer.Dispose();
-
-            return points.Where(point => point.y >= 0).ToArray();
+            
+            var filtered = points.Where(point => point.y >= 0).ToArray();
+            callback.Invoke(filtered);
+            _pointsPipelineClear = true;
         }
         
         /// <summary>
@@ -319,8 +335,9 @@ namespace Terrain
         /// <param name="points"></param>
         /// <param name="foliage"></param>
         /// <returns></returns>
-        public Vector3[] SamplePoints(ref Vector3[] points, Foliage.Foliage foliage)
+        public async Task SamplePoints(Vector3[] points, Action<Vector3[]> callback, Foliage.Foliage foliage )
         {
+            _pointsPipelineClear = false;
             int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
             var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
             buffer.SetData(points);
@@ -336,10 +353,16 @@ namespace Terrain
             int groups = Mathf.CeilToInt(points.Length / 32f);
             TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);
             
-            buffer.GetData(points);
+            var pointsRequest = ReadBufferAsync<Vector3>(buffer);
+            await Task.WhenAll(pointsRequest);
+            points = pointsRequest.Result;
+            
+            // buffer.GetData(points);
             buffer.Dispose();
-
-            return points.Where(point => point.y >= 0).ToArray();
+            
+            var filtered = points.Where(point => point.y >= 0).ToArray();
+            callback.Invoke(filtered);
+            _pointsPipelineClear = true;
         }
     }
 }

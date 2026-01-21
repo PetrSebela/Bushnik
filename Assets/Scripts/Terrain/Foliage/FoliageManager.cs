@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Terrain.Foliage
@@ -33,12 +34,29 @@ namespace Terrain.Foliage
 
         private Dictionary<Vector3, FoliageChunk> _chunks = new();
 
+        /// <summary>
+        /// Generated foliage
+        /// </summary>
         public Foliage[] PlacedObjects;
-
+        
+        /// <summary>
+        /// Mesh used for rendering foliage billboards
+        /// </summary>
         public Mesh BillboardModel;
 
+        /// <summary>
+        /// Foliage render distance
+        /// </summary>
         private float _renderDistance = 6000;
+        
+        /// <summary>
+        /// Render distance getter
+        /// </summary>
         public float RenderDistance => _renderDistance;
+        
+        HashSet<Vector3> existingChunks = new();
+        
+        Vector3 lastChunkPosition = Vector3.zero;
 
         /// <summary>
         /// Manager setup and singleton init
@@ -56,56 +74,87 @@ namespace Terrain.Foliage
                 throw new Exception("Duplicate instance of foliage manager");
         }
 
+
+        private HashSet<Vector3> GetGrid(Vector3 position)
+        {
+            HashSet<Vector3> grid = new();
+            
+            int chunkRadius = Mathf.CeilToInt(_renderDistance / foliageSettings.chunkSize);
+
+            for (int x = -chunkRadius; x <= chunkRadius; x++)
+            {
+                for (int z = -chunkRadius; z <= chunkRadius; z++)
+                {
+                    Vector3 point = (position + new Vector3(x, 0, z)) * foliageSettings.chunkSize; 
+                    grid.Add(point);
+                }
+            }
+
+            return grid;
+        }
+
+        void UpdateChunks(HashSet<Vector3> current)
+        {
+            var delete = existingChunks.Except(current);
+            var create = current.Except(existingChunks);
+            existingChunks = current;
+
+            foreach (var chunkPosition in delete)
+            {
+                var instance = _chunks[chunkPosition];
+                Destroy(instance.gameObject);
+                _chunks.Remove(chunkPosition);
+            }
+            
+            CreateChunks(create);
+        }
+        
+        void Update()
+        {
+            var target = TerrainManager.Instance.LODTarget.position;
+            Vector3 origin = new(
+                Mathf.Round(target.x / foliageSettings.chunkSize),
+                0,
+                Mathf.Round(target.z / foliageSettings.chunkSize)
+            );
+            
+            if (origin != lastChunkPosition)
+            {
+                lastChunkPosition = origin;
+                var active = GetGrid(origin);
+                UpdateChunks(active);
+            }
+            
+            foreach (var chunk in _chunks.Values)
+                chunk.Render();
+        }
+
+        void CreateChunks(IEnumerable<Vector3> create)
+        {
+            foreach (var chunkPosition in create)
+            {
+                var foliageChunk = FoliageChunk.CreateChunk(chunkPosition, _foliageParent.transform);
+                _chunks.Add(chunkPosition, foliageChunk);
+            }
+        }
+        
+        
         /// <summary>
         /// Generates foliage chunks
         /// </summary>
         /// TODO: If performance on generation is issus (which it will be), convert this into coroutine and split load across multiple frames 
         public void Start()
         {
+            Vector3 origin = new(
+                Mathf.Round(TerrainManager.Instance.LODTarget.position.x / foliageSettings.chunkSize),
+                0,
+                Mathf.Round(TerrainManager.Instance.LODTarget.position.z / foliageSettings.chunkSize)
+            );
+            lastChunkPosition = origin;
+            var active = GetGrid(origin);
+            UpdateChunks(active);
+            
             SetRenderDistance(_renderDistance);
-            StartCoroutine(GenerateFoliageChunks());
-        }
-
-        IEnumerator GenerateFoliageChunks()
-        {
-            yield return new WaitForEndOfFrame();
-            
-            float terrainSize = TerrainManager.Instance.terrainSettings.size;
-            int chunkCount = Mathf.CeilToInt(terrainSize / foliageSettings.chunkSize);
-            float foliageSize = chunkCount * foliageSettings.chunkSize;
-
-            Vector3 start = new Vector3(-foliageSize / 2, 0, -foliageSize / 2) +
-                            new Vector3(foliageSettings.chunkSize / 2, 0, foliageSettings.chunkSize / 2);
-            
-            List<Vector3> chunkOrigins = new List<Vector3>();
-            
-            for (int x = 0; x < chunkCount; x++)
-            {
-                for (int z = 0; z < chunkCount; z++)
-                {
-                    Vector3 position = start + new Vector3(x, 0, z) * foliageSettings.chunkSize;
-                    chunkOrigins.Add(position);
-                }
-            }
-
-            chunkOrigins.Sort((a, b) => a.sqrMagnitude.CompareTo(b.sqrMagnitude));
-            
-            Queue<Vector3> chunkOriginsQueue = new(chunkOrigins);
-            
-            double iterationStart = Time.realtimeSinceStartupAsDouble;
-            while (chunkOriginsQueue.Count > 0)
-            {
-                var origin = chunkOriginsQueue.Dequeue();
-                CreateFoliageChunk(origin);
-
-                if (Time.realtimeSinceStartupAsDouble - iterationStart < 0.1f) 
-                    continue;
-                
-                iterationStart = Time.realtimeSinceStartupAsDouble;
-                yield return null;
-            }
-            
-            RemovePruned();
         }
 
         /// <summary>
@@ -119,66 +168,6 @@ namespace Terrain.Foliage
             {
                 model.billboardMaterial.SetFloat("_RenderDistance", distance);
                 model.billboardMaterial.SetFloat("_FadeDistance", distance * 0.1f);
-            }
-        }
-
-        /// <summary>
-        /// Creates new foliage chunk
-        /// </summary>
-        /// <param name="position">origin of created chunk</param>
-        void CreateFoliageChunk(Vector3 position)
-        {
-            GameObject chunk = new GameObject("Chunk");
-            var foliageChunk = chunk.AddComponent<FoliageChunk>();
-            chunk.transform.SetParent(_foliageParent.transform);
-            chunk.transform.localPosition = position;
-            foliageChunk.Generate();
-            _chunks.Add(new Vector3(position.x, 0, position.z), foliageChunk);
-        }
-
-        /// <summary>
-        /// Removes inactive chunks
-        /// </summary>
-        void RemovePruned()
-        {
-            List<KeyValuePair<Vector3,FoliageChunk>> pruned = new List<KeyValuePair<Vector3,FoliageChunk>>();
-            
-            foreach (var pair in _chunks)
-                if (pair.Value.GetState == LODState.Pruned)
-                    pruned.Add(pair);
-
-            float percentage = (float)pruned.Count / _chunks.Count * 100;
-            Debug.Log($"Pruning {pruned.Count} chunks ({percentage:F2}%)");
-            
-            foreach (var key in pruned)
-            {
-                Destroy(key.Value);
-                _chunks.Remove(key.Key);
-            }
-        }
-        
-        /// <summary>
-        /// Updates foliage chunks
-        /// </summary>
-        private void Update()
-        {
-            var target = TerrainManager.Instance.LODTarget.position;
-            var flat = new Vector3(target.x, 0, target.z);
-            
-            foreach (var pair in _chunks)
-            {
-                var chunk = pair.Value;
-                var position = pair.Key;
-                var distance = Vector3.Distance(flat, position);
-                
-                if (distance < 1000)
-                    chunk.SetState(LODState.Active);       
-                else if (distance < _renderDistance)
-                    chunk.SetState(LODState.Reduced);
-                else
-                    chunk.SetState(LODState.Suspended);
-                
-                chunk.Render();
             }
         }
     }
