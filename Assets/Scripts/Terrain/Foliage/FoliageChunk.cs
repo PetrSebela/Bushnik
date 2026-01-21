@@ -27,7 +27,6 @@ namespace Terrain.Foliage
             _instances = new Instances[modelCount];
             
             float area = Mathf.Pow(FoliageManager.Instance.foliageSettings.chunkSize, 2);
-
             
             Vector3 minCube = transform.position - Vector3.one * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
             Vector3 maxCube = transform.position + Vector3.one * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
@@ -38,14 +37,13 @@ namespace Terrain.Foliage
                 float density = FoliageManager.Instance.PlacedObjects[i].density; //Trees per 10000m^2
                 int count = Mathf.CeilToInt(area * density);
                 Vector3[] samples = Utility.RandomProvider.GetRandomPointsIn(minCube, maxCube, count);
-                var valid = ComputeProxy.Instance.SamplePoints(ref samples, 20f);
+                var valid = ComputeProxy.Instance.SamplePoints(ref samples, FoliageManager.Instance.PlacedObjects[i]);
                 totalCount += valid.Length;
                 _instances[i] = new(FoliageManager.Instance.PlacedObjects[i], valid);
             }
          
             if (totalCount == 0)
                 _state = LODState.Pruned;
-            
         }
         
         public void Render()

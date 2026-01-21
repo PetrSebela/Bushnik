@@ -13,5 +13,8 @@ namespace Terrain.Foliage
         public float minSize = 1f;
         public float maxSize = 1f;
         public float density = 0.001f;
+        
+        public float maxAngle = 20f;
+        public float maxHeight = 1000f;
     }
 }

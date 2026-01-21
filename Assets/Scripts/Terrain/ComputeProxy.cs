@@ -290,7 +290,7 @@ namespace Terrain
         /// </summary>
         /// <param name="points">Reference to array of points, their .y component will be modified</param>
         /// <returns>List of points that are valid</returns>
-        public Vector3[] SamplePoints(ref Vector3[] points, float maxAngle = 90f)
+        public Vector3[] SamplePoints(ref Vector3[] points)
         {
             int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
             var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
@@ -298,8 +298,40 @@ namespace Terrain
             
             TerrainComputeShader.SetBuffer(sampleKernel, "Points", buffer);
             TerrainComputeShader.SetInt("PointsSize", points.Length);
-            TerrainComputeShader.SetFloat("AngleLimit", maxAngle);
             
+            TerrainComputeShader.SetFloat("AngleLimit", 90f);
+            TerrainComputeShader.SetFloat("MaxHeight", 0f);
+            TerrainComputeShader.SetBool("IgnoreAirstrips", true);
+            
+            
+            int groups = Mathf.CeilToInt(points.Length / 32f);
+            TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);
+            
+            buffer.GetData(points);
+            buffer.Dispose();
+
+            return points.Where(point => point.y >= 0).ToArray();
+        }
+        
+        /// <summary>
+        /// Samples points for specified foliage object
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="foliage"></param>
+        /// <returns></returns>
+        public Vector3[] SamplePoints(ref Vector3[] points, Foliage.Foliage foliage)
+        {
+            int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
+            var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
+            buffer.SetData(points);
+            
+            TerrainComputeShader.SetBuffer(sampleKernel, "Points", buffer);
+            TerrainComputeShader.SetInt("PointsSize", points.Length);
+            
+            // Foliage parameters
+            TerrainComputeShader.SetFloat("AngleLimit", foliage.maxAngle);
+            TerrainComputeShader.SetFloat("MaxHeight", foliage.maxHeight);
+            TerrainComputeShader.SetBool("IgnoreAirstrips", false);
             
             int groups = Mathf.CeilToInt(points.Length / 32f);
             TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);

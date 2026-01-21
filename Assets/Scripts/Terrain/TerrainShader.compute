@@ -278,7 +278,10 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
 // === Sample points ===
 RWStructuredBuffer<float3> Points;
 int PointsSize;
+
 float AngleLimit;
+float MaxHeight;
+bool IgnoreAirstrips;
 
 [numthreads(32, 1, 1)]
 void SamplePoints(uint3 id : SV_DispatchThreadID)
@@ -296,9 +299,25 @@ void SamplePoints(uint3 id : SV_DispatchThreadID)
     if (angle < AngleLimit)
     {
         TerrainMaterialOverride terrain = GetTerrainHeight(worldPosition);
-        if (terrain.distance > 150)
+
+        float height = terrain.height * TerrainHeight;
+        
+        if (height > MaxHeight && MaxHeight != 0)
+        {
+            Points[id.x].y = -1;
+            return;
+        }
+        
+        if (IgnoreAirstrips)
         {
             Points[id.x].y = terrain.height * TerrainHeight;
+            return;
+        }
+        
+        // Distance from airstrip
+        if (terrain.distance > 150)
+        {
+            Points[id.x].y = height;
             return;
         }
     }
