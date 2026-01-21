@@ -9,6 +9,9 @@ namespace Terrain.Foliage
     {
         public GameObject foliagePrefab;
         public Material billboardMaterial;
-        public float billboardSize;
+
+        public float minSize = 1f;
+        public float maxSize = 1f;
+        public float density = 0.001f;
     }
 }

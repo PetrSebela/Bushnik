@@ -23,12 +23,11 @@ namespace Terrain.Foliage
         /// </summary>
         public void Generate()
         {
-            var modelCount = FoliageManager.Instance.Tests.Length;
+            var modelCount = FoliageManager.Instance.PlacedObjects.Length;
             _instances = new Instances[modelCount];
             
             float area = Mathf.Pow(FoliageManager.Instance.foliageSettings.chunkSize, 2);
-            float density = 20f; //Trees per 10000m^2
-            int count = Mathf.CeilToInt((area / 10000f) * density / modelCount);
+
             
             Vector3 minCube = transform.position - Vector3.one * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
             Vector3 maxCube = transform.position + Vector3.one * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
@@ -36,10 +35,12 @@ namespace Terrain.Foliage
             int totalCount = 0;
             for (int i = 0; i < modelCount; i++)
             {
+                float density = FoliageManager.Instance.PlacedObjects[i].density; //Trees per 10000m^2
+                int count = Mathf.CeilToInt(area * density);
                 Vector3[] samples = Utility.RandomProvider.GetRandomPointsIn(minCube, maxCube, count);
                 var valid = ComputeProxy.Instance.SamplePoints(ref samples, 20f);
                 totalCount += valid.Length;
-                _instances[i] = new(FoliageManager.Instance.Tests[i], valid);
+                _instances[i] = new(FoliageManager.Instance.PlacedObjects[i], valid);
             }
          
             if (totalCount == 0)
@@ -47,13 +48,13 @@ namespace Terrain.Foliage
             
         }
         
-        public void Render(float culled)
+        public void Render()
         {
             if (_state == LODState.Suspended || _state == LODState.Pruned)
                 return;
             
             foreach (var instances in _instances)
-                instances.Render(culled);
+                instances.Render();
         }
 
         private void OnDrawGizmos()

@@ -33,7 +33,7 @@ namespace Terrain.Foliage
 
         private Dictionary<Vector3, FoliageChunk> _chunks = new();
 
-        public Foliage[] Tests;
+        public Foliage[] PlacedObjects;
 
         public Mesh BillboardModel;
 
@@ -115,7 +115,7 @@ namespace Terrain.Foliage
         public void SetRenderDistance(float distance)
         {
             _renderDistance = distance;
-            foreach (var model in Tests)
+            foreach (var model in PlacedObjects)
             {
                 model.billboardMaterial.SetFloat("_RenderDistance", distance);
                 model.billboardMaterial.SetFloat("_FadeDistance", distance * 0.1f);
@@ -178,9 +178,7 @@ namespace Terrain.Foliage
                 else
                     chunk.SetState(LODState.Suspended);
                 
-                // TODO: reduce tree amount further from the camera
-                float cull = Mathf.Clamp01((distance - _renderDistance / 2) / _renderDistance);
-                chunk.Render(0);
+                chunk.Render();
             }
         }
     }

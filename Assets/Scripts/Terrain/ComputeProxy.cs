@@ -182,6 +182,12 @@ namespace Terrain
             TerrainComputeShader.SetInt("MeshResolution", meshSettings.resolution);
             TerrainComputeShader.SetFloat("TerrainHeight", terrainSettings.height);
             
+            // Noise parameters
+            TerrainComputeShader.SetInt("NoiseLayers", terrainSettings.noiseLayers);
+            TerrainComputeShader.SetFloat("BaseNoiseFrequency", terrainSettings.baseNoiseFrequency);
+            TerrainComputeShader.SetFloat("FrequencyDecay", terrainSettings.frequencyDecay);
+            TerrainComputeShader.SetFloat("AmplitudeDecay", terrainSettings.amplitudeDecay);
+            
             // Default terrain does not account for runways and other affectors
             TerrainComputeShader.SetInt("AirstripBufferSize", 0);
             _airstripBuffer?.Dispose();

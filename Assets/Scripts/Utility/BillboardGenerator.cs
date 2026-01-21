@@ -116,7 +116,6 @@ namespace Utility
             AssetDatabase.CreateAsset(material, $"{path}/{targetName}_material.asset");
 
             target.billboardMaterial = material;
-            target.billboardSize = size / 2f;
             
             AssetDatabase.SaveAssets();
             

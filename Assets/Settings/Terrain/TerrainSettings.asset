@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59f13e1fe7f4e358dad7b729fdd5d387, type: 3}
   m_Name: TerrainSettings
   m_EditorClassIdentifier: 
-  size: 100000
+  size: 200000
   material: {fileID: 2100000, guid: b0a7b78988221db469a1822db1243527, type: 2}
   height: 1500
   snowHeight: 500
+  noiseLayers: 25
+  baseNoiseFrequency: 0.00005
+  frequencyDecay: 1.35
+  amplitudeDecay: 0.7

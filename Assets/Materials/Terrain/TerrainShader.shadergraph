@@ -1979,7 +1979,7 @@
     "m_Title": "Normal angle",
     "m_Position": {
         "x": -2189.0,
-        "y": 967.0
+        "y": 967.0000610351563
     }
 }
 
@@ -3667,8 +3667,8 @@
     "m_ObjectId": "7f17e88c54f0482085e36d76f55be5a0",
     "m_Title": "Runway material mixing",
     "m_Position": {
-        "x": 249.0,
-        "y": 115.0
+        "x": 248.99996948242188,
+        "y": 115.00005340576172
     }
 }
 
@@ -4075,7 +4075,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Tile",
     "m_StageCapability": 3,
-    "m_Value": 0.10000000149011612,
+    "m_Value": 0.5,
     "m_DefaultValue": 1.0,
     "m_Labels": []
 }

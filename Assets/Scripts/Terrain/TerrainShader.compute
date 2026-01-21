@@ -24,6 +24,12 @@ struct TerrainMaterialOverride
 
 // === Common terrain settings ===
 
+// Noise settings
+int NoiseLayers;
+float BaseNoiseFrequency;
+float FrequencyDecay;
+float AmplitudeDecay;
+
 // Size of the generated terrain
 float TerrainSize;
 
@@ -121,10 +127,11 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
     float sample = 0;
     float amplitude_sum = 0;
 
-    float frequency = 0.0001f;
+    // float frequency = 0.0001f;
+    float frequency = BaseNoiseFrequency;
     float amplitude = 1;
 
-    for (int i = 0; i < sample_count; i++)
+    for (int i = 0; i < NoiseLayers; i++)
     {
         // TODO: parametrize 
         float2 warp_offset = float2(
@@ -144,15 +151,16 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
         current /= 1.5;
         sample += current;
         
-        frequency *= 1.35f;
+        frequency *= FrequencyDecay;
+        
         amplitude_sum += amplitude;
-        amplitude *= 0.65f;
+        amplitude *= AmplitudeDecay;
     }
     
     
     // Post processing
     sample /= amplitude_sum;
-    sample = pow(sample, 3);
+    sample = pow(sample, 5);
     sample -= FalloffMap(position);
     
     return ApplyRunways(position, sample);

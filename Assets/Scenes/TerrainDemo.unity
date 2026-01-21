@@ -181,9 +181,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foliageSettings: {fileID: 11400000, guid: a133b43f9a5c03b948f821be96988ae5, type: 2}
-  Tests:
+  PlacedObjects:
   - {fileID: 11400000, guid: cff1e7c4710101b1fbf5e31705c8adba, type: 2}
-  - {fileID: 11400000, guid: 0609c18306ff86a2eb4323982a4a1452, type: 2}
+  - {fileID: 11400000, guid: cff1e7c4710101b1fbf5e31705c8adba, type: 2}
   BillboardModel: {fileID: -2049535571509378001, guid: 7e4b4b2fc0c97793a80c974c2708acd8, type: 3}
 --- !u!114 &1244977
 MonoBehaviour:
@@ -1766,7 +1766,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1041054067}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 065602dea1df3bafbbeac35d972529eb, type: 3}
   m_Name: 

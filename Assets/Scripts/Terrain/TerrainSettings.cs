@@ -19,5 +19,10 @@ namespace Terrain
 
         [Tooltip("Snow height")] 
         public float snowHeight;
+
+        public int noiseLayers = 20;
+        public float baseNoiseFrequency = 0.00005f;
+        public float frequencyDecay = 1.35f;
+        public float amplitudeDecay = 0.65f;
     }
 }
