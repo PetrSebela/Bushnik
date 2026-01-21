@@ -64,8 +64,8 @@ namespace Terrain
         
         private void ProcessPointsRequest()
         {
-            if(!ComputeProxy.Instance.PointsPipelineClear || _pointRequests.Count == 0)
-                return; 
+            if (_pointRequests.Count == 0)
+                return;
             
             var request = _pointRequests[0];
             _pointRequests.RemoveAt(0);
