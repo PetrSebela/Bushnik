@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Terrain.Data;
 using Unity.Mathematics;
 using UnityEngine.Rendering;
+using Utility;
 
 namespace Terrain
 {
@@ -25,82 +26,47 @@ namespace Terrain
         /// </summary>
         public static ComputeProxy Instance => _instance;
 
-        [Tooltip("Compute shader used for generation of terrain heightmap and meshes")]
+        /// <summary>
+        /// Compute shader used for terrain generation
+        /// </summary>
         public ComputeShader TerrainComputeShader;
 
         /// <summary>
-        /// Index of terrain mesh kernel (heightmap + meshes)
+        /// ID of mesh kernel
         /// </summary>
         private int _terrainMeshKernel;
 
         /// <summary>
-        /// Index of sample kernel
+        /// ID of heightmap sample kernel
         /// </summary>
         private int _sampleKernel;
         
         /// <summary>
-        /// Index of preview kernel
+        /// ID of preview kernel
         /// </summary>
         private int _previewKernel;
-        
-        /// <summary>
-        /// Compute buffer containing mesh vertices
-        /// </summary>
-        private ComputeBuffer _terrainVertexBuffer;
-        
-        /// <summary>
-        /// Compute buffer containing mesh indices
-        /// </summary>
-        private ComputeBuffer _terrainIndexBuffer;
-        
-        /// <summary>
-        /// Compute buffer containing terrain normals
-        /// </summary>
-        private ComputeBuffer _terrainNormalBuffer;
-        
-        /// <summary>
-        /// Compute buffer containing additional terrain data that are passed to the fragment and vertex shaders (use uv0)
-        /// </summary>
-        private ComputeBuffer _terrainDataBuffer;
-
-        /// <summary>
-        /// Mesh generation clear flag
-        /// </summary>
-        private bool _terrainPipelineClear = true;
-        
-        /// <summary>
-        /// Flag signalizing that the mesh generation pipeline is ready to accept request
-        /// </summary>
-        public bool TerrainPipelineClear => _terrainPipelineClear;
-
-        /// <summary>
-        /// Flag if point sample kernel is free
-        /// </summary>
-        private bool _pointsPipelineClear = true;
-        
-        /// <summary>
-        /// Flag if point sample kernel is free
-        /// </summary>
-        public bool PointsPipelineClear => _pointsPipelineClear;
         
         /// <summary>
         /// Compute buffer storing biome data
         /// </summary>
         private ComputeBuffer _airstripBuffer;
-
-        [Tooltip("Mesh settings")]
-        public MeshSettings meshSettings;
         
-        [Tooltip("Terrain settings")]
+        /// <summary>
+        /// TODO: move dependency management to Terrain and Pipeline management object
+        /// </summary>
+        public MeshSettings meshSettings;
         public TerrainSettings terrainSettings;
-
-        [Tooltip("Terrain feature manager")]
         public TerrainFeatureManager terrainFeatureManager;
 
         /// <summary>
-        /// Count thread groups on single axis for mesh generation
+        /// List of all used terrain workers
         /// </summary>
-        private int ThreadGroups = 1;
+        private readonly List<TerrainWorker> _workers = new();
+        
+        /// <summary>
+        /// List of available terrain workers
+        /// </summary>
+        private readonly List<TerrainWorker> _freeWorkers = new();
 
         /// <summary>
         /// Singleton initialization
@@ -120,25 +86,24 @@ namespace Terrain
         private void Start()
         {
             GetKernelIDs();
-            int vertexCount = (int)Mathf.Pow(meshSettings.resolution, 2);
-            int indicesCount = (int)Mathf.Pow(meshSettings.resolution - 1, 2) * 6;
-
-            _terrainVertexBuffer = new ComputeBuffer(vertexCount, sizeof(float) * 3);
-            _terrainIndexBuffer = new ComputeBuffer(indicesCount, sizeof(uint));
-            _terrainNormalBuffer = new ComputeBuffer(vertexCount, sizeof(float) * 3);
-            _terrainDataBuffer = new ComputeBuffer(vertexCount, sizeof(float) * 2);
-
-            TerrainComputeShader.SetBuffer(_terrainMeshKernel, "VertexBuffer", _terrainVertexBuffer);
-            TerrainComputeShader.SetBuffer(_terrainMeshKernel, "IndexBuffer", _terrainIndexBuffer);
-            TerrainComputeShader.SetBuffer(_terrainMeshKernel, "NormalBuffer", _terrainNormalBuffer);
-            TerrainComputeShader.SetBuffer(_terrainMeshKernel, "DataBuffer", _terrainDataBuffer);
             
-            ThreadGroups = Mathf.CeilToInt(meshSettings.resolution / 32f);
+            for (int i = 0; i < 5; i++)
+            {
+                var worker = new TerrainWorker(meshSettings, TerrainComputeShader);
+                worker.OnTaskFinished += OnWorkerCompleted;
+                _freeWorkers.Add(worker);
+                _workers.Add(worker);
+            }
             
             UpdateTerrainSettings();
             UpdateTerrainAffectors();
         }
 
+        private void OnWorkerCompleted(TerrainWorker worker)
+        {
+            _freeWorkers.Add(worker);
+        }
+        
         /// <summary>
         /// Creates and sets terrain affector
         /// This method requires
@@ -175,10 +140,9 @@ namespace Terrain
         /// </summary>
         private void OnDestroy()
         {
-            _terrainVertexBuffer?.Dispose();
-            _terrainIndexBuffer?.Dispose();
-            _terrainNormalBuffer?.Dispose();
-            _terrainDataBuffer?.Dispose();
+            foreach (var worker in _workers)
+                worker.Dispose();
+            
             _airstripBuffer?.Dispose();
         }
 
@@ -223,54 +187,19 @@ namespace Terrain
         /// <param name="buffer">Compute buffer to be read</param>
         /// <typeparam name="T">Datatype stored in compute buffer</typeparam>
         /// <returns>Task corresponding to said request</returns>
-        private async Task<T[]> ReadBufferAsync<T>(ComputeBuffer buffer) where T : struct
-        {
-            var request = AsyncGPUReadback.Request(buffer);
 
-            while (!request.done)
-                await Task.Yield();
-            
-            return request.GetData<T>().ToArray();
-        }
         
+        public bool HasFreeWorker => _freeWorkers.Count > 0;
+
         /// <summary>
-        /// Constructs terrain mesh and heightmap using compute shaders for given chunk
+        /// Seizes single worker and tasks it with computing terrain mesh for said chunk
         /// </summary>
-        /// <param name="position">chunk position</param>
-        /// <param name="size">chunk size</param>
-        /// <param name="depth">chunk depth in LOD tree</param>
-        /// <param name="chunk"> Chunk to which the resulting mesh should be set </param>
-        /// <returns></returns>
-        public async Task GetTerrainMesh(Vector3 position, float size, int depth, Chunk chunk)
+        /// <param name="chunk">Chunk for which the mesh will be computed</param>
+        public void GetTerrainMesh(Chunk chunk)
         {
-            if (!_terrainPipelineClear)
-                throw new Exception("Mesh generation pipeline is not clear");
-            
-            _terrainPipelineClear = false;
-            TerrainComputeShader.SetFloat("ChunkSize", size);
-            TerrainComputeShader.SetFloats("ChunkPosition", position.x, position.y, position.z);
-            TerrainComputeShader.SetInt("ChunkDepth", depth);
-
-            TerrainComputeShader.Dispatch(_terrainMeshKernel, ThreadGroups, 1, ThreadGroups);
-
-            var verticesRequest = ReadBufferAsync<Vector3>(_terrainVertexBuffer);
-            var indicesRequest = ReadBufferAsync<int>(_terrainIndexBuffer);
-            var normalsRequest = ReadBufferAsync<Vector3>(_terrainNormalBuffer);
-            var dataRequest = ReadBufferAsync<Vector2>(_terrainDataBuffer);
-
-            await Task.WhenAll(verticesRequest, indicesRequest, normalsRequest, dataRequest);
-            
-            Mesh mesh = new()
-            {
-                vertices = verticesRequest.Result,
-                triangles = indicesRequest.Result,
-                normals = normalsRequest.Result,
-                uv2 = dataRequest.Result
-            };
-            
-            mesh.RecalculateTangents();
-            MeshBaker.Instance.Bake(chunk, mesh);
-            _terrainPipelineClear = true;
+            var worker = _freeWorkers[0];
+            _freeWorkers.RemoveAt(0);
+            _ = worker.ComputeMesh(chunk);
         }
 
         /// <summary>
@@ -302,7 +231,6 @@ namespace Terrain
         /// <returns>List of points that are valid</returns>
         public async Task SamplePoints(Vector3[] points, Action<Vector3[]> callback)
         {
-            _pointsPipelineClear = false;
             int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
             var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
             buffer.SetData(points);
@@ -317,16 +245,14 @@ namespace Terrain
             int groups = Mathf.CeilToInt(points.Length / 32f);
             TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);
             
-            var pointsRequest = ReadBufferAsync<Vector3>(buffer);
+            var pointsRequest = GPUUtils.ReadBufferAsync<Vector3>(buffer);
             await Task.WhenAll(pointsRequest);
             points = pointsRequest.Result;
             
-            // buffer.GetData(points);
             buffer.Dispose();
             
             var filtered = points.Where(point => point.y >= 0).ToArray();
             callback.Invoke(filtered);
-            _pointsPipelineClear = true;
         }
         
         /// <summary>
@@ -337,7 +263,6 @@ namespace Terrain
         /// <returns></returns>
         public async Task SamplePoints(Vector3[] points, Action<Vector3[]> callback, Foliage.Foliage foliage )
         {
-            _pointsPipelineClear = false;
             int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
             var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
             buffer.SetData(points);
@@ -353,16 +278,14 @@ namespace Terrain
             int groups = Mathf.CeilToInt(points.Length / 32f);
             TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);
             
-            var pointsRequest = ReadBufferAsync<Vector3>(buffer);
+            var pointsRequest = GPUUtils.ReadBufferAsync<Vector3>(buffer);
             await Task.WhenAll(pointsRequest);
             points = pointsRequest.Result;
             
-            // buffer.GetData(points);
             buffer.Dispose();
             
             var filtered = points.Where(point => point.y >= 0).ToArray();
             callback.Invoke(filtered);
-            _pointsPipelineClear = true;
         }
     }
 }

@@ -49,17 +49,12 @@ namespace Terrain
         /// </summary>
         private void ProcessMeshRequest()
         {
-            if(!ComputeProxy.Instance.TerrainPipelineClear || _terrainMeshRequests.Count == 0)
-                return; 
-            
-            var request = _terrainMeshRequests[^1];
-            _terrainMeshRequests.RemoveAt(_terrainMeshRequests.Count - 1);
-
-            _ = ComputeProxy.Instance.GetTerrainMesh(
-                request.transform.position,
-                request.Size,
-                request.Depth,
-                request);
+            while (ComputeProxy.Instance.HasFreeWorker && _terrainMeshRequests.Count > 0 )
+            {
+                var request = _terrainMeshRequests[^1];
+                _terrainMeshRequests.RemoveAt(_terrainMeshRequests.Count - 1);
+                ComputeProxy.Instance.GetTerrainMesh(request);
+            }
         }
         
         private void ProcessPointsRequest()

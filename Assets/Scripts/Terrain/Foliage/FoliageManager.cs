@@ -9,7 +9,6 @@ namespace Terrain.Foliage
     /// <summary>
     /// Class responsible for management and generation of foliage
     /// </summary>
-    [RequireComponent(typeof(TerrainManager))]
     public class FoliageManager : MonoBehaviour
     {
         /// <summary>

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: MeshSettings
   m_EditorClassIdentifier: 
   resolution: 127
-  LODLevels: 5
+  LODLevels: 6
   size: 256

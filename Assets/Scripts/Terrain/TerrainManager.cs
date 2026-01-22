@@ -7,7 +7,6 @@ namespace Terrain
     /// <summary>
     /// Class responsible for generation and management of terrain LODs 
     /// </summary>
-    [RequireComponent(typeof(FoliageManager))]
     public class TerrainManager : MonoBehaviour
     {
         /// <summary>
