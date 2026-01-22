@@ -5,10 +5,11 @@ namespace Terrain.Foliage
     public class Instances
     {
         private readonly Mesh _mesh;
-        private readonly Material _materials;
+        private readonly Material _material;
         private readonly Foliage _foliage;
         private Matrix4x4[] _matrices;
         private PointsRequest _request;
+        private readonly RenderParams _renderParams;
         
         /// <summary>
         /// Create instances for billboards
@@ -19,7 +20,8 @@ namespace Terrain.Foliage
         {
             _foliage = foliage;
             _mesh = FoliageManager.Instance.BillboardModel;
-            _materials = foliage.billboardMaterial;
+            _material = foliage.billboardMaterial;
+            _renderParams = new(_material);
             
             PointsRequest request = new PointsRequest(points, foliage);
             request.OnRequestComplete += SetPoints;
@@ -48,13 +50,19 @@ namespace Terrain.Foliage
 
         public void Render()
         {   
-            if(_matrices == null)
+            if(_matrices == null || _matrices.Length == 0)
                 return;
             
-            Graphics.DrawMeshInstanced(
-                _mesh,
+            // Graphics.DrawMeshInstanced(
+            //     _mesh,
+            //     0,
+            //     _material,
+            //     _matrices);
+            
+            Graphics.RenderMeshInstanced(
+                _renderParams,
+                _mesh, 
                 0,
-                _materials,
                 _matrices);
         }
     }

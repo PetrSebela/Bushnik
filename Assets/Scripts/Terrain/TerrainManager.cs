@@ -1,5 +1,4 @@
 using System;
-using Terrain.Foliage;
 using UnityEngine;
 
 namespace Terrain
@@ -36,6 +35,16 @@ namespace Terrain
         /// Highest LOD
         /// </summary>
         private Chunk _terrainRoot;
+
+        /// <summary>
+        /// Tracker chunk position (highest possible LOD)
+        /// </summary>
+        private Vector3 _chunkPosition = Vector3.zero;
+
+        /// <summary>
+        /// If the tree was fragmented in the last frame
+        /// </summary>
+        private bool _fragmented = true;
         
         /// <summary>
         /// Singleton initialization
@@ -70,6 +79,17 @@ namespace Terrain
             int targetDepth = (int)Mathf.Log(nodeCount, 2);
             Debug.Log($"Using {targetDepth} quad-tree layer");
             _terrainRoot = Chunk.GetChunk(Vector3.zero, transform, ComputeProxy.Instance.terrainSettings.size, targetDepth);
+            
+            _chunkPosition = GetChunkPosition(LODTarget.transform.position);
+            _terrainRoot.UpdateLOD(LODTarget.transform.position);
+        }
+
+        private Vector3 GetChunkPosition(Vector3 position)
+        {
+            return new (
+                Mathf.Round(position.x / meshSettings.size),
+                0,
+                Mathf.Round(position.z / meshSettings.size));
         }
 
         /// <summary>
@@ -77,7 +97,15 @@ namespace Terrain
         /// </summary>
         private void Update()
         {
-            _terrainRoot.UpdateLOD(LODTarget.transform.position);
+            var currentPosition = GetChunkPosition(LODTarget.transform.position);
+            if(currentPosition != _chunkPosition)
+                _terrainRoot.UpdateLOD(LODTarget.transform.position);
+            _chunkPosition = currentPosition;
+        }
+
+        public void ForceUpdate(Chunk from)
+        {
+            from.UpdateLOD(LODTarget.transform.position);
         }
     }
 }

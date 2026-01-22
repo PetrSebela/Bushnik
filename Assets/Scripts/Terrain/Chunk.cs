@@ -63,6 +63,9 @@ namespace Terrain
         /// </summary>
         private bool IsReady => _isReady;
 
+        /// <summary>
+        /// If all chunk childs have generated mesh and can be disabled
+        /// </summary>
         private bool _canDisable = false;
         
         /// <summary>
@@ -128,6 +131,9 @@ namespace Terrain
 
             foreach (var child in _children)
                 _canDisable &= child.IsReady;
+            
+            if(_canDisable)
+                TerrainManager.Instance.ForceUpdate(this);
         }
 
         /// <summary>
@@ -182,7 +188,6 @@ namespace Terrain
         /// <param name="position"> Target LOD position </param>
         public void UpdateLOD(Vector3 position)
         {
-            // TODO: use in shaders to cull unused LODs
             if(_depth <= 0)
                 return;
 
@@ -192,7 +197,7 @@ namespace Terrain
                 _forced = true;
                 _canDisable = true;
             }
-
+            
             Vector3 flatPosition = new Vector3(position.x, 0, position.z);
             if (Vector3.SqrMagnitude(flatPosition - transform.position) > Mathf.Pow(_size, 2) && !_forced)
             {
