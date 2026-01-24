@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 200000
   material: {fileID: 2100000, guid: b0a7b78988221db469a1822db1243527, type: 2}
-  height: 1500
-  snowHeight: 500
+  height: 2500
+  snowHeight: 750
   noiseLayers: 25
   baseNoiseFrequency: 0.00005
   frequencyDecay: 1.35

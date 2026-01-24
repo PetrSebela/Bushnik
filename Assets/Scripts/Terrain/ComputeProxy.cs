@@ -83,7 +83,7 @@ namespace Terrain
         /// <summary>
         /// Sets up terrain generator
         /// </summary>
-        private void Start()
+        public void Init()
         {
             GetKernelIDs();
             
@@ -96,7 +96,6 @@ namespace Terrain
             }
             
             UpdateTerrainSettings();
-            UpdateTerrainAffectors();
         }
 
         private void OnWorkerCompleted(TerrainWorker worker)
@@ -108,20 +107,21 @@ namespace Terrain
         /// Creates and sets terrain affector
         /// This method requires
         /// </summary>
-        private void UpdateTerrainAffectors()
+        public void UpdateTerrainAffectors(RunwayData[] affectors)
         {
+            if(affectors.Length == 0)
+                return;
+            
             UpdateTerrainSettings();
-
-            var runways = terrainFeatureManager.GetRunways();
-
+            
             // Create compute buffer
             int runwayDataSize = (sizeof(float) * 3) * 2 + sizeof(float);
             _airstripBuffer?.Dispose();
-            _airstripBuffer = new ComputeBuffer(runways.Length, runwayDataSize);
-            _airstripBuffer.SetData(runways);
+            _airstripBuffer = new ComputeBuffer(affectors.Length, runwayDataSize);
+            _airstripBuffer.SetData(affectors);
             
             // Set data to kernels
-            TerrainComputeShader.SetInt("AirstripBufferSize", runways.Length);
+            TerrainComputeShader.SetInt("AirstripBufferSize", affectors.Length);
             SetBufferToAllKernels(_airstripBuffer, "AirstripBuffer");
         }
 
@@ -225,6 +225,30 @@ namespace Terrain
         }
 
         /// <summary>
+        /// Blocking function for point sampling
+        /// </summary>
+        /// <param name="points"></param>
+        public void SamplePoints(ref Vector3[] points)
+        {
+            int sampleKernel = TerrainComputeShader.FindKernel("SamplePoints");
+            var buffer = new ComputeBuffer(points.Length, sizeof(float) * 3);
+            buffer.SetData(points);
+            
+            TerrainComputeShader.SetBuffer(sampleKernel, "Points", buffer);
+            TerrainComputeShader.SetInt("PointsSize", points.Length);
+            
+            TerrainComputeShader.SetFloat("AngleLimit", 90f);
+            TerrainComputeShader.SetFloat("MaxHeight", terrainSettings.height);
+            TerrainComputeShader.SetBool("IgnoreAirstrips", true);
+            
+            int groups = Mathf.CeilToInt(points.Length / 32f);
+            TerrainComputeShader.Dispatch(sampleKernel, groups, 1, 1);
+            
+            buffer.GetData(points);
+            buffer.Dispose();
+        }
+        
+        /// <summary>
         /// Samples heightmap at specified positions
         /// </summary>
         /// <param name="points">Reference to array of points, their .y component will be modified</param>
@@ -239,7 +263,7 @@ namespace Terrain
             TerrainComputeShader.SetInt("PointsSize", points.Length);
             
             TerrainComputeShader.SetFloat("AngleLimit", 90f);
-            TerrainComputeShader.SetFloat("MaxHeight", 0f);
+            TerrainComputeShader.SetFloat("MaxHeight", terrainSettings.height);
             TerrainComputeShader.SetBool("IgnoreAirstrips", true);
             
             int groups = Mathf.CeilToInt(points.Length / 32f);
@@ -251,8 +275,7 @@ namespace Terrain
             
             buffer.Dispose();
             
-            var filtered = points.Where(point => point.y >= 0).ToArray();
-            callback.Invoke(filtered);
+            callback.Invoke(points);
         }
         
         /// <summary>

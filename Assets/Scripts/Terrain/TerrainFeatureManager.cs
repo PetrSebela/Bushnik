@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Terrain.Data;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,10 +20,12 @@ namespace Terrain
 
         [SerializeField] private int OversampleRatio;
         
-        public static TerrainFeatureManager Instance => _instance;
-        private static TerrainFeatureManager _instance;
-        
+
         private RunwayData[] _runways;
+        
+        public static TerrainFeatureManager Instance => _instance;
+        
+        private static TerrainFeatureManager _instance;
         
         /// <summary>
         /// Initialize singleton instance
@@ -34,81 +38,86 @@ namespace Terrain
             else
                 throw new Exception("Duplicate instance of TerrainFeatureManager");
         }
-        
-        public void Start()
+
+        private bool TryAddRunway(ref List<RunwayData> runways, Vector3 approach, float heading)
         {
-            _runways = GetRunways();
+            const int runwaySamples = 10;
+            Vector3[] points = new Vector3[runwaySamples];
+            
+            Vector3 headingVector = Quaternion.AngleAxis(heading, Vector3.up) * Vector3.forward;
+            float length = 250f;
+
+            for (int sampleIndex = 0; sampleIndex < runwaySamples; sampleIndex++)
+            {
+                float progress = sampleIndex / (float)runwaySamples;
+                var samplePosition = approach + headingVector * length * progress;
+                points[sampleIndex] = samplePosition;
+            }
+
+            ComputeProxy.Instance.SamplePoints(ref points);
+            
+            var approachPoint = points[0];
+            var departurePoint = points[^1];
+            
+            var flow = departurePoint - approachPoint;
+            var angle = Vector3.Angle(Vector3.up, flow);
+
+            // Limit runway slope
+            if (Mathf.Abs(angle - 90) > 5f)
+                return false;
+            
+            var totalDiff = 0f;
+            for (int sampleIndex = 0; sampleIndex < runwaySamples; sampleIndex++)
+            {
+                float progress = sampleIndex / (float)runwaySamples;
+                var flatSample = Vector3.Lerp(approachPoint, departurePoint, progress);
+            
+                var diff = flatSample.y - points[sampleIndex].y;
+                totalDiff += Mathf.Abs(diff);
+            }
+
+            if (totalDiff / runwaySamples > 1)
+                return false;
+            
+            var runway = new RunwayData
+            {
+                ApproachThreshold = approachPoint,
+                DepartureThreshold = departurePoint,
+                Width = 10f
+            };
+            runways.Add(runway);
+
+            return true;
         }
 
         /// <summary>
         /// Generates runways on terrain
         /// </summary>
         /// <returns>Array of valid runways</returns>
-        public RunwayData[] GetRunways()
+        public void GetRunways(Action<RunwayData[]> onCompleted)
         {
-            // throw new NotImplementedException("Runway generation is depreceated, rewrite to use async code");
             Random.InitState(seed);
-            
-            int totalPointCount = 2 * RunwayOrientationSamples * RunwayCount;
-            
-            // Calculate all possible runway control points
-            Vector3[] points = new Vector3[totalPointCount];
 
+            List<RunwayData> runways = new List<RunwayData>();
+            
             for (int airportIndex = 0; airportIndex < RunwayCount; airportIndex++)
             {
                 for (int runwayIndex = 0; runwayIndex < RunwayOrientationSamples; runwayIndex += 2)
                 {
-                    //TODO: Better dependency management for terrain values from different sources
                     Vector2 position = Random.insideUnitCircle;
                     Vector3 centerPoint = new Vector3(position.x, 0, position.y) * 40000;
-                    
                     float heading = (float)runwayIndex / RunwayOrientationSamples * 360f;
 
-                    float runwayLength = 1000;
-
-                    Vector3 direction = Quaternion.AngleAxis(heading, Vector3.up) * Vector3.forward;
-
-                    Vector3 approachThreshold = direction * (runwayLength / 2);
-                    Vector3 departureThreshold = direction * -(runwayLength / 2);
-
-                    int thresholdIndex = airportIndex * RunwayOrientationSamples + runwayIndex;
-                    points[thresholdIndex] = centerPoint + approachThreshold;
-                    points[thresholdIndex + 1] = centerPoint + departureThreshold;
+                    if (TryAddRunway(ref runways, centerPoint, heading))
+                        break;
                 }
             }
-
-            // ComputeProxy.Instance.SamplePoints(ref points);
             
-            RunwayData[] runways = new RunwayData[RunwayCount];
-            
-            for (int airportIndex = 0; airportIndex < RunwayCount; airportIndex++)
-            {
-                float bestRunwaySlope = 90f;
-                RunwayData runway = new();
-                
-                for (int runwayIndex = 0; runwayIndex < RunwayOrientationSamples; runwayIndex += 2)
-                {
-                    int thresholdIndex = airportIndex * RunwayOrientationSamples + runwayIndex;
-                    Vector3 approachThreshold = points[thresholdIndex];
-                    Vector3 departureThreshold = points[thresholdIndex + 1];
-
-                    Vector3 delta = departureThreshold - approachThreshold;
-                    float angle = Mathf.Abs(90 - Vector3.Angle(Vector3.up, delta));
-
-                    if (angle > bestRunwaySlope)
-                        continue;
-
-                    bestRunwaySlope = angle;
-                    runway.ApproachThreshold = approachThreshold;
-                    runway.DepartureThreshold = departureThreshold;
-                }
-                
-                runways[airportIndex] = runway;
-            }
-
-            return runways;
+            Debug.Log($"Generated {runways.Count} runways");
+            _runways = runways.ToArray();
+            onCompleted.Invoke(runways.ToArray());
         }
-
+        
         public void OnDrawGizmos()
         {
             if(_runways == null)

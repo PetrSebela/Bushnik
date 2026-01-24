@@ -91,6 +91,7 @@ namespace Terrain
             var gameObject = new GameObject(depth.ToString());
             gameObject.transform.parent = parent;
             gameObject.transform.localPosition = offset;
+            gameObject.isStatic = true;
             var chunk = gameObject.AddComponent<Chunk>();
             var parentChunk = parent.GetComponent<Chunk>();
             chunk.Init(size, depth, parentChunk);
@@ -226,18 +227,18 @@ namespace Terrain
         /// </summary>
         void OnDrawGizmos()
         {
-            if(!gameObject.activeSelf || _forced)
-                return;
-            
-            float r = _depth * 1233123876 % 255f / 255f * 0.75f;
-            float g = _depth * 75340123123 % 255f / 255f * 0.75f;
-            float b = _depth * 820002012312 % 255f / 255f * 0.75f;
-
-            Gizmos.color = new Color(r, g, b, 0.25f);
-            Gizmos.DrawCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1),_size));
-            
-            Gizmos.color = new Color(r, g, b, 0.75f);
-            Gizmos.DrawWireCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1), _size));
+            // if(!gameObject.activeSelf || _forced)
+            //     return;
+            //
+            // float r = _depth * 1233123876 % 255f / 255f * 0.75f;
+            // float g = _depth * 75340123123 % 255f / 255f * 0.75f;
+            // float b = _depth * 820002012312 % 255f / 255f * 0.75f;
+            //
+            // Gizmos.color = new Color(r, g, b, 0.25f);
+            // Gizmos.DrawCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1),_size));
+            //
+            // Gizmos.color = new Color(r, g, b, 0.75f);
+            // Gizmos.DrawWireCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1), _size));
         }
 
 
@@ -250,6 +251,9 @@ namespace Terrain
                 return;
             
             _meshRenderer.enabled = true;
+            
+            if(_collider)
+                _collider.enabled = true;
         }
 
         /// <summary>
@@ -261,6 +265,9 @@ namespace Terrain
                 return;
             
             _meshRenderer.enabled = false;
+            
+            if(_collider)
+                _collider.enabled = false;
         }
     }
 }

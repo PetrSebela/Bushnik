@@ -138,7 +138,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ShowHeight: 500
+    - _ShowHeight: 750
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SnowAmplitude: 1.37
@@ -146,7 +146,7 @@ Material:
     - _SnowFq: 0.01
     - _SnowFqGain: 3.25
     - _SnowOctaves: 8
-    - _SnowPadding: 500
+    - _SnowPadding: 1000
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1

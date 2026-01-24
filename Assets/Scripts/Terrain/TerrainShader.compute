@@ -30,6 +30,12 @@ float BaseNoiseFrequency;
 float FrequencyDecay;
 float AmplitudeDecay;
 
+float ChunkSize;
+float TerrainHeight;
+uint ChunkDepth;
+uint MeshResolution;
+float3 ChunkPosition;
+
 // Size of the generated terrain
 float TerrainSize;
 
@@ -86,7 +92,6 @@ TerrainMaterialOverride ApplyRunways(float2 position, float value)
     override.material = 0;
     override.distance = 100000; // Arbitrary large enough value
     
-    
     for (int airstripIndex = 0; airstripIndex < AirstripBufferSize; airstripIndex++)
     {
         Runway runway = AirstripBuffer[airstripIndex];
@@ -100,20 +105,22 @@ TerrainMaterialOverride ApplyRunways(float2 position, float value)
         float projection = dot(relative, direction) / dot(direction, direction);
         projection = clamp(projection, 0, 1);
         float3 runwayPoint = runway.approachThreshold * (1 - projection) + runway.departureThreshold * projection; 
-
         
         float d = distance(direction * projection, relative);
         
-        if (d + NormalizedNoise(position * 0.05f) * 20 < 50)
+        // Set runway material
+        if (d + NormalizedNoise(position * 0.05f) * 20 < 100)
             override.material = 1;
         
-        if (d < 200)
+        // Clear objects around runway
+        if (d < 250)
             override.distance = d;
         
-        float fadeProgress = (d - 50) / 500;
+        /// Level ground around runway
+        float fadeProgress = (d - 50) / 250;
         fadeProgress = clamp(fadeProgress, 0, 1);
         fadeProgress = SmoothEase(fadeProgress) * 0.9 + 0.1;
-        override.height = runwayPoint.y / 1500 * (1 - fadeProgress) + override.height * fadeProgress;
+        override.height = runwayPoint.y / TerrainHeight * (1 - fadeProgress) + override.height * fadeProgress;
     }
     
     return override;
@@ -188,12 +195,6 @@ RWStructuredBuffer<float3> VertexBuffer;
 RWStructuredBuffer<int> IndexBuffer;
 RWStructuredBuffer<float3> NormalBuffer;
 RWStructuredBuffer<float2> DataBuffer;
-
-float ChunkSize;
-float TerrainHeight;
-uint ChunkDepth;
-uint MeshResolution;
-float3 ChunkPosition;
 
 [numthreads(THREAD_GROUP_SIZE, 1, THREAD_GROUP_SIZE)]
 void TerrainMesh(uint3 id : SV_DispatchThreadID)

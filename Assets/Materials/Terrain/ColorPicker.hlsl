@@ -13,7 +13,7 @@ void ColorPicker_float(
     float angle, 
     out float3 color)
 {
-    if (angle > 45)
+    if (angle > 25)
     {
         float progress = clamp((angle - 45) / 10.0, 0.0, 1.0);
         color = rock * progress + light_rock * (1 - progress);

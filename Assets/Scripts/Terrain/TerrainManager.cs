@@ -23,7 +23,9 @@ namespace Terrain
         /// </summary>
         public MeshSettings meshSettings;
 
-        [Tooltip("Terrain settings")]
+        /// <summary>
+        /// Terrain settings
+        /// </summary>
         public TerrainSettings terrainSettings;
 
         /// <summary>
@@ -98,14 +100,18 @@ namespace Terrain
         private void Update()
         {
             var currentPosition = GetChunkPosition(LODTarget.transform.position);
-            if(currentPosition != _chunkPosition)
+            if (currentPosition != _chunkPosition)
+            {
                 _terrainRoot.UpdateLOD(LODTarget.transform.position);
+                StaticBatchingUtility.Combine(_terrainRoot.gameObject);
+            }
             _chunkPosition = currentPosition;
         }
 
         public void ForceUpdate(Chunk from)
         {
             from.UpdateLOD(LODTarget.transform.position);
+            StaticBatchingUtility.Combine(_terrainRoot.gameObject);
         }
     }
 }
