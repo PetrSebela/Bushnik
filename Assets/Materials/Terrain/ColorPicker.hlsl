@@ -5,6 +5,8 @@ void ColorPicker_float(
     float3 sand, 
     float3 grass, 
     float3 light_grass,
+    float3 dirt,
+    float3 light_dirt,
     float3 rock,
     float3 light_rock,
     float3 snow, 
@@ -16,7 +18,15 @@ void ColorPicker_float(
     if (angle > 25)
     {
         float progress = clamp((angle - 45) / 10.0, 0.0, 1.0);
-        color = rock * progress + light_rock * (1 - progress);
+        
+        if (height > snowHeightThreshold || angle > 35)
+        {
+            color = rock * progress + light_rock * (1 - progress);
+            return;
+        }
+        progress = clamp((angle - 35) / 10.0, 0.0, 1.0);
+        
+        color = dirt * progress + light_dirt * (1 - progress);
         return;
     }
     

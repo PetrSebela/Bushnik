@@ -19,4 +19,4 @@ MonoBehaviour:
   noiseLayers: 25
   baseNoiseFrequency: 0.00005
   frequencyDecay: 1.35
-  amplitudeDecay: 0.7
+  amplitudeDecay: 0.675

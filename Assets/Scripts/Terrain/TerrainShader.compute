@@ -129,8 +129,9 @@ TerrainMaterialOverride ApplyRunways(float2 position, float value)
 // Implementation of FBM with 
 TerrainMaterialOverride GetTerrainHeight(float2 position)
 {
-    int sample_count = 20;
-
+    float2 seed = float2(TerrainSize, TerrainSize);
+    float mountain_mask = NormalizedNoise((seed + position) * BaseNoiseFrequency);
+    
     float sample = 0;
     float amplitude_sum = 0;
 
@@ -144,11 +145,9 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
         float2 warp_offset = float2(
             NormalizedNoise(position * 0.001 + float2(100,0)),
             NormalizedNoise(position * 0.001 + float2(0,100))
-        ) * 275;
+        ) * 275 * mountain_mask;
         
         // Avoid large seed values because of float resolution issues
-        float2 seed = float2(TerrainSize, TerrainSize);
-        
         float2 sample_position = seed + position + warp_offset;
         float current = 0;
         
@@ -167,7 +166,9 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
     
     // Post processing
     sample /= amplitude_sum;
-    sample = pow(sample, 5);
+    
+
+    sample = pow(sample, mountain_mask * 4 + 2);
     sample -= FalloffMap(position);
     
     return ApplyRunways(position, sample);
