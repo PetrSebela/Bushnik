@@ -1,0 +1,288 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a568318a2e7cbe74a8764226359fc39c, type: 3}
+  m_Name: xf-ht08-il-1000000-n5
+  m_EditorClassIdentifier: 
+  profile:
+  - Alpha: -12.5
+    Lift: -0.7973
+    Drag: 0.15645
+  - Alpha: -12.25
+    Lift: -0.7958
+    Drag: 0.15146
+  - Alpha: -10.75
+    Lift: -1.1096
+    Drag: 0.03377
+  - Alpha: -10.5
+    Lift: -1.0994
+    Drag: 0.02966
+  - Alpha: -10.25
+    Lift: -1.0837
+    Drag: 0.02676
+  - Alpha: -10
+    Lift: -1.0651
+    Drag: 0.02449
+  - Alpha: -9.75
+    Lift: -1.0445
+    Drag: 0.02267
+  - Alpha: -9.5
+    Lift: -1.0224
+    Drag: 0.02118
+  - Alpha: -9.25
+    Lift: -0.9994
+    Drag: 0.01987
+  - Alpha: -9
+    Lift: -0.9755
+    Drag: 0.01878
+  - Alpha: -8.75
+    Lift: -0.9526
+    Drag: 0.01717
+  - Alpha: -8.5
+    Lift: -0.9283
+    Drag: 0.01599
+  - Alpha: -8.25
+    Lift: -0.9029
+    Drag: 0.01523
+  - Alpha: -8
+    Lift: -0.8769
+    Drag: 0.01462
+  - Alpha: -7.75
+    Lift: -0.8507
+    Drag: 0.01407
+  - Alpha: -7.5
+    Lift: -0.8243
+    Drag: 0.01357
+  - Alpha: -7.25
+    Lift: -0.7978
+    Drag: 0.01306
+  - Alpha: -7
+    Lift: -0.7712
+    Drag: 0.01253
+  - Alpha: -6.75
+    Lift: -0.7443
+    Drag: 0.01206
+  - Alpha: -6.5
+    Lift: -0.7177
+    Drag: 0.0114
+  - Alpha: -6.25
+    Lift: -0.6908
+    Drag: 0.01088
+  - Alpha: -6
+    Lift: -0.6635
+    Drag: 0.0105
+  - Alpha: -5.75
+    Lift: -0.6362
+    Drag: 0.01016
+  - Alpha: -5.5
+    Lift: -0.6087
+    Drag: 0.00984
+  - Alpha: -5.25
+    Lift: -0.5811
+    Drag: 0.00958
+  - Alpha: -5
+    Lift: -0.5536
+    Drag: 0.00917
+  - Alpha: -4.75
+    Lift: -0.526
+    Drag: 0.00889
+  - Alpha: -4.5
+    Lift: -0.4982
+    Drag: 0.00865
+  - Alpha: -4.25
+    Lift: -0.4703
+    Drag: 0.00841
+  - Alpha: -4
+    Lift: -0.4425
+    Drag: 0.00815
+  - Alpha: -3.75
+    Lift: -0.4146
+    Drag: 0.00795
+  - Alpha: -3.5
+    Lift: -0.3866
+    Drag: 0.00772
+  - Alpha: -3.25
+    Lift: -0.3587
+    Drag: 0.00754
+  - Alpha: -3
+    Lift: -0.3307
+    Drag: 0.00733
+  - Alpha: -2.75
+    Lift: -0.3027
+    Drag: 0.00713
+  - Alpha: -2.5
+    Lift: -0.2747
+    Drag: 0.00693
+  - Alpha: -2.25
+    Lift: -0.2467
+    Drag: 0.00671
+  - Alpha: -2
+    Lift: -0.2186
+    Drag: 0.0065
+  - Alpha: -1.75
+    Lift: -0.1906
+    Drag: 0.00629
+  - Alpha: -1.5
+    Lift: -0.1627
+    Drag: 0.00607
+  - Alpha: -1.25
+    Lift: -0.1291
+    Drag: 0.00589
+  - Alpha: -1
+    Lift: -0.1063
+    Drag: 0.00593
+  - Alpha: -0.75
+    Lift: -0.0817
+    Drag: 0.00605
+  - Alpha: -0.5
+    Lift: -0.055
+    Drag: 0.00615
+  - Alpha: -0.25
+    Lift: -0.0275
+    Drag: 0.0062
+  - Alpha: 0
+    Lift: 0.0001
+    Drag: 0.00621
+  - Alpha: 0.25
+    Lift: 0.0277
+    Drag: 0.00619
+  - Alpha: 0.5
+    Lift: 0.0551
+    Drag: 0.00615
+  - Alpha: 0.75
+    Lift: 0.0819
+    Drag: 0.00605
+  - Alpha: 1
+    Lift: 0.1065
+    Drag: 0.00593
+  - Alpha: 1.25
+    Lift: 0.1292
+    Drag: 0.00589
+  - Alpha: 1.5
+    Lift: 0.1628
+    Drag: 0.00607
+  - Alpha: 1.75
+    Lift: 0.1908
+    Drag: 0.0063
+  - Alpha: 2
+    Lift: 0.2188
+    Drag: 0.00651
+  - Alpha: 2.25
+    Lift: 0.2468
+    Drag: 0.00671
+  - Alpha: 2.5
+    Lift: 0.2748
+    Drag: 0.00693
+  - Alpha: 2.75
+    Lift: 0.3028
+    Drag: 0.00713
+  - Alpha: 3
+    Lift: 0.3308
+    Drag: 0.00733
+  - Alpha: 3.25
+    Lift: 0.3588
+    Drag: 0.00754
+  - Alpha: 3.5
+    Lift: 0.3868
+    Drag: 0.00773
+  - Alpha: 3.75
+    Lift: 0.4148
+    Drag: 0.00795
+  - Alpha: 4
+    Lift: 0.4427
+    Drag: 0.00815
+  - Alpha: 4.25
+    Lift: 0.4705
+    Drag: 0.00841
+  - Alpha: 4.5
+    Lift: 0.4984
+    Drag: 0.00865
+  - Alpha: 4.75
+    Lift: 0.5261
+    Drag: 0.00889
+  - Alpha: 5
+    Lift: 0.5538
+    Drag: 0.00918
+  - Alpha: 5.25
+    Lift: 0.5813
+    Drag: 0.00959
+  - Alpha: 5.5
+    Lift: 0.6089
+    Drag: 0.00984
+  - Alpha: 5.75
+    Lift: 0.6364
+    Drag: 0.01016
+  - Alpha: 6
+    Lift: 0.6638
+    Drag: 0.01051
+  - Alpha: 6.25
+    Lift: 0.691
+    Drag: 0.01089
+  - Alpha: 6.5
+    Lift: 0.718
+    Drag: 0.0114
+  - Alpha: 6.75
+    Lift: 0.7446
+    Drag: 0.01207
+  - Alpha: 7
+    Lift: 0.7714
+    Drag: 0.01256
+  - Alpha: 7.25
+    Lift: 0.7981
+    Drag: 0.01307
+  - Alpha: 7.5
+    Lift: 0.8246
+    Drag: 0.01357
+  - Alpha: 7.75
+    Lift: 0.851
+    Drag: 0.01407
+  - Alpha: 8
+    Lift: 0.8772
+    Drag: 0.01463
+  - Alpha: 8.25
+    Lift: 0.9031
+    Drag: 0.01525
+  - Alpha: 8.5
+    Lift: 0.9287
+    Drag: 0.01599
+  - Alpha: 8.75
+    Lift: 0.953
+    Drag: 0.01716
+  - Alpha: 9
+    Lift: 0.9759
+    Drag: 0.01875
+  - Alpha: 9.25
+    Lift: 0.9998
+    Drag: 0.01985
+  - Alpha: 9.5
+    Lift: 1.0229
+    Drag: 0.02113
+  - Alpha: 9.75
+    Lift: 1.045
+    Drag: 0.02264
+  - Alpha: 10
+    Lift: 1.0657
+    Drag: 0.02445
+  - Alpha: 10.25
+    Lift: 1.0845
+    Drag: 0.02668
+  - Alpha: 10.5
+    Lift: 1.1004
+    Drag: 0.02953
+  - Alpha: 10.75
+    Lift: 1.1109
+    Drag: 0.03357
+  - Alpha: 12.25
+    Lift: 0.7967
+    Drag: 0.15166
+  - Alpha: 12.5
+    Lift: 0.7982
+    Drag: 0.15666

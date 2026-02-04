@@ -47,7 +47,6 @@ public class HeightmapPreview : EditorWindow
 
     private void WatcherCallback(object source, FileSystemEventArgs args)
     {
-        Debug.Log("Repaint");   
         Repaint();
     }
     
