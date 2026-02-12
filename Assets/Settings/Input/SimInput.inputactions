@@ -956,22 +956,13 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Left brake",
-                    "type": "Button",
-                    "id": "a65abf38-9000-4e45-bd9a-9e45d9428431",
-                    "expectedControlType": "",
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "93f3cdcd-b569-4822-a4a6-668e2a1a8a74",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Right brake",
-                    "type": "Button",
-                    "id": "59d23b8c-bc40-49ae-97e2-4a64943d3bd7",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -1040,28 +1031,6 @@
                     "action": "Throttle",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "91dfa399-e782-4727-8d5f-14b4a12058f0",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Left brake",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2dd4aeff-7cf0-4a48-a078-d908dd25f536",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Right brake",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "1D Axis",
@@ -1192,6 +1161,17 @@
                     "processors": "Invert",
                     "groups": "",
                     "action": "Yaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0387cd20-5e80-4657-b632-f2485dcf26ac",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

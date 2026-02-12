@@ -1042,22 +1042,13 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Left brake"",
-                    ""type"": ""Button"",
-                    ""id"": ""a65abf38-9000-4e45-bd9a-9e45d9428431"",
-                    ""expectedControlType"": """",
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""93f3cdcd-b569-4822-a4a6-668e2a1a8a74"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Right brake"",
-                    ""type"": ""Button"",
-                    ""id"": ""59d23b8c-bc40-49ae-97e2-4a64943d3bd7"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1126,28 +1117,6 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""91dfa399-e782-4727-8d5f-14b4a12058f0"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Left brake"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2dd4aeff-7cf0-4a48-a078-d908dd25f536"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Right brake"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""1D Axis"",
@@ -1280,6 +1249,17 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""action"": ""Yaw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0387cd20-5e80-4657-b632-f2485dcf26ac"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1315,8 +1295,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Aircraft_Pitch = m_Aircraft.FindAction("Pitch", throwIfNotFound: true);
         m_Aircraft_Roll = m_Aircraft.FindAction("Roll", throwIfNotFound: true);
         m_Aircraft_Yaw = m_Aircraft.FindAction("Yaw", throwIfNotFound: true);
-        m_Aircraft_Leftbrake = m_Aircraft.FindAction("Left brake", throwIfNotFound: true);
-        m_Aircraft_Rightbrake = m_Aircraft.FindAction("Right brake", throwIfNotFound: true);
+        m_Aircraft_Look = m_Aircraft.FindAction("Look", throwIfNotFound: true);
     }
 
     ~@SimInput()
@@ -1782,8 +1761,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Aircraft_Pitch;
     private readonly InputAction m_Aircraft_Roll;
     private readonly InputAction m_Aircraft_Yaw;
-    private readonly InputAction m_Aircraft_Leftbrake;
-    private readonly InputAction m_Aircraft_Rightbrake;
+    private readonly InputAction m_Aircraft_Look;
     /// <summary>
     /// Provides access to input actions defined in input action map "Aircraft".
     /// </summary>
@@ -1812,13 +1790,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Yaw => m_Wrapper.m_Aircraft_Yaw;
         /// <summary>
-        /// Provides access to the underlying input action "Aircraft/Leftbrake".
+        /// Provides access to the underlying input action "Aircraft/Look".
         /// </summary>
-        public InputAction @Leftbrake => m_Wrapper.m_Aircraft_Leftbrake;
-        /// <summary>
-        /// Provides access to the underlying input action "Aircraft/Rightbrake".
-        /// </summary>
-        public InputAction @Rightbrake => m_Wrapper.m_Aircraft_Rightbrake;
+        public InputAction @Look => m_Wrapper.m_Aircraft_Look;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1857,12 +1831,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Yaw.started += instance.OnYaw;
             @Yaw.performed += instance.OnYaw;
             @Yaw.canceled += instance.OnYaw;
-            @Leftbrake.started += instance.OnLeftbrake;
-            @Leftbrake.performed += instance.OnLeftbrake;
-            @Leftbrake.canceled += instance.OnLeftbrake;
-            @Rightbrake.started += instance.OnRightbrake;
-            @Rightbrake.performed += instance.OnRightbrake;
-            @Rightbrake.canceled += instance.OnRightbrake;
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
         }
 
         /// <summary>
@@ -1886,12 +1857,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Yaw.started -= instance.OnYaw;
             @Yaw.performed -= instance.OnYaw;
             @Yaw.canceled -= instance.OnYaw;
-            @Leftbrake.started -= instance.OnLeftbrake;
-            @Leftbrake.performed -= instance.OnLeftbrake;
-            @Leftbrake.canceled -= instance.OnLeftbrake;
-            @Rightbrake.started -= instance.OnRightbrake;
-            @Rightbrake.performed -= instance.OnRightbrake;
-            @Rightbrake.canceled -= instance.OnRightbrake;
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
         }
 
         /// <summary>
@@ -2110,18 +2078,11 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnYaw(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Left brake" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnLeftbrake(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Right brake" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRightbrake(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Aircraft.Components
@@ -20,6 +21,11 @@ namespace Aircraft.Components
         /// Visual representation of the flap
         /// </summary>
         [SerializeField] private Transform visual;
+
+        /// <summary>
+        /// How fast the flap reacts to input
+        /// </summary>
+        [SerializeField] private float responsiveness;
         
         /// <summary>
         /// Original element rotation
@@ -36,7 +42,7 @@ namespace Aircraft.Components
             _rotationOffset = transform.localRotation;
             _visualRotationOffset = visual.localRotation;
         }
-
+        
         /// <summary>
         /// Rotates the wing element
         /// </summary>

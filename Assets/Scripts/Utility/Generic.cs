@@ -41,5 +41,17 @@ namespace Utility
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, transform.position + transform.up);
         }
+        
+        public static void DrawDirectionGizmo(Vector3 position, Quaternion rotation)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(position, position + rotation * Vector3.right);
+            
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(position, position + rotation * Vector3.forward);
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(position, position + rotation * Vector3.up);
+        }
     }
 }

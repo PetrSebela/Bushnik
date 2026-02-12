@@ -48,6 +48,13 @@ namespace Aircraft
         /// Aircraft velocity in knots
         /// </summary>
         public float VelocityKnots => aircraftBody.linearVelocity.magnitude * 1.9438445f;
+
+        /// <summary>
+        /// Aircraft velocity in mps
+        /// </summary>
+        public float Velocity => aircraftBody.linearVelocity.magnitude;
+        
+        public Quaternion AngularVelocity => Quaternion.Euler(aircraftBody.angularVelocity);
         
         /// <summary>
         /// Sets engine throttle input

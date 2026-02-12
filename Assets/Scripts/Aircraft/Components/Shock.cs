@@ -10,6 +10,11 @@ namespace Aircraft.Components
     public class Shock : MonoBehaviour
     {
         /// <summary>
+        /// Mask with all layers that should be handled as ground
+        /// </summary>
+        [SerializeField] private LayerMask groundMask;
+        
+        /// <summary>
         /// Radius of attached wheel
         /// </summary>
         [SerializeField] private float wheelRadius;
@@ -126,7 +131,7 @@ namespace Aircraft.Components
         /// <returns>Wheel position in world space</returns>
         public Vector3 GetWheelPosition()
         {
-            if (!Physics.SphereCast(ShockOrigin, wheelRadius, -ShockDirection, out RaycastHit hit, travel))
+            if (!Physics.SphereCast(ShockOrigin, wheelRadius, -ShockDirection, out RaycastHit hit, travel, groundMask))
                 return ShockOrigin - ShockDirection * travel;
 
             return ShockOrigin - ShockDirection * hit.distance;
@@ -137,7 +142,7 @@ namespace Aircraft.Components
         /// </summary>
         void FixedUpdate()
         {
-            if (!Physics.SphereCast(ShockOrigin, wheelRadius, -ShockDirection, out RaycastHit hit, travel))
+            if (!Physics.SphereCast(ShockOrigin, wheelRadius, -ShockDirection, out RaycastHit hit, travel, groundMask))
                 return;
             
             var spring = GetShockForce(hit);
