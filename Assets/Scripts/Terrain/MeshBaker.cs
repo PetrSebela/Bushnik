@@ -16,6 +16,10 @@ namespace Terrain
         /// </summary>
         private readonly List<ColliderBakeRequest> _requests = new();
         
+        private readonly int _batchSize = 16;
+        
+        private NativeArray<int> _meshIDs;
+        
         /// <summary>
         /// Flag for representing if the pipeline is occupied
         /// </summary>
@@ -34,6 +38,12 @@ namespace Terrain
         void Awake()
         {
             _instance = this;
+            _meshIDs = new NativeArray<int>(_batchSize, Allocator.Persistent);
+        }
+
+        void OnDestroy()
+        {
+            _meshIDs.Dispose();
         }
 
         /// <summary>
@@ -68,22 +78,37 @@ namespace Terrain
 
             _pipelineClear = false;
             
+            var realSize = Mathf.Min(_requests.Count, _batchSize);
+
+            var pending = new List<ColliderBakeRequest>();
+
+            for (int meshIndex = 0; meshIndex < realSize; meshIndex++)
+            {
+                var request = _requests[0];
+                _requests.RemoveAt(0);
+                
+                _meshIDs[meshIndex] = request.Mesh.GetInstanceID();
+                pending.Add(request);
+            }
+            
+            
+            
             // Create local copy of requests and clear them so that incoming requests can be buffered
-            var pending = new List<ColliderBakeRequest>(_requests);
-            _requests.Clear();
+            // var pending = new List<ColliderBakeRequest>(_requests);
+            // _requests.Clear();
             
             // Create job params
-            NativeArray<int> meshIDs = new NativeArray<int>(pending.Count, Allocator.TempJob);
-            for (int i = 0; i < pending.Count; i++)
-                meshIDs[i] = pending[i].Mesh.GetInstanceID();
+            // NativeArray<int> meshIDs = new NativeArray<int>(pending.Count, Allocator.TempJob);
+            // for (int i = 0; i < pending.Count; i++)
+                // meshIDs[i] = pending[i].Mesh.GetInstanceID();
 
             // Baking
-            var job = new ColliderBakeJob(meshIDs);
-            var handle = job.Schedule(meshIDs.Length, 64);
+            var job = new ColliderBakeJob(_meshIDs);
+            var handle = job.Schedule(realSize, _batchSize);
             yield return new WaitUntil (() => handle.IsCompleted);
 
             handle.Complete();
-            meshIDs.Dispose();
+            // meshIDs.Dispose();
             
             // Callbacks
             foreach (var request in pending)

@@ -134,7 +134,12 @@ namespace Terrain
             };
             
             mesh.RecalculateTangents();
-            MeshBaker.Instance.Bake(chunk, mesh);
+            
+            if(chunk.HasCollider)
+                MeshBaker.Instance.Bake(chunk, mesh);
+            else
+                chunk.SetMesh(mesh);
+            
             _isFree = true;
             OnTaskFinished.Invoke(this);
         }

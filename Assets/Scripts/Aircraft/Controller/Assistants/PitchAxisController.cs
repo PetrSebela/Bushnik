@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using Utility;
 
@@ -36,7 +37,7 @@ namespace Aircraft.Controller.Assistants
         /// <summary>
         /// Updates PID loop
         /// </summary>
-        void Update()
+        void FixedUpdate()
         {
             var reference = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
             var rotated = _aircraft.AngularVelocity * reference;

@@ -98,7 +98,7 @@ namespace Terrain
             if (currentPosition != _chunkPosition)
             {
                 _terrainRoot.UpdateLOD(Terrain.Instance.player.position);
-                StaticBatchingUtility.Combine(_terrainRoot.gameObject);
+                // StaticBatchingUtility.Combine(_terrainRoot.gameObject);
             }
             _chunkPosition = currentPosition;
         }
@@ -106,7 +106,7 @@ namespace Terrain
         public void ForceUpdate(Chunk from)
         {
             from.UpdateLOD(Terrain.Instance.player.position);
-            StaticBatchingUtility.Combine(_terrainRoot.gameObject);
+            // StaticBatchingUtility.Combine(_terrainRoot.gameObject);
         }
     }
 }

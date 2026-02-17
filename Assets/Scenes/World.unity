@@ -290,18 +290,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1609528352988767440, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
-      propertyPath: damping
-      value: 0.002
-      objectReference: {fileID: 0}
-    - target: {fileID: 1609528352988767440, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
-      propertyPath: errorGain
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1609528352988767440, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
-      propertyPath: offsetGain
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 2237264483778095023, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
       propertyPath: m_Name
       value: Bushplane

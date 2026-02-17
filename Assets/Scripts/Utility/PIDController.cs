@@ -59,10 +59,10 @@ namespace Utility
         {
             var error = _target - current;
             
-            _accumulator = Mathf.Clamp(_accumulator + error, -accumulatorSize, accumulatorSize);
+            _accumulator = Mathf.Clamp(_accumulator + error * errorGain, -accumulatorSize, accumulatorSize);
             
-            var derivative = (error - _lastError) / Time.deltaTime;
-            _lastError = error;
+            var derivative = (error * errorGain - _lastError) / Time.fixedDeltaTime;
+            _lastError = error * errorGain;
             
             var output = error * errorGain + _accumulator * offsetGain - derivative * damping;
             _controllerOutput = Mathf.Clamp(output, outputRange.x, outputRange.y);

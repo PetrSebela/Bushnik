@@ -19,7 +19,6 @@ namespace Game
         void SpawnPlayer()
         {
             var runway = TerrainFeatureManager.Instance.Runways[0];
-            Debug.Log(runway.ApproachThreshold);
             player.position = runway.ApproachThreshold + Vector3.up;
         }
 
@@ -28,6 +27,5 @@ namespace Game
             Debug.Log("After Load");
             player.isKinematic = false;
         }
-        
     }
 }

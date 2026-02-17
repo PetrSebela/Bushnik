@@ -100,15 +100,6 @@ namespace Terrain
         {
             _pointRequests.Add(request);
         }
-        
-        /// <summary>
-        /// Cancels any requests for said chunk 
-        /// </summary>
-        /// <param name="chunk">Chunk for which the requests will be cancelled</param>
-        public void CancelRequest(Chunk chunk)
-        {
-            _terrainMeshRequests.Remove(chunk);
-        }
     }
 
     public class PointsRequest

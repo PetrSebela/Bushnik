@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 namespace Terrain
@@ -77,6 +78,8 @@ namespace Terrain
         private MeshRenderer _meshRenderer;
         private MeshCollider _collider;
         
+        public bool HasCollider => _collider != null;
+        
         /// <summary>
         /// Creates and initializes chunk instance
         /// TODO: use prefab instancing
@@ -117,7 +120,7 @@ namespace Terrain
             _meshRenderer = gameObject.AddComponent<MeshRenderer>();
             _meshRenderer.material = ComputeProxy.Instance.terrainSettings.material;
 
-            if (_depth == 0 || _depth == TerrainManager.Instance.meshSettings.LODLevels)
+            if (_depth == 0)
                 _collider = gameObject.AddComponent<MeshCollider>();
             
             LoadBalancer.Instance.RegisterRequest(this);
@@ -136,15 +139,7 @@ namespace Terrain
             if(_canDisable)
                 TerrainManager.Instance.ForceUpdate(this);
         }
-
-        /// <summary>
-        /// Cancels potential request of disabled chunks
-        /// </summary>
-        private void OnDisable()
-        {
-            LoadBalancer.Instance.CancelRequest(this);
-        }
-
+        
         /// <summary>
         /// Sets chunk mesh
         /// </summary>
@@ -228,17 +223,30 @@ namespace Terrain
         void OnDrawGizmos()
         {
             // if(!gameObject.activeSelf || _forced)
-            //     return;
-            //
+                // return;
+            
+            // Vector3 flatPosition = new Vector3(Terrain.Instance.player.position.x, 0, Terrain.Instance.player.position.z);
+            // Gizmos.color = Vector3.SqrMagnitude(flatPosition - transform.position) > Mathf.Pow(_size, 2) ? Color.red : Color.cyan;
+            // Gizmos.DrawLine(transform.position, Terrain.Instance.player.position);
+            
+            
             // float r = _depth * 1233123876 % 255f / 255f * 0.75f;
             // float g = _depth * 75340123123 % 255f / 255f * 0.75f;
             // float b = _depth * 820002012312 % 255f / 255f * 0.75f;
-            //
-            // Gizmos.color = new Color(r, g, b, 0.25f);
-            // Gizmos.DrawCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1),_size));
-            //
-            // Gizmos.color = new Color(r, g, b, 0.75f);
-            // Gizmos.DrawWireCube(transform.position + Vector3.up * _depth, new Vector3(_size,1f/ (_depth + 1), _size));
+
+            if (_forced)
+                return;
+            
+            if(!_fragmented)
+                return;
+            
+            if(_fragmented && _canDisable)
+                return;
+            
+            Gizmos.color = Color.red;
+            Gizmos.DrawCube(transform.position + Vector3.up * TerrainManager.Instance.terrainSettings.height / 2, new Vector3(_size,TerrainManager.Instance.terrainSettings.height,_size));
+            Gizmos.color = Color.black;
+            Gizmos.DrawWireCube(transform.position + Vector3.up * TerrainManager.Instance.terrainSettings.height / 2, new Vector3(_size,TerrainManager.Instance.terrainSettings.height,_size));
         }
 
 

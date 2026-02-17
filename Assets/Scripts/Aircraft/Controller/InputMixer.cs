@@ -47,11 +47,12 @@ namespace Aircraft.Controller
             _mixer += (_userInputRaw != 0 ? 1 : -1) * Time.deltaTime / transitionTime;
             _mixer = Mathf.Clamp01(_mixer);
         }
-        
+
         /// <summary>
         /// Mixed user and assistant inputs
         /// </summary>
-        public float GetMixedInput => Mathf.Lerp(_assistInput, _userInputSmooth, _mixer);
+        // public float GetMixedInput => Mathf.Lerp(_assistInput, _userInputSmooth, _mixer);
+        public float GetMixedInput => Mathf.Clamp(_assistInput +_userInputSmooth, -1,1);
         
         /// <summary>
         /// Sets user input
