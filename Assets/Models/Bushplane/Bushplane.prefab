@@ -145,14 +145,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 709251533700825429}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca9b22862d6844eda6c077b68c0cc487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   errorGain: 0.1
   offsetGain: 0.1
-  damping: 0.02
+  damping: 0.002
   outputRange: {x: -1, y: 1}
   accumulatorSize: 1
   cutoffThreshold: 65
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 6886467834627848113}
-  MaxForce: 25
+  MaxForce: 150
   propeller: {fileID: 8265283556605614647}
   idle: 500
   redline: 2250
@@ -1739,7 +1739,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 100000
   field of view: 90
   orthographic: 0
   orthographic size: 5

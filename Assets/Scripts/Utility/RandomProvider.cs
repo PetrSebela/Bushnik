@@ -5,7 +5,7 @@ namespace Utility
     /// <summary>
     /// Class for management of randomness
     /// </summary>
-    public class RandomProvider
+    public static class RandomProvider
     {
         /// <summary>
         /// Returns array of random points in cube specified by provided parameters
@@ -21,11 +21,16 @@ namespace Utility
             
             for (int i = 0; i < count; i++)
             {
-                samples[i] = new Vector3(
-                    Random.Range(-0.5f, 0.5f) * delta.x,
-                    Random.Range(-0.5f, 0.5f) * delta.y,
-                    Random.Range(-0.5f, 0.5f) * delta.z
-                    ) + min;
+                var position = min;
+
+                position.x += Random.Range(-0.5f, 0.5f) * delta.x;
+                
+                if(delta.y != 0)
+                    position.y += Random.Range(-0.5f, 0.5f) * delta.y;
+                
+                position.z += Random.Range(-0.5f, 0.5f) * delta.z;
+
+                samples[i] = position;
             }
             
             return samples;

@@ -22,6 +22,7 @@ namespace Terrain
         
 
         private RunwayData[] _runways;
+        public RunwayData[] Runways => _runways;
         
         public static TerrainFeatureManager Instance => _instance;
         

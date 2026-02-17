@@ -72,7 +72,10 @@ namespace Aircraft.Components
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + transform.forward * _throttle * MaxForce);
+            
+        #if UNITY_EDITOR
             Handles.Label(transform.position, $"{(int)(_throttle * 100)}%");
+        #endif
         }
     }
 }

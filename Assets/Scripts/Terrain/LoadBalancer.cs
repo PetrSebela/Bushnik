@@ -30,6 +30,12 @@ namespace Terrain
         /// </summary>
         private readonly List<PointsRequest> _pointRequests = new();
         
+        public int RequestCount => _terrainMeshRequests.Count;
+
+        public bool AllFinished => _terrainMeshRequests.Count == 0 && ComputeProxy.Instance.AllWorkersFree;
+        
+        public Action OnRequestDispatched;
+        
         /// <summary>
         /// Singleton init
         /// </summary>
@@ -54,6 +60,7 @@ namespace Terrain
                 var request = _terrainMeshRequests[^1];
                 _terrainMeshRequests.RemoveAt(_terrainMeshRequests.Count - 1);
                 ComputeProxy.Instance.GetTerrainMesh(request);
+                OnRequestDispatched?.Invoke();
             }
         }
         

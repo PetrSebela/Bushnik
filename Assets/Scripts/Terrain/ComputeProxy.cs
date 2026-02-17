@@ -31,6 +31,8 @@ namespace Terrain
         /// </summary>
         public ComputeShader TerrainComputeShader;
 
+        public bool AllWorkersFree => _freeWorkers.Count == _workers.Count;
+        
         /// <summary>
         /// ID of mesh kernel
         /// </summary>

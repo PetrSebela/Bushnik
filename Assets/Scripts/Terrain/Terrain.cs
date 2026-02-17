@@ -5,14 +5,19 @@ namespace Terrain
 {
     public class Terrain : MonoBehaviour
     {
-        private void PrintProgress(float progress)
+        public Transform player;
+        
+        private static Terrain _instance;
+        public static Terrain Instance => _instance;
+
+        void Awake()
         {
-            Debug.Log(progress);
+            _instance = this;
         }
         
-        private void Start()
+        void Start()
         {
-            Loader.Instance.Load(PrintProgress);
+            // Loader.Instance.Load();
         }
     }
 }

@@ -110,7 +110,7 @@ namespace Terrain.Foliage
         
         void Update()
         {
-            var target = TerrainManager.Instance.LODTarget.position;
+            var target = Terrain.Instance.player.position;
             Vector3 origin = new(
                 Mathf.Round(target.x / foliageSettings.chunkSize),
                 0,
@@ -145,9 +145,9 @@ namespace Terrain.Foliage
         public void Start()
         {
             Vector3 origin = new(
-                Mathf.Round(TerrainManager.Instance.LODTarget.position.x / foliageSettings.chunkSize),
+                Mathf.Round(Terrain.Instance.player.position.x / foliageSettings.chunkSize),
                 0,
-                Mathf.Round(TerrainManager.Instance.LODTarget.position.z / foliageSettings.chunkSize)
+                Mathf.Round(Terrain.Instance.player.position.z / foliageSettings.chunkSize)
             );
             lastChunkPosition = origin;
             var active = GetGrid(origin);

@@ -27,12 +27,7 @@ namespace Terrain
         /// Terrain settings
         /// </summary>
         public TerrainSettings terrainSettings;
-
-        /// <summary>
-        /// LOD target 
-        /// </summary>
-        public Transform LODTarget;
-
+        
         /// <summary>
         /// Highest LOD
         /// </summary>
@@ -42,11 +37,6 @@ namespace Terrain
         /// Tracker chunk position (highest possible LOD)
         /// </summary>
         private Vector3 _chunkPosition = Vector3.zero;
-
-        /// <summary>
-        /// If the tree was fragmented in the last frame
-        /// </summary>
-        private bool _fragmented = true;
         
         /// <summary>
         /// Singleton initialization
@@ -79,11 +69,11 @@ namespace Terrain
             
             int nodeCount = Mathf.CeilToInt(ComputeProxy.Instance.terrainSettings.size / meshSettings.size);
             int targetDepth = (int)Mathf.Log(nodeCount, 2);
-            Debug.Log($"Using {targetDepth} quad-tree layer");
+            
             _terrainRoot = Chunk.GetChunk(Vector3.zero, transform, ComputeProxy.Instance.terrainSettings.size, targetDepth);
             
-            _chunkPosition = GetChunkPosition(LODTarget.transform.position);
-            _terrainRoot.UpdateLOD(LODTarget.transform.position);
+            _chunkPosition = GetChunkPosition(Terrain.Instance.player.position);
+            _terrainRoot.UpdateLOD(Terrain.Instance.player.position);
         }
 
         private Vector3 GetChunkPosition(Vector3 position)
@@ -94,15 +84,20 @@ namespace Terrain
                 Mathf.Round(position.z / meshSettings.size));
         }
 
+        public void ForceLODUpdate()
+        {
+            _terrainRoot.UpdateLOD(Terrain.Instance.player.position);
+        }
+
         /// <summary>
         /// Updating LODs
         /// </summary>
         private void Update()
         {
-            var currentPosition = GetChunkPosition(LODTarget.transform.position);
+            var currentPosition = GetChunkPosition(Terrain.Instance.player.position);
             if (currentPosition != _chunkPosition)
             {
-                _terrainRoot.UpdateLOD(LODTarget.transform.position);
+                _terrainRoot.UpdateLOD(Terrain.Instance.player.position);
                 StaticBatchingUtility.Combine(_terrainRoot.gameObject);
             }
             _chunkPosition = currentPosition;
@@ -110,7 +105,7 @@ namespace Terrain
 
         public void ForceUpdate(Chunk from)
         {
-            from.UpdateLOD(LODTarget.transform.position);
+            from.UpdateLOD(Terrain.Instance.player.position);
             StaticBatchingUtility.Combine(_terrainRoot.gameObject);
         }
     }
