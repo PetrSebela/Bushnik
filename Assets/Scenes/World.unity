@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_FogMode: 3
-  m_FogDensity: 0.01
+  m_Fog: 1
+  m_FogColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+  m_FogMode: 2
+  m_FogDensity: 0.0001
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 0b9453904e1cc8487adddd285e80d881, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -275,12 +275,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 728947151}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 232.7306, y: -8580.243, z: 3466.1086}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -7585.1865, y: -8580.246, z: 6922.8623}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1773617956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1153679051
 PrefabInstance:
@@ -293,6 +293,10 @@ PrefabInstance:
     - target: {fileID: 2237264483778095023, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
       propertyPath: m_Name
       value: Bushplane
+      objectReference: {fileID: 0}
+    - target: {fileID: 6886467834627848113, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8010582625107566219, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
       propertyPath: m_LocalPosition.x
@@ -393,6 +397,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aec03d06c9ed69df82a607dacc69c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1773617955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1773617956}
+  m_Layer: 0
+  m_Name: Effects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1773617956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773617955}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7817.917, y: 0.0030197876, z: -3456.7534}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 728947153}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2077870284
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,6 +557,6 @@ SceneRoots:
   - {fileID: 2077870286}
   - {fileID: 340867086}
   - {fileID: 1535594866}
-  - {fileID: 728947153}
   - {fileID: 132949036}
   - {fileID: 1153679051}
+  - {fileID: 1773617956}

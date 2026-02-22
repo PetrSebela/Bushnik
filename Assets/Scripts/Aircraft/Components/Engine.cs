@@ -40,6 +40,13 @@ namespace Aircraft.Components
         private float _throttle = 0;
 
         /// <summary>
+        /// Engine RPM
+        /// </summary>
+        public float EngineSpeed => idle + _throttle * (redline - idle);
+        
+        public float Throttle => _throttle;
+        
+        /// <summary>
         /// Sets throttle input
         /// </summary>
         /// <param name="input">Throttle input</param>
@@ -53,8 +60,7 @@ namespace Aircraft.Components
         /// </summary>
         private void Update()
         {
-            var deltaRotation = idle + _throttle * (redline - idle);
-            propeller.localRotation *= Quaternion.AngleAxis(-deltaRotation * Time.deltaTime, Vector3.forward);
+            propeller.localRotation *= Quaternion.AngleAxis(-EngineSpeed * Time.deltaTime, Vector3.forward);
         }
 
         /// <summary>

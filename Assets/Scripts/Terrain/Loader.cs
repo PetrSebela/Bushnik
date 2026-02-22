@@ -35,7 +35,7 @@ namespace Terrain
         {
             loadingScreen.BeginLoading();
             SeaManager.Instance.Init();
-            
+            TerrainManager.Instance.Init();
             TerrainManager.Instance.enabled = false;
             FoliageManager.Instance.enabled = false;
             
@@ -43,8 +43,7 @@ namespace Terrain
             ComputeProxy.Instance.Init();
             TerrainFeatureManager.Instance.GetRunways(OnRunwaysGenerated);
         }
-
-
+        
         private void OnRunwaysGenerated(RunwayData[] runways)
         {
             ComputeProxy.Instance.UpdateTerrainAffectors(runways);

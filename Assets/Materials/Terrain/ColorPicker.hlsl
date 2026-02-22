@@ -30,18 +30,16 @@ void ColorPicker_float(
         return;
     }
     
-    
     if (height < 10)
     {
         color = sand;
         return;
     }
 
-
     float progress = clamp(angle / 30.0, 0.0, 1.0);
     color = grass * progress + light_grass * (1 - progress);
 
-    progress = clamp((height - snowHeightThreshold) / 25, 0.0, 1.0);
+    progress = clamp((height - snowHeightThreshold) / 170, 0.0, 1.0);
     color = snow * progress + color * (1 - progress);
 }
 

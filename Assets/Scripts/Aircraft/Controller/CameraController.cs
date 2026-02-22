@@ -110,7 +110,7 @@ namespace Aircraft.Controller
             _targetOffset += new Vector3(-input.y, input.x, 0) * mouseSensitivity;
             
             var baseOffset = Mathf.Round(_targetOffset.x / 360) * 360f;
-            _targetOffset.x = Mathf.Clamp(_targetOffset.x, baseOffset - 90, baseOffset + 90);
+            _targetOffset.x = Mathf.Clamp(_targetOffset.x, baseOffset - 89, baseOffset + 89);
             
             _offsetActive = true;
             _lastOffsetChangeTime = Time.realtimeSinceStartupAsDouble;

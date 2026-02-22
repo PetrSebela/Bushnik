@@ -92,7 +92,7 @@ namespace Aircraft.Components
         {
             var coefficients = airfoil.GetSample(AngleOfAttack);
             var density = Atmosphere.GetDensityAtPoint(transform.position);
-            var drag = coefficients.Drag * density * AirflowVelocity * WingArea;
+            var drag = coefficients.Drag * density * Mathf.Abs(AirflowVelocity) * WingArea;
             return DragVector * drag;
         }
         

@@ -62,7 +62,7 @@ namespace Terrain
         /// <summary>
         /// LOD system setup
         /// </summary>
-        private void Start()
+        public void Init()
         {
             // TODO: decide on material management and move this to propper module
             terrainSettings.material.SetFloat("_ShowHeight", terrainSettings.snowHeight);
@@ -71,7 +71,6 @@ namespace Terrain
             int targetDepth = (int)Mathf.Log(nodeCount, 2);
             
             _terrainRoot = Chunk.GetChunk(Vector3.zero, transform, ComputeProxy.Instance.terrainSettings.size, targetDepth);
-            
             _chunkPosition = GetChunkPosition(Terrain.Instance.player.position);
             _terrainRoot.UpdateLOD(Terrain.Instance.player.position);
         }
@@ -86,6 +85,7 @@ namespace Terrain
 
         public void ForceLODUpdate()
         {
+            Debug.Log(_terrainRoot);
             _terrainRoot.UpdateLOD(Terrain.Instance.player.position);
         }
 
