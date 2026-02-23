@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
-using Unity.VisualScripting;
+using Unity;
 using UnityEngine;
 
 namespace UI.HUD
@@ -38,24 +38,9 @@ namespace UI.HUD
         [SerializeField] private GameObject minorTick;
         
         /// <summary>
-        /// Minimum tape value
-        /// </summary>
-        public float minValue = 0;
-        
-        /// <summary>
-        /// Maximum tape value
-        /// </summary>
-        public float maxValue = 1000;
-        
-        /// <summary>
         /// Tick spacing in physical space
         /// </summary>
-        [SerializeField] private float tickSpacing;
-        
-        /// <summary>
-        /// Tick spacing in value space
-        /// </summary>
-        [SerializeField] private float tickNumericalSpacing;
+        [SerializeField] private float scale;
         
         /// <summary>
         /// Moved tape parent object
@@ -68,35 +53,41 @@ namespace UI.HUD
         [SerializeField] private TMP_Text valueDisplay;
         
         /// <summary>
-        /// Collection of all major tick labels
+        /// Collection of all ticks
         /// </summary>
-        private List<TMP_Text> _labels = new();
+        private List<RectTransform> _ticks = new();
         
         /// <summary>
         /// Crates tape indents
         /// </summary>
         public void Start()
         {
-            float range = Mathf.Abs(maxValue - minValue);
-            var tickCount = Mathf.CeilToInt(range / tickNumericalSpacing);
-            var increment = range / tickCount;
-            
-            for (int i = 0; i <= tickCount + 1; i++)
+            for (int i = 0; i < 20; i++)
             {
-                float tickValue = minValue + increment * i; 
-                GameObject tick = Instantiate(i % majorTickSpacing == 0 ? majorTick : minorTick, tapeParent);
-                float offset = i * tickSpacing;
-                tick.transform.localPosition = new Vector3(-tapeParent.rect.width / 2, offset, 0);
-                
+                var tick = Instantiate(majorTick, tapeParent);
+                for (int j = 1; j <= 9; j++)
+                {
+                    var minorTick = Instantiate(this.minorTick, tick.transform);
+                    minorTick.transform.localPosition = new Vector3(0, j * 10 * scale, 0);
+                }
+                _ticks.Add(tick.transform as RectTransform);
+            }
+        }
+
+        void UpdateTapeItems(float value)
+        {
+            var diameter = 10;
+            var origin = Mathf.Round(value / 100) - diameter;
+            
+            for (int i = 0; i < _ticks.Count; i++)
+            {
+                var tickValue = (origin + i) * (100 * scale);
+                var tick = _ticks[i];       
+                tick.transform.localPosition = new Vector3(tick.transform.localPosition.x, tickValue, 0);
+
                 var label = tick.GetComponentInChildren<TMP_Text>();
                 if (label)
-                {
-                    _labels.Add(label);
-                    if(showKilo)
-                        label.text = (Mathf.Round(tickValue / 100) / 10).ToString("0.0", CultureInfo.InvariantCulture);
-                    else
-                        label.text = tickValue.ToString("0", CultureInfo.InvariantCulture);
-                }
+                    label.text = ((origin + i) / 10).ToString("0.0", CultureInfo.InvariantCulture);
             }
         }
         
@@ -106,14 +97,8 @@ namespace UI.HUD
         public void Update()
         {
             valueDisplay.text = Mathf.RoundToInt(value).ToString(CultureInfo.InvariantCulture);
-            float offset = (minValue - value) / tickNumericalSpacing * tickSpacing;
-            tapeParent.transform.localPosition = new Vector3(0, offset, 0);
-
-            foreach (var label in _labels)
-            {
-                bool active = Mathf.Abs(float.Parse(label.text, CultureInfo.InvariantCulture) - value) < 250;
-                label.gameObject.SetActive(active);
-            }
+            UpdateTapeItems(value);
+            tapeParent.localPosition = new Vector3(0, -value * scale, 0);
         }
     }
 }

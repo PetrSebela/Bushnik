@@ -192,10 +192,7 @@ MonoBehaviour:
   majorTickSpacing: 10
   majorTick: {fileID: 8027105881033371165, guid: 55b2b0a94cadf7daba3db04907779485, type: 3}
   minorTick: {fileID: 395275933064092661, guid: d694758dd9d23bcbeba2da6a828586a3, type: 3}
-  minValue: -1000
-  maxValue: 10000
-  tickSpacing: 4
-  tickNumericalSpacing: 10
+  scale: 0.375
   tapeParent: {fileID: 2210149527075329103}
   valueDisplay: {fileID: 7426364418016615814}
 --- !u!1 &4238893718387928254
@@ -347,7 +344,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4290765567
   m_fontColor: {r: 1, g: 0.8862745, b: 0.7490196, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3

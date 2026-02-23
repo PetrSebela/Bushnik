@@ -2732,6 +2732,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 650472859809937390, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 650472859809937390, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 650472859809937390, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 650472859809937390, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 917487617307435014, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
       propertyPath: m_text
       value: 2255
