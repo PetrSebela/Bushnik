@@ -55,5 +55,15 @@ namespace User
         {
             _input.Disable();
         }
+        
+        public void DisableAircraftControls()
+        {
+            _input.Aircraft.Disable();
+        }
+        
+        public void EnableAircraftControls()
+        {
+            _input.Aircraft.Enable();
+        }
     }
 }

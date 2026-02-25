@@ -416,7 +416,7 @@
                     "name": "Submit",
                     "type": "Button",
                     "id": "9108c9f0-3825-4c45-a460-4dfc2980806d",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -425,7 +425,7 @@
                     "name": "Cancel",
                     "type": "Button",
                     "id": "282b73fe-f5a7-42cb-9b33-6930ec32202c",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -489,6 +489,15 @@
                     "type": "PassThrough",
                     "id": "8601a14d-aa58-44e5-8e98-fd5a9cdc9b95",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Back",
+                    "type": "Button",
+                    "id": "674e56e7-bd8b-4993-b0ce-c61be85a565e",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -910,6 +919,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "78c8d7bc-0a93-4cc1-b758-0e74cfdc6e5d",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Back",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Game.World;
 using Terrain.Data;
 using Terrain.Foliage;
 using UI;
@@ -33,7 +34,8 @@ namespace Terrain
 
         public void Load()
         {
-            loadingScreen.BeginLoading();
+            UIManager.Instance?.BeginLoading();
+
             SeaManager.Instance.Init();
             TerrainManager.Instance.Init();
             TerrainManager.Instance.enabled = false;
@@ -83,7 +85,8 @@ namespace Terrain
         {
             AfterLoading?.Invoke();
             _isLoaded = true;
-            loadingScreen.FinishLoading();
+            
+            UIManager.Instance?.FinishLoading();
         }
     }
 }

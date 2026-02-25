@@ -9,15 +9,10 @@ namespace Terrain
         
         private static Terrain _instance;
         public static Terrain Instance => _instance;
-
+        
         void Awake()
         {
             _instance = this;
-        }
-        
-        void Start()
-        {
-            // Loader.Instance.Load();
         }
     }
 }

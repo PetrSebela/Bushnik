@@ -11,27 +11,10 @@ namespace UI
         [SerializeField] private Slider progressBar;
         [SerializeField] private TMP_Text progressText;
         private CanvasGroup _loadingScreen;
-
+        
         public void Awake()
         {
             _loadingScreen = GetComponent<CanvasGroup>();
-        }
-
-        public void BeginLoading()
-        {
-            UIManager.Instance?.HideHUD(true);
-            
-            LeanTween.alphaCanvas(_loadingScreen, 1, 1).setIgnoreTimeScale(true);
-            _loadingScreen.blocksRaycasts = true;
-        }
-
-        public void FinishLoading()
-        {
-            UIManager.Instance?.ShowHUD();
-            
-            UnityEngine.Debug.Log("Loading screen finished");
-            LeanTween.alphaCanvas(_loadingScreen, 0, 1).setIgnoreTimeScale(true);
-            _loadingScreen.blocksRaycasts = false;
         }
         
         public void SetProgress(float value)
