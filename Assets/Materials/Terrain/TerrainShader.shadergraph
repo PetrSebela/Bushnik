@@ -1409,8 +1409,8 @@
     "m_ObjectId": "1ba67af415544cb092753d77455301cc",
     "m_Title": "Height offset",
     "m_Position": {
-        "x": -3261.000244140625,
-        "y": 0.000057220458984375
+        "x": -3261.0,
+        "y": 0.0
     }
 }
 
@@ -2056,8 +2056,8 @@
     "m_ObjectId": "32c6fc23249d4bd9b84db8db8687feff",
     "m_Title": "Normal angle",
     "m_Position": {
-        "x": -2189.000244140625,
-        "y": 966.9999389648438
+        "x": -2189.0,
+        "y": 967.0
     }
 }
 
@@ -3860,7 +3860,7 @@
     "m_ObjectId": "7f17e88c54f0482085e36d76f55be5a0",
     "m_Title": "Runway material mixing",
     "m_Position": {
-        "x": 248.99998474121095,
+        "x": 249.0,
         "y": 115.0
     }
 }

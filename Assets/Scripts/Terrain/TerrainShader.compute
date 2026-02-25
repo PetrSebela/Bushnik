@@ -109,15 +109,15 @@ TerrainMaterialOverride ApplyRunways(float2 position, float value)
         float d = distance(direction * projection, relative);
         
         // Set runway material
-        if (d + NormalizedNoise(position * 0.05f) * 20 < 100)
+        if (d + NormalizedNoise(position * 0.05f) * 5 < 25)
             override.material = 1;
         
         // Clear objects around runway
-        if (d < 250)
+        if (d < 150)
             override.distance = d;
         
         /// Level ground around runway
-        float fadeProgress = (d - 50) / 250;
+        float fadeProgress = (d - 50) / 150;
         fadeProgress = clamp(fadeProgress, 0, 1);
         fadeProgress = SmoothEase(fadeProgress) * 0.9 + 0.1;
         override.height = runwayPoint.y / TerrainHeight * (1 - fadeProgress) + override.height * fadeProgress;

@@ -275,7 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 317
   RunwayOrientationSamples: 32
-  RunwayCount: 100
+  RunwayCount: 1500
   OversampleRatio: 1
 --- !u!1 &2984874464434350333
 GameObject:

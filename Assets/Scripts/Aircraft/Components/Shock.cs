@@ -92,7 +92,7 @@ namespace Aircraft.Components
         /// <returns>Force vector</returns>
         private Vector3 GetShockForce(RaycastHit hit)
         {
-            var compression = travel - hit.distance;
+            var compression = Mathf.Pow(travel - hit.distance,1.5f);
             var velocity = _aircraftBody.GetPointVelocity(ShockOrigin);
             var shockVelocity = Vector3.Dot(ShockDirection, velocity);
             var springForce = compression * springRate - shockVelocity * damping;

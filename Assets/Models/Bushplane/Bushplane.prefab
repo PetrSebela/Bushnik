@@ -220,7 +220,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 709251533700825429}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca9b22862d6844eda6c077b68c0cc487, type: 3}
   m_Name: 
@@ -1119,6 +1119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aircraft: {fileID: 9091534808665603839}
   throttle: 0
+  brake: 0
   throttleSensitivity: 0.01
   pitchInput: {fileID: 5726025662888148390}
   rollInput: {fileID: 939972247281290334}
@@ -1562,12 +1563,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 119
   wheelRadius: 0.42
-  travel: 0.5
-  springRate: 20000
-  damping: 1500
+  travel: 1.5
+  springRate: 35000
+  damping: 550
   tireGrip: 100
   drag: 50
-  maxBrakeForce: 550
+  maxBrakeForce: 750
 --- !u!114 &5777436427473741806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3126,12 +3127,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 119
   wheelRadius: 0.42
-  travel: 0.5
-  springRate: 20000
-  damping: 1500
+  travel: 1.5
+  springRate: 35000
+  damping: 550
   tireGrip: 100
   drag: 50
-  maxBrakeForce: 550
+  maxBrakeForce: 750
 --- !u!114 &6863143574413782661
 MonoBehaviour:
   m_ObjectHideFlags: 0
