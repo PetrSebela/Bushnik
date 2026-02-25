@@ -5,9 +5,15 @@ using Slider = UnityEngine.UI.Slider;
 
 namespace UI
 {
+    /// <summary>
+    /// Class responsible for management of loading screen
+    /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
     public class LoadingScreen : MonoBehaviour
     {
+        /// <summary>
+        /// Progress
+        /// </summary>
         [SerializeField] private Slider progressBar;
         [SerializeField] private TMP_Text progressText;
         private CanvasGroup _loadingScreen;

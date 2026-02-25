@@ -6,14 +6,35 @@ using UnityEngine.UI;
 
 namespace Game
 {
+    /// <summary>
+    /// Class responsible for management of player preferences
+    /// </summary>
     public class Options : MonoBehaviour
     {
+        /// <summary>
+        /// Dropdown containing all possible resolutions
+        /// </summary>
         [SerializeField] private TMP_Dropdown resolutionDropdown;
+        
+        /// <summary>
+        /// Dropdown containing all possible fps lock values
+        /// </summary>
         [SerializeField] private TMP_Dropdown frameRateDropdown;
         
+        /// <summary>
+        /// All possible resolutions
+        /// </summary>
         private readonly List<Resolution> _resolutions = new();
-        private readonly List<int> _frameRate = new(){-1};
-        private readonly List<string> _frameRateOptions = new(){"Unlimited"};
+        
+        /// <summary>
+        /// All possible frame rates
+        /// </summary>
+        private readonly List<int> _frameRate = new(){-1, 60, 144};
+        
+        /// <summary>
+        /// Names of all possible frame rates
+        /// </summary>
+        private readonly List<string> _frameRateOptions = new(){"Unlimited", "60", "144"};
         
         private void TryAddResolution(Resolution resolution)
         {
@@ -22,16 +43,7 @@ namespace Game
 
             _resolutions.Add(resolution);
         }
-
-        private void TryAddFrameRate(int targetFrameRate)
-        {
-            if (_frameRate.Any(existing => existing == targetFrameRate))
-                return;
-            
-            _frameRate.Add(targetFrameRate);
-            _frameRateOptions.Add(targetFrameRate.ToString());
-        }
-
+        
         private List<string> GetResolutionOptions()
         {
             List<string> options = new();
@@ -42,27 +54,32 @@ namespace Game
             return options;
         }
 
+        int GetCurrentResolutionIndex()
+        {
+            for (int i = 0; i < _resolutions.Count; i++)
+            {
+                if (_resolutions[i].width == Screen.currentResolution.width &&
+                    _resolutions[i].height == Screen.currentResolution.height)
+                    return i;
+            }
+            
+            return -1;
+        }
+
         void Start()
         {
             _resolutions.Clear();
             foreach (var resolution in Screen.resolutions)
-            {
                 TryAddResolution(resolution);
-                TryAddFrameRate((int)resolution.refreshRateRatio.value);
-            }
             
             resolutionDropdown.ClearOptions();
             resolutionDropdown.AddOptions(GetResolutionOptions());
+            resolutionDropdown.SetValueWithoutNotify(GetCurrentResolutionIndex());
             
             frameRateDropdown.ClearOptions();
             frameRateDropdown.AddOptions(_frameRateOptions);
         }
-
-        void LoadConfig()
-        {
-            
-        }
-
+        
         public void SetResolution(int resolutionIndex)
         {
             var resolution = _resolutions[resolutionIndex];

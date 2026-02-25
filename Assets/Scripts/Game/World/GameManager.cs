@@ -7,25 +7,29 @@ using User;
 
 namespace Game.World
 {
+    /// <summary>
+    /// Class responsible for management of general game behavior such as spawning the player of pause/unpause logic
+    /// </summary>
     public class GameManager : MonoBehaviour
     {
+        /// <summary>
+        /// Reference to player rigidbody
+        /// </summary>
         [SerializeField] private Rigidbody player;
         
-        private bool _isLoaded = false;
+        /// <summary>
+        /// Is the game paused
+        /// </summary>
         private bool _isPaused = false;
         
-        public bool IsLoaded => _isLoaded;
-        
+        /// <summary>
+        /// Is the game paused
+        /// </summary>
         public bool IsPaused => _isPaused;
         
-        private static GameManager _instance;
-        public static GameManager Instance => _instance;
-
-        void Awake()
-        {
-            _instance = this;
-        }
-        
+        /// <summary>
+        /// Loads the terrain and spawns the player
+        /// </summary>
         void Start()
         {
             player.isKinematic = true;
@@ -34,37 +38,46 @@ namespace Game.World
             Loader.Instance.Load();
 
             InputProvider.Instance.Input.UI.Back.performed += TogglePause;
+            
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
+        /// <summary>
+        /// Places player on the desired spot
+        /// </summary>
         void SpawnPlayer()
         {
             var runway = TerrainFeatureManager.Instance.Runways[0];
             player.position = runway.ApproachThreshold + Vector3.up;
         }
 
+        /// <summary>
+        /// Enables player movement
+        /// </summary>
         void AfterLoad()
         {
-            Debug.Log("After Load");
             player.isKinematic = false;
         }
-
-        private bool CanPause()
-        {
-            return UIManager.Instance.State == UIManager.UIState.Game ||
-                   UIManager.Instance.State == UIManager.UIState.Pause;
-        }
-
+        
+        /// <summary>
+        /// Sets timescale back to one to avoid issues while transitioning to other scenes
+        /// </summary>
         void OnDestroy()
         {
             Time.timeScale = 1;
         }
         
+        /// <summary>
+        /// Toggles game pause
+        /// </summary>
+        /// <param name="context"></param>
         void TogglePause(InputAction.CallbackContext context)
         {
             if (!Loader.Instance.IsLoaded)
                 return;
 
-            if (!CanPause())
+            if (UIManager.Instance.State != UIManager.UIState.Game && UIManager.Instance.State != UIManager.UIState.Pause)
             {
                 UIManager.Instance.Back();
                 return;
@@ -77,19 +90,22 @@ namespace Game.World
             if (_isPaused)
             {
                 InputProvider.Instance.DisableAircraftControls();
-                Cursor.lockState = CursorLockMode.None;
                 Time.timeScale = 0;
+                Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
             else
             {
                 InputProvider.Instance.EnableAircraftControls();
-                Cursor.lockState = CursorLockMode.Locked;
                 Time.timeScale = 1;
+                Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
         }
 
+        /// <summary>
+        /// Forcefully unpauses the game 
+        /// </summary>
         public void Unpause()
         {
             if (!_isPaused)
@@ -97,17 +113,24 @@ namespace Game.World
             
             _isPaused = false;
             UIManager.Instance.Back();
-            Time.timeScale = 1;
             InputProvider.Instance.EnableAircraftControls();
+            
+            Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
+        /// <summary>
+        /// Loads main menu scene
+        /// </summary>
         public void GoToMainMenu()
         {
             SceneManager.LoadScene("Main menu");
         }
         
+        /// <summary>
+        /// Quits the application
+        /// </summary>
         public void Quit()
         {
             Application.Quit();

@@ -1069,75 +1069,27 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Brake"",
+                    ""type"": ""Value"",
+                    ""id"": ""ade0e0d6-a874-43e9-9a64-6767748045c9"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ThrottleBrakeCombo"",
+                    ""type"": ""Value"",
+                    ""id"": ""529ee053-a3e1-41c5-8b9c-961e085e4241"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""3c682e3e-a9bf-479f-9793-ce777760b8fb"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Throttle"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""436dcd8b-ebc5-4e97-8da8-cd57a80e4ba6"",
-                    ""path"": ""<Keyboard>/leftCtrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Throttle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""3d087468-a7c0-42fa-8b66-39107102cff1"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Throttle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""dadb3c0d-10ff-43a0-9458-642da4ff4c42"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Throttle"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""e68dfeb2-d6ed-47ee-861d-29bc00fbe91d"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Throttle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""0f7f575c-9442-4fe4-bd21-707437bf471c"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Throttle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
                 {
                     ""name"": ""1D Axis"",
                     ""id"": ""2e8186cc-90ac-4820-bfae-84c46040f87f"",
@@ -1280,6 +1232,61 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfcd6b24-e766-4e6b-ad6a-625ea4bed47e"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""08383d97-4506-4f1b-878f-76a795ce09b5"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrottleBrakeCombo"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""38575f0d-f37b-43a9-acc8-21aa0db85fb8"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrottleBrakeCombo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""0ca5f61c-6e8f-4512-b8b3-8f08dc69a72e"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrottleBrakeCombo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e1911ce-6a5b-4b3e-ab24-c6a39a7bd8bd"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1317,6 +1324,8 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Aircraft_Roll = m_Aircraft.FindAction("Roll", throwIfNotFound: true);
         m_Aircraft_Yaw = m_Aircraft.FindAction("Yaw", throwIfNotFound: true);
         m_Aircraft_Look = m_Aircraft.FindAction("Look", throwIfNotFound: true);
+        m_Aircraft_Brake = m_Aircraft.FindAction("Brake", throwIfNotFound: true);
+        m_Aircraft_ThrottleBrakeCombo = m_Aircraft.FindAction("ThrottleBrakeCombo", throwIfNotFound: true);
     }
 
     ~@SimInput()
@@ -1794,6 +1803,8 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Aircraft_Roll;
     private readonly InputAction m_Aircraft_Yaw;
     private readonly InputAction m_Aircraft_Look;
+    private readonly InputAction m_Aircraft_Brake;
+    private readonly InputAction m_Aircraft_ThrottleBrakeCombo;
     /// <summary>
     /// Provides access to input actions defined in input action map "Aircraft".
     /// </summary>
@@ -1825,6 +1836,14 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Aircraft/Look".
         /// </summary>
         public InputAction @Look => m_Wrapper.m_Aircraft_Look;
+        /// <summary>
+        /// Provides access to the underlying input action "Aircraft/Brake".
+        /// </summary>
+        public InputAction @Brake => m_Wrapper.m_Aircraft_Brake;
+        /// <summary>
+        /// Provides access to the underlying input action "Aircraft/ThrottleBrakeCombo".
+        /// </summary>
+        public InputAction @ThrottleBrakeCombo => m_Wrapper.m_Aircraft_ThrottleBrakeCombo;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1866,6 +1885,12 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @Brake.started += instance.OnBrake;
+            @Brake.performed += instance.OnBrake;
+            @Brake.canceled += instance.OnBrake;
+            @ThrottleBrakeCombo.started += instance.OnThrottleBrakeCombo;
+            @ThrottleBrakeCombo.performed += instance.OnThrottleBrakeCombo;
+            @ThrottleBrakeCombo.canceled += instance.OnThrottleBrakeCombo;
         }
 
         /// <summary>
@@ -1892,6 +1917,12 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @Brake.started -= instance.OnBrake;
+            @Brake.performed -= instance.OnBrake;
+            @Brake.canceled -= instance.OnBrake;
+            @ThrottleBrakeCombo.started -= instance.OnThrottleBrakeCombo;
+            @ThrottleBrakeCombo.performed -= instance.OnThrottleBrakeCombo;
+            @ThrottleBrakeCombo.canceled -= instance.OnThrottleBrakeCombo;
         }
 
         /// <summary>
@@ -2123,5 +2154,19 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Brake" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBrake(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ThrottleBrakeCombo" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnThrottleBrakeCombo(InputAction.CallbackContext context);
     }
 }

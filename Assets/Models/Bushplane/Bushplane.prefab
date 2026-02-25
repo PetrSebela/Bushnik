@@ -1098,6 +1098,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aircraftBody: {fileID: 6886467834627848113}
   tailwheel: {fileID: 1912973334464704294}
+  leftGear: {fileID: 6323819898086110778}
+  rightGear: {fileID: 688865081979490336}
   left: {fileID: 5904496002416447612}
   right: {fileID: 8216302732824915787}
   elevator: {fileID: 8337962280346154732}
@@ -1561,11 +1563,11 @@ MonoBehaviour:
     m_Bits: 119
   wheelRadius: 0.42
   travel: 0.5
-  springRate: 15000
-  damping: 500
-  tireGrip: 10
+  springRate: 20000
+  damping: 1500
+  tireGrip: 100
   drag: 50
-  maxBrakeForce: 3
+  maxBrakeForce: 550
 --- !u!114 &5777436427473741806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3125,11 +3127,11 @@ MonoBehaviour:
     m_Bits: 119
   wheelRadius: 0.42
   travel: 0.5
-  springRate: 15000
-  damping: 500
-  tireGrip: 10
+  springRate: 20000
+  damping: 1500
+  tireGrip: 100
   drag: 50
-  maxBrakeForce: 3
+  maxBrakeForce: 550
 --- !u!114 &6863143574413782661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3596,6 +3598,7 @@ MonoBehaviour:
   throttleBar: {fileID: 7570318670646475814}
   brakeBar: {fileID: 6096607755601411852}
   readoutText: {fileID: 4447037583636234005}
+  controller: {fileID: 4084576040971950852}
 --- !u!1 &6343022407017555987
 GameObject:
   m_ObjectHideFlags: 0

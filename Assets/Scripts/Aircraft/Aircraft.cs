@@ -20,6 +20,16 @@ namespace Aircraft
         public Tailwheel tailwheel;
 
         /// <summary>
+        /// Left front landing gear
+        /// </summary>
+        public Shock leftGear;
+        
+        /// <summary>
+        /// Left front landing gear
+        /// </summary>
+        public Shock rightGear;
+        
+        /// <summary>
         /// Left aileron
         /// </summary>
         public Flap left;
@@ -93,23 +103,16 @@ namespace Aircraft
             tailwheel.SetSteerInput(-input);
             rudder.SetInput(input);
         }
-        
-        /// <summary>
-        /// Sets pressure of the left main landing gear brake
-        /// </summary>
-        /// <param name="input">Surface deflection (-1, 1)</param>
-        public void SetLeftBrakeInput(float input)
-        {
-            
-        }
 
         /// <summary>
-        /// Sets pressure of the right main landing gear brake
+        /// Sets brake input for left and right wheels of front landing gear
         /// </summary>
-        /// <param name="input">Surface deflection (-1, 1)</param>
-        public void SetRightBrakeInput(float input)
+        /// <param name="leftBrake">Left brake input</param>
+        /// <param name="rightBrake">Right brake input</param>
+        public void SetBrakeInput(float leftBrake, float rightBrake)
         {
-            
+            leftGear.SetBrakeInput(leftBrake);
+            rightGear.SetBrakeInput(rightBrake);
         }
         
         /// <summary>

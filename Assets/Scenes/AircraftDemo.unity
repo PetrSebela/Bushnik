@@ -2748,10 +2748,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 688865081979490336, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
-      propertyPath: drag
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 917487617307435014, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
       propertyPath: m_text
       value: 2255
@@ -2839,10 +2835,6 @@ PrefabInstance:
     - target: {fileID: 6113597611792411756, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6323819898086110778, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
-      propertyPath: drag
-      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7049369278285980966, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
       propertyPath: m_fontAsset

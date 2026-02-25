@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Game.World
 {
+    /// <summary>
+    /// Class responsible for management of individual UI screens during gameplay
+    /// </summary>
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private CanvasGroup hud;

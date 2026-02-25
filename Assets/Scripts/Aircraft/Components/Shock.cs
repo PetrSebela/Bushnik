@@ -76,6 +76,15 @@ namespace Aircraft.Components
         private Vector3 ShockDirection => transform.up;
 
         /// <summary>
+        /// Sets brake input
+        /// </summary>
+        /// <param name="value">Brake input value</param>
+        public void SetBrakeInput(float value)
+        {
+            _brakeInput = value;
+        }
+        
+        /// <summary>
         /// Computes spring forces acting in the suspension
         /// Inspired by https://www.youtube.com/watch?v=CdPYlj5uZeI
         /// </summary>

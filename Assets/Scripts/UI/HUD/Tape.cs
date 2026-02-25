@@ -16,16 +16,6 @@ namespace UI.HUD
         /// Value displayed on the tape
         /// </summary>
         public float value = 0;
-
-        /// <summary>
-        /// If tape value should be displayed as kilo
-        /// </summary>
-        [SerializeField] private bool showKilo = true;
-        
-        /// <summary>
-        /// Number of indents between major ticks
-        /// </summary>
-        [SerializeField] private int majorTickSpacing = 10;
         
         /// <summary>
         /// Major tick prefab - should have label for displaying  value
@@ -38,7 +28,7 @@ namespace UI.HUD
         [SerializeField] private GameObject minorTick;
         
         /// <summary>
-        /// Tick spacing in physical space
+        /// Tick space scaling factor
         /// </summary>
         [SerializeField] private float scale;
         
@@ -55,7 +45,7 @@ namespace UI.HUD
         /// <summary>
         /// Collection of all ticks
         /// </summary>
-        private List<RectTransform> _ticks = new();
+        private readonly List<RectTransform> _ticks = new();
         
         /// <summary>
         /// Crates tape indents
@@ -74,7 +64,10 @@ namespace UI.HUD
             }
         }
 
-        void UpdateTapeItems(float value)
+        /// <summary>
+        /// Updates position of all ticks in relation to currently displayed value
+        /// </summary>
+        private void UpdateTickPositions()
         {
             var diameter = 10;
             var origin = Mathf.Round(value / 100) - diameter;
@@ -89,6 +82,8 @@ namespace UI.HUD
                 if (label)
                     label.text = ((origin + i) / 10).ToString("0.0", CultureInfo.InvariantCulture);
             }
+            
+            tapeParent.localPosition = new Vector3(0, -value * scale, 0);
         }
         
         /// <summary>
@@ -97,8 +92,7 @@ namespace UI.HUD
         public void Update()
         {
             valueDisplay.text = Mathf.RoundToInt(value).ToString(CultureInfo.InvariantCulture);
-            UpdateTapeItems(value);
-            tapeParent.localPosition = new Vector3(0, -value * scale, 0);
+            UpdateTickPositions();
         }
     }
 }
