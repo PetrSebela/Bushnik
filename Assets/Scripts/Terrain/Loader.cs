@@ -24,8 +24,8 @@ namespace Terrain
 
         [SerializeField] LoadingScreen loadingScreen;
         
-        public Action AfterPregeneration; 
-        public Action AfterLoading; 
+        public UnityEvent AfterPregeneration; 
+        public UnityEvent AfterLoading; 
         
         private void Awake()
         {
@@ -34,8 +34,6 @@ namespace Terrain
 
         public void Load()
         {
-            UIManager.Instance?.BeginLoading();
-
             SeaManager.Instance.Init();
             TerrainManager.Instance.Init();
             TerrainManager.Instance.enabled = false;
@@ -85,8 +83,6 @@ namespace Terrain
         {
             AfterLoading?.Invoke();
             _isLoaded = true;
-            
-            UIManager.Instance?.FinishLoading();
         }
     }
 }

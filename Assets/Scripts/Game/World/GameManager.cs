@@ -33,15 +33,15 @@ namespace Game.World
         void Start()
         {
             player.isKinematic = true;
-            Loader.Instance.AfterPregeneration += SpawnPlayer;
-            Loader.Instance.AfterLoading += AfterLoad;
+            Loader.Instance.AfterPregeneration.AddListener(SpawnPlayer);
+            Loader.Instance.AfterLoading.AddListener(AfterLoad);
             Loader.Instance.Load();
-
-            InputProvider.Instance.Input.UI.Back.performed += TogglePause;
             
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+        
+        
 
         /// <summary>
         /// Places player on the desired spot
@@ -69,22 +69,10 @@ namespace Game.World
         }
         
         /// <summary>
-        /// Toggles game pause
+        /// Toggles game pause state
         /// </summary>
-        /// <param name="context"></param>
-        void TogglePause(InputAction.CallbackContext context)
+        public void TogglePause()
         {
-            if (!Loader.Instance.IsLoaded)
-                return;
-
-            if (UIManager.Instance.State != UIManager.UIState.Game && UIManager.Instance.State != UIManager.UIState.Pause)
-            {
-                UIManager.Instance.Back();
-                return;
-            }
-            
-            UIManager.Instance.Back();
-            
             _isPaused = !_isPaused;
 
             if (_isPaused)
@@ -104,6 +92,22 @@ namespace Game.World
         }
 
         /// <summary>
+        /// Forcefully pauses the game
+        /// </summary>
+        public void Pause()
+        {
+            if (_isPaused)
+                return;
+            
+            _isPaused = true;
+            InputProvider.Instance.DisableAircraftControls();
+            
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        
+        /// <summary>
         /// Forcefully unpauses the game 
         /// </summary>
         public void Unpause()
@@ -112,7 +116,6 @@ namespace Game.World
                 return;
             
             _isPaused = false;
-            UIManager.Instance.Back();
             InputProvider.Instance.EnableAircraftControls();
             
             Time.timeScale = 1;

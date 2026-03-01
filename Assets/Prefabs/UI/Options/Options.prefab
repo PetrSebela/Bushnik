@@ -1101,6 +1101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 792868526473386115}
   - component: {fileID: 6768197672260588854}
+  - component: {fileID: 4519976375776591626}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -1144,6 +1145,25 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &4519976375776591626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2149138588608679585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c8b549e16bb63cbb9372e6a1ebfa66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precedingPage: {fileID: 0}
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2168209944486335575
 GameObject:
   m_ObjectHideFlags: 0
