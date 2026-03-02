@@ -248,7 +248,7 @@ void TerrainMesh(uint3 id : SV_DispatchThreadID)
 
 
 // === Heightmap preview section ===
-RWTexture2D<float3> HeightmapPreview;
+RWTexture2D<float4> HeightmapPreview;
 int PreviewSize;
 
 [numthreads(THREAD_GROUP_SIZE, 1, THREAD_GROUP_SIZE)]
@@ -258,23 +258,15 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
     float2 flatWorldPosition = normalizedPosition * TerrainSize;
 
     float value = GetTerrainHeight(flatWorldPosition).height;
-    float3 color = float3(value, value, value);
+    float step = 25;
+    float3 lowest = float3(0.27f, 0.2f, 0.15f);
+    float3 max = float3(1, 0.9f, 0.75f);
+    float3 color = lerp(lowest, max, round(value * step) / step);
     
-    if (value >= 1)
-        HeightmapPreview[id.xz] = float3(1, 1 - value, 1 - value);
-    else if (value <= 0)
-        HeightmapPreview[id.xz] = float3(0.05f, 0.15f, 0.05f);
+    if (value <= 0)
+        HeightmapPreview[id.xz] = float4(0,0,0,0);
     else
-    {
-        if ((value * 500) % 50 <= 3)
-        {
-            HeightmapPreview[id.xz] = float3(0,1,0);
-        }
-        else
-        {
-            HeightmapPreview[id.xz] = color;
-        }
-    }
+        HeightmapPreview[id.xz] = float4(color, 1);
 }
 
 // === Sample points ===

@@ -47,7 +47,7 @@ namespace User
         {
             _input.Enable();
         }
-
+        
         /// <summary>
         /// Disable input object
         /// </summary>

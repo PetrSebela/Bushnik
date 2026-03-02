@@ -587,6 +587,15 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Map"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e037ffe-01c1-4269-a85c-9499aa38291a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1018,6 +1027,17 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""405a101c-7e1a-4b36-bedb-5c4f8c21f7b8"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Map"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1289,6 +1309,74 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Map"",
+            ""id"": ""d4493553-7d47-4160-a04f-6b725d56dacb"",
+            ""actions"": [
+                {
+                    ""name"": ""Drag"",
+                    ""type"": ""Button"",
+                    ""id"": ""74dcd389-646c-4fbb-8b75-32b0f5941b81"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""c89ddad8-306b-4802-9630-7bdb3e017396"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scale"",
+                    ""type"": ""Value"",
+                    ""id"": ""778af0b0-0b63-4016-bfe2-4d8bd0102c3c"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""900c4964-f86a-4ff4-b808-f92e6a1d3c1f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73796dca-2023-4dda-962f-fb6d7c6d31ae"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a2fd855-0c34-4b18-8792-9e23c424ffee"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scale"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1317,6 +1405,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_Back = m_UI.FindAction("Back", throwIfNotFound: true);
+        m_UI_Map = m_UI.FindAction("Map", throwIfNotFound: true);
         // Aircraft
         m_Aircraft = asset.FindActionMap("Aircraft", throwIfNotFound: true);
         m_Aircraft_Throttle = m_Aircraft.FindAction("Throttle", throwIfNotFound: true);
@@ -1326,6 +1415,11 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Aircraft_Look = m_Aircraft.FindAction("Look", throwIfNotFound: true);
         m_Aircraft_Brake = m_Aircraft.FindAction("Brake", throwIfNotFound: true);
         m_Aircraft_ThrottleBrakeCombo = m_Aircraft.FindAction("ThrottleBrakeCombo", throwIfNotFound: true);
+        // Map
+        m_Map = asset.FindActionMap("Map", throwIfNotFound: true);
+        m_Map_Drag = m_Map.FindAction("Drag", throwIfNotFound: true);
+        m_Map_MoveDelta = m_Map.FindAction("MoveDelta", throwIfNotFound: true);
+        m_Map_Scale = m_Map.FindAction("Scale", throwIfNotFound: true);
     }
 
     ~@SimInput()
@@ -1333,6 +1427,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Demo.enabled, "This will cause a leak and performance issues, SimInput.Demo.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, SimInput.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Aircraft.enabled, "This will cause a leak and performance issues, SimInput.Aircraft.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Map.enabled, "This will cause a leak and performance issues, SimInput.Map.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1603,6 +1698,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_Back;
+    private readonly InputAction m_UI_Map;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1658,6 +1754,10 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/Back".
         /// </summary>
         public InputAction @Back => m_Wrapper.m_UI_Back;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/Map".
+        /// </summary>
+        public InputAction @Map => m_Wrapper.m_UI_Map;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1717,6 +1817,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Back.started += instance.OnBack;
             @Back.performed += instance.OnBack;
             @Back.canceled += instance.OnBack;
+            @Map.started += instance.OnMap;
+            @Map.performed += instance.OnMap;
+            @Map.canceled += instance.OnMap;
         }
 
         /// <summary>
@@ -1761,6 +1864,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Back.started -= instance.OnBack;
             @Back.performed -= instance.OnBack;
             @Back.canceled -= instance.OnBack;
+            @Map.started -= instance.OnMap;
+            @Map.performed -= instance.OnMap;
+            @Map.canceled -= instance.OnMap;
         }
 
         /// <summary>
@@ -1956,6 +2062,124 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="AircraftActions" /> instance referencing this action map.
     /// </summary>
     public AircraftActions @Aircraft => new AircraftActions(this);
+
+    // Map
+    private readonly InputActionMap m_Map;
+    private List<IMapActions> m_MapActionsCallbackInterfaces = new List<IMapActions>();
+    private readonly InputAction m_Map_Drag;
+    private readonly InputAction m_Map_MoveDelta;
+    private readonly InputAction m_Map_Scale;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Map".
+    /// </summary>
+    public struct MapActions
+    {
+        private @SimInput m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public MapActions(@SimInput wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Map/Drag".
+        /// </summary>
+        public InputAction @Drag => m_Wrapper.m_Map_Drag;
+        /// <summary>
+        /// Provides access to the underlying input action "Map/MoveDelta".
+        /// </summary>
+        public InputAction @MoveDelta => m_Wrapper.m_Map_MoveDelta;
+        /// <summary>
+        /// Provides access to the underlying input action "Map/Scale".
+        /// </summary>
+        public InputAction @Scale => m_Wrapper.m_Map_Scale;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Map; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="MapActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(MapActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="MapActions" />
+        public void AddCallbacks(IMapActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MapActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MapActionsCallbackInterfaces.Add(instance);
+            @Drag.started += instance.OnDrag;
+            @Drag.performed += instance.OnDrag;
+            @Drag.canceled += instance.OnDrag;
+            @MoveDelta.started += instance.OnMoveDelta;
+            @MoveDelta.performed += instance.OnMoveDelta;
+            @MoveDelta.canceled += instance.OnMoveDelta;
+            @Scale.started += instance.OnScale;
+            @Scale.performed += instance.OnScale;
+            @Scale.canceled += instance.OnScale;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="MapActions" />
+        private void UnregisterCallbacks(IMapActions instance)
+        {
+            @Drag.started -= instance.OnDrag;
+            @Drag.performed -= instance.OnDrag;
+            @Drag.canceled -= instance.OnDrag;
+            @MoveDelta.started -= instance.OnMoveDelta;
+            @MoveDelta.performed -= instance.OnMoveDelta;
+            @MoveDelta.canceled -= instance.OnMoveDelta;
+            @Scale.started -= instance.OnScale;
+            @Scale.performed -= instance.OnScale;
+            @Scale.canceled -= instance.OnScale;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="MapActions.UnregisterCallbacks(IMapActions)" />.
+        /// </summary>
+        /// <seealso cref="MapActions.UnregisterCallbacks(IMapActions)" />
+        public void RemoveCallbacks(IMapActions instance)
+        {
+            if (m_Wrapper.m_MapActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="MapActions.AddCallbacks(IMapActions)" />
+        /// <seealso cref="MapActions.RemoveCallbacks(IMapActions)" />
+        /// <seealso cref="MapActions.UnregisterCallbacks(IMapActions)" />
+        public void SetCallbacks(IMapActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MapActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MapActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="MapActions" /> instance referencing this action map.
+    /// </summary>
+    public MapActions @Map => new MapActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Demo" which allows adding and removing callbacks.
     /// </summary>
@@ -2111,6 +2335,13 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Map" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMap(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Aircraft" which allows adding and removing callbacks.
@@ -2168,5 +2399,34 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnThrottleBrakeCombo(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Map" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="MapActions.AddCallbacks(IMapActions)" />
+    /// <seealso cref="MapActions.RemoveCallbacks(IMapActions)" />
+    public interface IMapActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Drag" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDrag(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MoveDelta" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMoveDelta(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Scale" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnScale(InputAction.CallbackContext context);
     }
 }

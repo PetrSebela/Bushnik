@@ -165,10 +165,13 @@ namespace Terrain
             TerrainComputeShader.SetFloat("AmplitudeDecay", terrainSettings.amplitudeDecay);
             
             // Default terrain does not account for runways and other affectors
-            TerrainComputeShader.SetInt("AirstripBufferSize", 0);
-            _airstripBuffer?.Dispose();
-            _airstripBuffer = new ComputeBuffer(1, 1);
-            SetBufferToAllKernels(_airstripBuffer, "AirstripBuffer");
+            if (_airstripBuffer == null)
+            {
+                TerrainComputeShader.SetInt("AirstripBufferSize", 0);
+                _airstripBuffer?.Dispose();
+                _airstripBuffer = new ComputeBuffer(1, 1);
+                SetBufferToAllKernels(_airstripBuffer, "AirstripBuffer");
+            }            
         }
 
         /// <summary>
@@ -214,6 +217,7 @@ namespace Terrain
             UpdateTerrainSettings();
             int previewKernelIndex = TerrainComputeShader.FindKernel("PreviewHeightmap");
 
+
             var preview = new RenderTexture(previewSize, previewSize, 0, RenderTextureFormat.ARGB32);
             preview.enableRandomWrite = true;
             preview.Create();
@@ -223,6 +227,7 @@ namespace Terrain
 
             int groups = previewSize / 32;
             TerrainComputeShader.Dispatch(previewKernelIndex, groups, 1, groups);
+            
             return preview;
         }
 

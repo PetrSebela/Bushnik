@@ -26,12 +26,12 @@ namespace UI
                 foreach (var page in top.GetComponentsInChildren<Page>(true))
                 {
                     page.gameObject.SetActive(true);
-                    page.ForceHide();
+                    page.Hide(true);
                 }
             }
 
             _currentPage = defaultPage;
-            defaultPage.ForceShow();
+            defaultPage.Show(true);
             
             InputProvider.Instance.Input.UI.Back.performed += Back;
         }
