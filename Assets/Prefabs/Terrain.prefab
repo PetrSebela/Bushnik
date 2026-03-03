@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1308584032264545536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2436424568355513983}
+  m_Layer: 0
+  m_Name: Interests
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2436424568355513983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308584032264545536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5920285809351086645}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1371026413374142168
 GameObject:
   m_ObjectHideFlags: 0
@@ -85,6 +116,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  _actions: []
 --- !u!1 &1878109131293917388
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,6 +329,9 @@ MonoBehaviour:
   RunwayOrientationSamples: 32
   RunwayCount: 1500
   OversampleRatio: 1
+  PointOfInterestParent: {fileID: 2436424568355513983}
+  Features:
+  - {fileID: 11400000, guid: b6b81a67632ae8c9497dca09095a6c37, type: 2}
 --- !u!1 &2984874464434350333
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +590,7 @@ Transform:
   m_Children:
   - {fileID: 4872774383027786746}
   - {fileID: 195952605832285200}
+  - {fileID: 2436424568355513983}
   - {fileID: 4315696470867436696}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -728,6 +764,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 5017954974601158778}
+  AfterPregeneration:
+    m_PersistentCalls:
+      m_Calls: []
+  AfterLoading:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4859630038198886779
 GameObject:
   m_ObjectHideFlags: 0

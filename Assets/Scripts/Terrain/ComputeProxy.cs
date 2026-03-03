@@ -109,8 +109,10 @@ namespace Terrain
         /// Creates and sets terrain affector
         /// This method requires
         /// </summary>
-        public void UpdateTerrainAffectors(RunwayData[] affectors)
+        public void UpdateTerrainAffectors()
         {
+            var affectors = TerrainFeatureManager.Instance.GetAffectors();
+            
             if(affectors.Length == 0)
                 return;
             

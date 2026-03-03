@@ -48,8 +48,8 @@ namespace Game.World
         /// </summary>
         void SpawnPlayer()
         {
-            var runway = TerrainFeatureManager.Instance.Runways[0];
-            player.position = runway.ApproachThreshold + Vector3.up;
+            var spawnPoint = TerrainFeatureManager.Instance.Interests[0].transform.position;
+            player.position = spawnPoint + Vector3.up;
         }
 
         /// <summary>

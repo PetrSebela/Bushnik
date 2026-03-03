@@ -41,12 +41,10 @@ namespace Terrain
             
             loadingScreen.SetMessage("Loading runways");
             ComputeProxy.Instance.Init();
-            TerrainFeatureManager.Instance.GetRunways(OnRunwaysGenerated);
-        }
-        
-        private void OnRunwaysGenerated(RunwayData[] runways)
-        {
-            ComputeProxy.Instance.UpdateTerrainAffectors(runways);
+            
+            TerrainFeatureManager.Instance.Init();
+            
+            ComputeProxy.Instance.UpdateTerrainAffectors();
             
             TerrainManager.Instance.enabled = true;
             FoliageManager.Instance.enabled = true;
@@ -55,6 +53,18 @@ namespace Terrain
             
             StartCoroutine(LoadTerrain());
         }
+        
+        // private void OnRunwaysGenerated(RunwayData[] runways)
+        // {
+        //     ComputeProxy.Instance.UpdateTerrainAffectors(runways);
+        //     
+        //     TerrainManager.Instance.enabled = true;
+        //     FoliageManager.Instance.enabled = true;
+        //     
+        //     AfterPregeneration?.Invoke();
+        //     
+        //     StartCoroutine(LoadTerrain());
+        // }
 
         private void IncrementProgress()
         {
