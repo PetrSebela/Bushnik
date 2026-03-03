@@ -1,37 +1,43 @@
-using System;
 using System.Collections;
-using Game.World;
-using Terrain.Data;
 using Terrain.Foliage;
-using UI;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Terrain
 {
+    /// <summary>
+    /// Class responsible for sequencing of actions that are necessary for correct terrain loading
+    /// </summary>
     public class Loader : MonoBehaviour
     {
-        private bool _isLoaded = false;
-        
-        public bool IsLoaded => _isLoaded;
-        
-        private Action<float> _progressCallback;
-        
+        /// <summary>
+        /// Loader instance
+        /// </summary>
         private static Loader _instance;
+        
+        /// <summary>
+        /// Instance getter
+        /// </summary>
         public static Loader Instance => _instance;
         
-        private int _chunksLoaded = 0;
-
-        [SerializeField] LoadingScreen loadingScreen;
+        /// <summary>
+        /// What actions should be performed as part of pipeline initialization
+        /// </summary>
+        public UnityEvent afterPregeneration;
         
-        public UnityEvent AfterPregeneration; 
-        public UnityEvent AfterLoading; 
+        /// <summary>
+        /// What actions should be performed after generation
+        /// </summary>
+        public UnityEvent afterLoading; 
         
         private void Awake()
         {
             _instance = this;
         }
-
+        
+        /// <summary>
+        /// Begins pipeline initialization
+        /// </summary>
         public void Load()
         {
             SeaManager.Instance.Init();
@@ -39,7 +45,6 @@ namespace Terrain
             TerrainManager.Instance.enabled = false;
             FoliageManager.Instance.enabled = false;
             
-            loadingScreen.SetMessage("Loading runways");
             ComputeProxy.Instance.Init();
             
             TerrainFeatureManager.Instance.Init();
@@ -49,34 +54,16 @@ namespace Terrain
             TerrainManager.Instance.enabled = true;
             FoliageManager.Instance.enabled = true;
             
-            AfterPregeneration?.Invoke();
+            afterPregeneration?.Invoke();
             
             StartCoroutine(LoadTerrain());
         }
         
-        // private void OnRunwaysGenerated(RunwayData[] runways)
-        // {
-        //     ComputeProxy.Instance.UpdateTerrainAffectors(runways);
-        //     
-        //     TerrainManager.Instance.enabled = true;
-        //     FoliageManager.Instance.enabled = true;
-        //     
-        //     AfterPregeneration?.Invoke();
-        //     
-        //     StartCoroutine(LoadTerrain());
-        // }
-
-        private void IncrementProgress()
-        {
-            _chunksLoaded++;
-            float progress = _chunksLoaded / 180f; 
-            loadingScreen.SetProgress(progress);
-        }
-
+        /// <summary>
+        /// Loads terrain around player
+        /// </summary>
         private IEnumerator LoadTerrain()
         {
-            loadingScreen.SetMessage("Loading terrain");
-            LoadBalancer.Instance.OnRequestDispatched += IncrementProgress;
             TerrainManager.Instance.ForceLODUpdate();
 
             while (!LoadBalancer.Instance.AllFinished)
@@ -85,14 +72,7 @@ namespace Terrain
                 yield return new WaitForSeconds(1f);
             }
 
-            LoadBalancer.Instance.OnRequestDispatched -= IncrementProgress;
-            LoadingFinished();
-        }
-
-        private void LoadingFinished()
-        {
-            AfterLoading?.Invoke();
-            _isLoaded = true;
+            afterLoading?.Invoke();
         }
     }
 }

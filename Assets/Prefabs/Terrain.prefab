@@ -116,7 +116,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  _actions: []
+  actions: []
 --- !u!1 &1878109131293917388
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,12 +325,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065602dea1df3bafbbeac35d972529eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 317
-  RunwayOrientationSamples: 32
-  RunwayCount: 1500
-  OversampleRatio: 1
-  PointOfInterestParent: {fileID: 2436424568355513983}
-  Features:
+  pointOfInterestParent: {fileID: 2436424568355513983}
+  features:
   - {fileID: 11400000, guid: b6b81a67632ae8c9497dca09095a6c37, type: 2}
 --- !u!1 &2984874464434350333
 GameObject:
@@ -764,10 +760,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 5017954974601158778}
-  AfterPregeneration:
+  afterPregeneration:
     m_PersistentCalls:
       m_Calls: []
-  AfterLoading:
+  afterLoading:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &4859630038198886779

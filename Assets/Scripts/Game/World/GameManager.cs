@@ -1,5 +1,6 @@
 using Terrain;
 using Terrain.Data;
+using UI.Map;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -33,16 +34,14 @@ namespace Game.World
         void Start()
         {
             player.isKinematic = true;
-            Loader.Instance.AfterPregeneration.AddListener(SpawnPlayer);
-            Loader.Instance.AfterLoading.AddListener(AfterLoad);
+            Loader.Instance.afterPregeneration.AddListener(SpawnPlayer);
+            Loader.Instance.afterLoading.AddListener(AfterLoad);
             Loader.Instance.Load();
             
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
         
-        
-
         /// <summary>
         /// Places player on the desired spot
         /// </summary>
@@ -50,6 +49,7 @@ namespace Game.World
         {
             var spawnPoint = TerrainFeatureManager.Instance.Interests[0].transform.position;
             player.position = spawnPoint + Vector3.up;
+            MapMarkerUtility.Instance.PlacePlayerMarker(player.transform);
         }
 
         /// <summary>
@@ -68,29 +68,6 @@ namespace Game.World
             Time.timeScale = 1;
         }
         
-        /// <summary>
-        /// Toggles game pause state
-        /// </summary>
-        public void TogglePause()
-        {
-            _isPaused = !_isPaused;
-
-            if (_isPaused)
-            {
-                InputProvider.Instance.DisableAircraftControls();
-                Time.timeScale = 0;
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                InputProvider.Instance.EnableAircraftControls();
-                Time.timeScale = 1;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-        }
-
         /// <summary>
         /// Forcefully pauses the game
         /// </summary>

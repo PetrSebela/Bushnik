@@ -7,8 +7,7 @@ namespace Terrain.Interests
     {
         public readonly List<TerrainAffectorData> TerrainAffectors = new();
     }
-
-
+    
     public struct TerrainAffectorData
     {
         public Vector3 From;

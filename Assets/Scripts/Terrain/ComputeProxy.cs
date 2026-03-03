@@ -58,7 +58,6 @@ namespace Terrain
         /// </summary>
         public MeshSettings meshSettings;
         public TerrainSettings terrainSettings;
-        public TerrainFeatureManager terrainFeatureManager;
 
         /// <summary>
         /// List of all used terrain workers
@@ -100,6 +99,10 @@ namespace Terrain
             UpdateTerrainSettings();
         }
 
+        /// <summary>
+        /// Returns worker to available pool
+        /// </summary>
+        /// <param name="worker">Worker to be returned</param>
         private void OnWorkerCompleted(TerrainWorker worker)
         {
             _freeWorkers.Add(worker);
@@ -187,14 +190,6 @@ namespace Terrain
             TerrainComputeShader.SetBuffer(_previewKernel, bname, buffer);
             TerrainComputeShader.SetBuffer(_sampleKernel, bname, buffer);
         }
-
-        /// <summary>
-        /// Creates request for compute buffer readback
-        /// </summary>
-        /// <param name="buffer">Compute buffer to be read</param>
-        /// <typeparam name="T">Datatype stored in compute buffer</typeparam>
-        /// <returns>Task corresponding to said request</returns>
-
         
         public bool HasFreeWorker => _freeWorkers.Count > 0;
 
@@ -218,8 +213,7 @@ namespace Terrain
         {
             UpdateTerrainSettings();
             int previewKernelIndex = TerrainComputeShader.FindKernel("PreviewHeightmap");
-
-
+            
             var preview = new RenderTexture(previewSize, previewSize, 0, RenderTextureFormat.ARGB32);
             preview.enableRandomWrite = true;
             preview.Create();

@@ -56,11 +56,17 @@ namespace User
             _input.Disable();
         }
         
+        /// <summary>
+        /// Disables aircraft controls
+        /// </summary>
         public void DisableAircraftControls()
         {
             _input.Aircraft.Disable();
         }
         
+        /// <summary>
+        /// Enables aircraft controls
+        /// </summary>
         public void EnableAircraftControls()
         {
             _input.Aircraft.Enable();

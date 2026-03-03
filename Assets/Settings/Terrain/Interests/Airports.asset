@@ -12,4 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9497e762f396c9358d758ca68570a01, type: 3}
   m_Name: Airports
   m_EditorClassIdentifier: 
-  count: 250
+  airportNames:
+  - Cedar Creek
+  - Kings Peek
+  - Westwater
+  - Kenai
+  - Nanwalek
+  - Quartz Peek
+  - Lone Pine
+  - Lonely Mountain
+  - Radiator Springs
+  - Thunder Hollow
+  - Propwash Junction
+  - Thomasville
+  - New Coil
+  minSpacing: 5000

@@ -2387,6 +2387,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  _actions: []
 --- !u!1 &3927952273500917202
 GameObject:
   m_ObjectHideFlags: 0

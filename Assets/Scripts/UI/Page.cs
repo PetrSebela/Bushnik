@@ -1,38 +1,62 @@
-using Game.World;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using User;
 
 namespace UI
 {
+    /// <summary>
+    /// Component representing single UI page
+    /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
     public class Page : MonoBehaviour
     {
+        /// <summary>
+        /// Page preceding current page
+        /// </summary>
         public Page precedingPage;
+        
+        /// <summary>
+        /// Called upon showing page
+        /// </summary>
         public UnityEvent onShow;
+        
+        /// <summary>
+        /// Called upon hiding page
+        /// </summary>
         public UnityEvent onHide;
         
-        public PageActions[] _actions;
+        /// <summary>
+        /// Arbitrary action map for active page
+        /// </summary>
+        ///
+        public PageActions[] actions;
 
+        /// <summary>
+        /// If current page is shown
+        /// </summary>
         private bool _shown = false;
         
+        /// <summary>
+        /// Canvas group for current page
+        /// </summary>
         private CanvasGroup _canvasGroup;
         
-        void Awake()
+        private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             
-            foreach (var action in _actions)
-                action.Trigger.action.performed += _ =>
+            foreach (var action in actions)
+                action.trigger.action.performed += _ =>
                 {
                     if (!_shown)
                         return;
-                    action.Action.Invoke();
+                    action.action.Invoke();
                 };
         }
         
+        /// <summary>
+        /// Navigates backwards
+        /// </summary>
         public void Back()
         {
             if (precedingPage == null)
@@ -41,6 +65,10 @@ namespace UI
             PageManager.Instance.Show(precedingPage);
         }
         
+        /// <summary>
+        /// Shows page
+        /// </summary>
+        /// <param name="instant">If transition should be instant</param>
         public void Show(bool instant=false)
         {
             _shown = true;
@@ -58,6 +86,10 @@ namespace UI
             LeanTween.alphaCanvas(_canvasGroup, 1, 0.1f).setIgnoreTimeScale(true);
         }
         
+        /// <summary>
+        /// Hides page
+        /// </summary>
+        /// <param name="instant">If transition should be instant</param>
         public void Hide(bool instant=false)
         {
             _shown = false;
@@ -76,10 +108,13 @@ namespace UI
         }
     }
 
+    /// <summary>
+    /// Struct for arbitrary action map
+    /// </summary>
     [System.Serializable]
     public struct PageActions
     {
-        public InputActionReference Trigger;
-        public UnityEvent Action;
+        public InputActionReference trigger;
+        public UnityEvent action;
     }
 }
