@@ -10,7 +10,7 @@ namespace Terrain.Interests
     {
         [SerializeField] private string[] airportNames;
         [SerializeField] private float minSpacing;
-        
+        [SerializeField] private GameObject airportPrefab;
         private bool TryAddRunway(ref List<PointOfInterest> runways, Vector3 approach, float heading, string airportName)
         {
             const int runwaySamples = 10;
@@ -30,6 +30,7 @@ namespace Terrain.Interests
             
             var approachPoint = points[0];
             var departurePoint = points[^1];
+            var center = (approachPoint + departurePoint) / 2;
             
             var flow = departurePoint - approachPoint;
             var angle = Vector3.Angle(Vector3.up, flow);
@@ -55,9 +56,10 @@ namespace Terrain.Interests
             if (totalDiff / runwaySamples > 1)
                 return false;
             
-            var airport = Airport.PlaceAirport(airportName, approachPoint);
             
-            var poi = airport.AddComponent<PointOfInterest>();
+            var airport = Instantiate(airportPrefab).GetComponent<Airport>();
+            airport.Init(airportName, center);
+            
             var affector = new TerrainAffectorData
             {
                 From = approachPoint,
@@ -65,8 +67,8 @@ namespace Terrain.Interests
                 Width = 10f
             };
             
-            poi.TerrainAffectors.Add(affector);
-            runways.Add(poi);
+            airport.TerrainAffectors.Add(affector);
+            runways.Add(airport);
             return true;
         }
         

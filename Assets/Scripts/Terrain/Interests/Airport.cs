@@ -1,3 +1,6 @@
+using System;
+using Game.World;
+using UI;
 using UI.Map;
 using UnityEngine;
 
@@ -6,23 +9,15 @@ namespace Terrain.Interests
     /// <summary>
     /// Script for managing single airport functionality
     /// </summary>
-    public class Airport : MonoBehaviour
+    public class Airport : PointOfInterest
     {
-        /// <summary>
-        /// Creates and places airport object
-        /// </summary>
-        /// <param name="airportName">Airport name</param>
-        /// <param name="position">Airport position</param>
-        /// <returns>Object containing airport</returns>
-        public static GameObject PlaceAirport(string airportName, Vector3 position)
+        public void Init(string airportName, Vector3 position)
         {
-            GameObject airport = new GameObject("Airport");
-            airport.transform.SetParent(TerrainFeatureManager.Instance.pointOfInterestParent);
-            airport.transform.position = position;
-            airport.name = airportName;
-            airport.AddComponent<Airport>();
-            MapMarkerUtility.Instance.PlaceTextMarker(airportName, airport.transform);
-            return airport;
+            transform.SetParent(TerrainFeatureManager.Instance.pointOfInterestParent);
+            transform.position = position;
+            name = airportName;
+
+            MapMarkerUtility.Instance.PlaceTextMarker(airportName, transform);
         }
     }
 }

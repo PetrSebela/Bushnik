@@ -44,6 +44,8 @@ namespace Aircraft.Components
         /// </summary>
         [SerializeField] private float drag;
         
+        private float StaticDrag => drag * 10;
+        
         /// <summary>
         /// Maximum brake force
         /// </summary>
@@ -131,7 +133,10 @@ namespace Aircraft.Components
             var direction = Mathf.Sign(velocity);
             var deltaVelocity = Mathf.Abs(velocity);
             var progress = Mathf.Clamp01(deltaVelocity / 5f);
-            return forward * (-direction * (drag * progress + maxBrakeForce * _brakeInput));
+
+            var dragCoefficient = Mathf.Lerp(StaticDrag, drag, velocity / 2f);
+            
+            return forward * (-direction * (dragCoefficient * progress + maxBrakeForce * _brakeInput));
         }
 
         /// <summary>

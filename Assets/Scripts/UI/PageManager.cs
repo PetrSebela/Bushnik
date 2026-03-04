@@ -33,13 +33,7 @@ namespace UI
         public void Awake()
         {
             _instance = this;
-        }
-        
-        /// <summary>
-        /// Sets all pages to consistent state
-        /// </summary>
-        public void Start()
-        {
+            
             foreach (var top in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
             {
                 foreach (var page in top.GetComponentsInChildren<Page>(true))
@@ -48,6 +42,14 @@ namespace UI
                     page.Hide(true);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Sets all pages to consistent state
+        /// </summary>
+        public void Start()
+        {
+
 
             _currentPage = defaultPage;
             defaultPage.Show(true);

@@ -1,5 +1,6 @@
 using Terrain;
 using Terrain.Data;
+using Terrain.Interests;
 using UI.Map;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,6 +19,8 @@ namespace Game.World
         /// </summary>
         [SerializeField] private Rigidbody player;
         
+        public Rigidbody Player => player;
+        
         /// <summary>
         /// Is the game paused
         /// </summary>
@@ -27,6 +30,21 @@ namespace Game.World
         /// Is the game paused
         /// </summary>
         public bool IsPaused => _isPaused;
+        
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
+        private static GameManager _instance;
+        
+        /// <summary>
+        /// Singleton
+        /// </summary>
+        public static GameManager Instance => _instance;
+
+        void Awake()
+        {
+            _instance = this;
+        }
         
         /// <summary>
         /// Loads the terrain and spawns the player
