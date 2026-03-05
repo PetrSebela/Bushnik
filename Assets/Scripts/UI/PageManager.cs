@@ -35,13 +35,8 @@ namespace UI
             _instance = this;
             
             foreach (var top in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
-            {
                 foreach (var page in top.GetComponentsInChildren<Page>(true))
-                {
-                    page.gameObject.SetActive(true);
-                    page.Hide(true);
-                }
-            }
+                    page.Init();
         }
         
         /// <summary>
@@ -49,11 +44,8 @@ namespace UI
         /// </summary>
         public void Start()
         {
-
-
             _currentPage = defaultPage;
-            defaultPage.Show(true);
-            
+            defaultPage.Enable(true);
             InputProvider.Instance.Input.UI.Back.performed += Back;
         }
 
@@ -65,13 +57,21 @@ namespace UI
         {
             _currentPage.Hide();
             _currentPage = page;
-            page.Show();
+            page.Enable();
         }
 
         /// <summary>
         /// Handler for back action
         /// </summary>
         private void Back(InputAction.CallbackContext context)
+        {
+            if(_currentPage.precedingPage == null)
+                return;
+            
+            Show(_currentPage.precedingPage);
+        }
+        
+        public void Back()
         {
             if(_currentPage.precedingPage == null)
                 return;

@@ -4,12 +4,29 @@ using UnityEngine;
 
 namespace UI
 {
+    /// <summary>
+    /// Class for announcing messages to the player
+    /// </summary>
     public class Announcer : MonoBehaviour
     {
+        /// <summary>
+        /// Text display
+        /// </summary>
         [SerializeField] private TMP_Text announcerText;
+        
+        /// <summary>
+        /// Canvas group for managing visibility
+        /// </summary>
         [SerializeField] private CanvasGroup canvasGroup;
         
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
         private static Announcer _instance;
+        
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
         public static Announcer Instance => _instance;
 
         private void Awake()
@@ -17,6 +34,10 @@ namespace UI
             _instance = this;
         }
 
+        /// <summary>
+        /// Displays message on the hud
+        /// </summary>
+        /// <param name="announcement"></param>
         public void Announce(string announcement)
         {
             announcerText.text = announcement;

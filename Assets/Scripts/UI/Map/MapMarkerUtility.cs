@@ -1,12 +1,13 @@
 using TMPro;
 using UnityEngine;
+using Utility;
 
 namespace UI.Map
 {
     /// <summary>
     /// Utility for placing markers onto map view
     /// </summary>
-    public class MapMarkerUtility : MonoBehaviour
+    public class MapMarkerUtility : Singleton<MapMarkerUtility>
     {
         /// <summary>
         /// Prefab for markers containing text
@@ -18,21 +19,6 @@ namespace UI.Map
         /// </summary>
         [SerializeField] private GameObject playerMarkerPrefab;
 
-        /// <summary>
-        /// Private singleton instance
-        /// </summary>
-        private static MapMarkerUtility _instance;
-        
-        /// <summary>
-        /// Public singleton getter
-        /// </summary>
-        public static MapMarkerUtility Instance => _instance;
-
-        public void Awake()
-        {
-            _instance = this;
-        }
-        
         /// <summary>
         /// Places marker with text onto the map
         /// </summary>

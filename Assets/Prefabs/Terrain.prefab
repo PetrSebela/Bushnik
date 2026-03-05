@@ -223,7 +223,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointOfInterestParent: {fileID: 2436424568355513983}
   features:
+  - {fileID: 11400000, guid: 432945a42d8852c559550671a7ec9850, type: 2}
   - {fileID: 11400000, guid: b6b81a67632ae8c9497dca09095a6c37, type: 2}
+  - {fileID: 11400000, guid: 7b9c44098951889979ff464e2543649c, type: 2}
+  - {fileID: 11400000, guid: 75ee01d40c4ab64568cdf73f40d72f6f, type: 2}
+  - {fileID: 11400000, guid: 03ca8936cc8deea2795bfc8ac13bb578, type: 2}
+  - {fileID: 11400000, guid: fac6be24f67f9103bb220c6860d50d5b, type: 2}
+  - {fileID: 11400000, guid: 637e65916c819fcfd9108dbac81c6a86, type: 2}
+  - {fileID: 11400000, guid: 9058fa89d3dab314c86aeeac01fa4022, type: 2}
 --- !u!1 &2984874464434350333
 GameObject:
   m_ObjectHideFlags: 0

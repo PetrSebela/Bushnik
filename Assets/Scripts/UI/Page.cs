@@ -40,6 +40,13 @@ namespace UI
         /// Canvas group for current page
         /// </summary>
         private CanvasGroup _canvasGroup;
+
+        public void Init()
+        {
+            _canvasGroup = GetComponent<CanvasGroup>();
+            gameObject.SetActive(true);
+            Hide(true);
+        }
         
         private void Awake()
         {
@@ -64,12 +71,17 @@ namespace UI
             
             PageManager.Instance.Show(precedingPage);
         }
+
+        public void Show()
+        {
+            PageManager.Instance.Show(this);
+        }
         
         /// <summary>
         /// Shows page
         /// </summary>
         /// <param name="instant">If transition should be instant</param>
-        public void Show(bool instant=false)
+        public void Enable(bool instant=false)
         {
             _shown = true;
             _canvasGroup.blocksRaycasts = true;

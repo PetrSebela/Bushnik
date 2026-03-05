@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Mission;
 using UI.Map;
 using UnityEngine;
 
@@ -8,10 +9,11 @@ namespace Terrain.Interests
     [CreateAssetMenu(fileName = "Airport", menuName = "POIs/Airport", order = 0)]
     public class AirportDescriptor : PointOfInterestDescriptor
     {
-        [SerializeField] private string[] airportNames;
+        [SerializeField] private string airportName;
+        [SerializeField] private List<MissionTemplate> missions;
         [SerializeField] private float minSpacing;
         [SerializeField] private GameObject airportPrefab;
-        private bool TryAddRunway(ref List<PointOfInterest> runways, Vector3 approach, float heading, string airportName)
+        private bool TryAddRunway(ref List<PointOfInterest> runways, Vector3 approach, float heading)
         {
             const int runwaySamples = 10;
             Vector3[] points = new Vector3[runwaySamples];
@@ -58,7 +60,7 @@ namespace Terrain.Interests
             
             
             var airport = Instantiate(airportPrefab).GetComponent<Airport>();
-            airport.Init(airportName, center);
+            airport.Init(airportName, center, missions);
             
             var affector = new TerrainAffectorData
             {
@@ -76,27 +78,24 @@ namespace Terrain.Interests
         {
             List<PointOfInterest> airports = new();
 
-            while (airports.Count < airportNames.Length)
+            while (true)
             {
                 int sampleCount = 12;
                 int baseIndex = Random.Range(0, sampleCount);
-                var airportName = airportNames[airports.Count];
                 
                 Vector2 position = Random.insideUnitCircle;
                 Vector3 centerPoint = new Vector3(position.x, 0, position.y) * TerrainManager.Instance.terrainSettings.size / 2f;
                 
-                if(airports.Any(airport => Vector3.Distance(centerPoint, airport.transform.position) <= minSpacing))
+                if(TerrainFeatureManager.Instance.Interests.Any(airport => Vector3.Distance(centerPoint, airport.transform.position) <= minSpacing))
                     continue;
                 
                 for (int orientationIndex = baseIndex; orientationIndex < sampleCount; orientationIndex++)
                 {
                     float heading = (float)(orientationIndex % sampleCount) / sampleCount * 360f;
-                    if (TryAddRunway(ref airports, centerPoint, heading, airportName))
-                        break;
+                    if (TryAddRunway(ref airports, centerPoint, heading))
+                        return airports;
                 }
             }
-            
-            return airports;
         }
     }
 }

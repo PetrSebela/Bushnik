@@ -41,6 +41,8 @@ namespace Game.World
         /// </summary>
         public static GameManager Instance => _instance;
 
+        public PointOfInterest landedAt = null;
+
         void Awake()
         {
             _instance = this;

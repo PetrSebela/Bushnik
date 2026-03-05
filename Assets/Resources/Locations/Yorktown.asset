@@ -10,21 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9497e762f396c9358d758ca68570a01, type: 3}
-  m_Name: Airports
+  m_Name: Yorktown
   m_EditorClassIdentifier: 
-  airportNames:
-  - Cedar Creek
-  - Kings Peek
-  - Westwater
-  - Kenai
-  - Nanwalek
-  - Quartz Peek
-  - Lone Pine
-  - Lonely Mountain
-  - Radiator Springs
-  - Thunder Hollow
-  - Propwash Junction
-  - Thomasville
-  - New Coil
+  airportName: Yorktown
+  missions:
+  - {fileID: 11400000, guid: 11c78dd7a33e16aa59368f112cdc70cf, type: 2}
   minSpacing: 5000
   airportPrefab: {fileID: 7623817571459275596, guid: c688b81f3716bb00fbde4a2146baa1bb, type: 3}
