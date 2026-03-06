@@ -4,7 +4,7 @@ using Terrain.Interests;
 namespace UI.Interactable
 {
     /// <summary>
-    /// Interaction for compleating deliveries
+    /// Interaction for completing deliveries
     /// </summary>
     public class DeliveryInteraction : Interactable
     {
@@ -16,24 +16,20 @@ namespace UI.Interactable
         public void Awake()
         {
             _onAirport = Utility.Generic.LocateObjectTowardsRoot<Airport>(transform.parent);
+            MissionManager.Instance.onMissionChanged.AddListener(StatusUpdate);
         }
         
         public override void Interact()
         {
             MissionManager.Instance.CompleteMission();
         }
-        
-        /// <summary>
-        /// Dynamically disables delivery point
-        /// </summary>
-        public void Update()
+
+        private void StatusUpdate(Mission mission)
         {
-            if(MissionManager.Instance.ActiveMission == null)
+            if(mission == null || mission.Destination != _onAirport)
                 Disable();
-            else if (MissionManager.Instance.ActiveMission.Destination == _onAirport)
-                Enable();
             else
-                Disable();
+                Enable();
         }
     }
 }

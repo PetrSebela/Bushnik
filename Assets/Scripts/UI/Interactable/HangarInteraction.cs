@@ -1,6 +1,7 @@
 using System;
 using Game.Mission;
 using Terrain.Interests;
+using UI.Missions;
 using UnityEngine;
 
 namespace UI.Interactable
@@ -15,12 +16,14 @@ namespace UI.Interactable
             MissionView.Instance.Show();
         }
 
-        /// <summary>
-        /// Dynamically set status of delivery point
-        /// </summary>
-        public void Update()
+        public void Start()
         {
-            if (MissionManager.Instance.ActiveMission == null)
+            MissionManager.Instance.onMissionChanged.AddListener(StatusUpdate);
+        }
+
+        private void StatusUpdate(Mission mission)
+        {
+            if (mission == null)
                 Enable();
             else
                 Disable();

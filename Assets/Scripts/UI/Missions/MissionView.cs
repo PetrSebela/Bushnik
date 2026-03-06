@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using Utility;
 
-namespace UI
+namespace UI.Missions
 {
     public class MissionView : Singleton<MissionView>
     {

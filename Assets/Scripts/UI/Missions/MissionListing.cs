@@ -2,7 +2,7 @@ using Game.Mission;
 using TMPro;
 using UnityEngine;
 
-namespace UI
+namespace UI.Missions
 {
     /// <summary>
     /// Class for visualization and picking of missions

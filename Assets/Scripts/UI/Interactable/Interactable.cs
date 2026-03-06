@@ -16,19 +16,14 @@ namespace UI.Interactable
         /// <summary>
         /// Is interaction enabled
         /// </summary>
-        private bool _enabled = true;
-        
-        /// <summary>
-        /// Is interaction enabled
-        /// </summary>
-        public bool Enabled => _enabled;
+        public bool active = true;
         
         /// <summary>
         /// Enable interaction
         /// </summary>
         public void Enable()
         {
-            _enabled = true;
+            active = true;
         }
 
         /// <summary>
@@ -36,7 +31,7 @@ namespace UI.Interactable
         /// </summary>
         public void Disable()
         {
-            _enabled = false;
+            active = false;
             InteractableInvoker.Instance.ClearRange(this);
         }
         
@@ -46,7 +41,7 @@ namespace UI.Interactable
         /// <param name="other"></param>
         private void OnTriggerStay(Collider other)
         {
-            if (!_enabled)
+            if (!active)
                 return;
             InteractableInvoker.Instance.InRange(this);
         }

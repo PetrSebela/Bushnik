@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Game.Mission;
 using UI.Interactable;
 using UI.Map;
+using UnityEditor;
 using UnityEngine;
 
 namespace Terrain.Interests
@@ -18,6 +20,13 @@ namespace Terrain.Interests
             name = airportName;
             Missions.AddRange(missions);
             MapMarkerUtility.Instance.PlaceTextMarker(airportName, transform);
+        }
+
+        private void OnDrawGizmos()
+        {
+            #if UNITY_EDITOR
+            Handles.Label(transform.position, gameObject.name);
+            #endif
         }
     }
 }

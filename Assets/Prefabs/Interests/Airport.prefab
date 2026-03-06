@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2755831235545696837}
   - component: {fileID: 7729936275506871419}
   m_Layer: 0
-  m_Name: Delivery
+  m_Name: Delivery point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   message: '[F] - deliver'
+  active: 0
 --- !u!1 &6488284716772926181
 GameObject:
   m_ObjectHideFlags: 0
@@ -79,7 +80,7 @@ GameObject:
   - component: {fileID: 5323417546585197600}
   - component: {fileID: 3284475033143395991}
   m_Layer: 0
-  m_Name: Hangar
+  m_Name: Pickup point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   message: '[F] - enter hangar'
+  active: 1
 --- !u!1 &7623817571459275596
 GameObject:
   m_ObjectHideFlags: 0

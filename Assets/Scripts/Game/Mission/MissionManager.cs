@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Game.World;
 using Terrain;
 using Terrain.Interests;
+using UI;
 using UnityEngine;
+using UnityEngine.Events;
 using Utility;
 
 namespace Game.Mission
@@ -18,9 +20,15 @@ namespace Game.Mission
         private Mission _activeMission;
         
         /// <summary>
-        /// Currently active mission
+        /// Actions performed when current mission is changed
         /// </summary>
-        public Mission ActiveMission => _activeMission;
+        public UnityEvent<Mission> onMissionChanged = new();
+
+
+        private void Start()
+        {
+            onMissionChanged.Invoke(null);
+        }
         
         /// <summary>
         /// Generates available mission for current location
@@ -55,6 +63,8 @@ namespace Game.Mission
         public void CompleteMission()
         {
             _activeMission = null;
+            onMissionChanged.Invoke(_activeMission);
+            Announcer.Instance.Announce("Mission completed");
         }
         
         /// <summary>
@@ -64,6 +74,8 @@ namespace Game.Mission
         public void StartMission(Mission mission)
         {
             _activeMission = mission;
+            onMissionChanged.Invoke(_activeMission);
+            Announcer.Instance.Announce($"Deliver cargo to {_activeMission.Destination.name}");
         }
     }
 }

@@ -1,13 +1,14 @@
 using System;
 using TMPro;
 using UnityEngine;
+using Utility;
 
 namespace UI
 {
     /// <summary>
     /// Class for announcing messages to the player
     /// </summary>
-    public class Announcer : MonoBehaviour
+    public class Announcer : Singleton<Announcer>
     {
         /// <summary>
         /// Text display
@@ -19,21 +20,7 @@ namespace UI
         /// </summary>
         [SerializeField] private CanvasGroup canvasGroup;
         
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        private static Announcer _instance;
         
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        public static Announcer Instance => _instance;
-
-        private void Awake()
-        {
-            _instance = this;
-        }
-
         /// <summary>
         /// Displays message on the hud
         /// </summary>
@@ -41,8 +28,9 @@ namespace UI
         public void Announce(string announcement)
         {
             announcerText.text = announcement;
+            LeanTween.cancel(announcerText.gameObject);
             var tween = LeanTween.alphaCanvas(canvasGroup, 1, 0.25f).setIgnoreTimeScale(true);
-            tween.setOnComplete(_ => LeanTween.delayedCall(5, FadeOut).setIgnoreTimeScale(true));
+            tween.setOnComplete(_ => LeanTween.delayedCall(3, FadeOut).setIgnoreTimeScale(true));
         }
 
         private void FadeOut()
