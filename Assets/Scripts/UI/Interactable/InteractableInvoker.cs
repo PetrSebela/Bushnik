@@ -29,6 +29,7 @@ namespace UI.Interactable
         private void Start()
         {
             InputProvider.Instance.Input.UI.Action.performed += _ => Interact();
+            interactionMessage.text = "";
         }
 
         private void Interact()

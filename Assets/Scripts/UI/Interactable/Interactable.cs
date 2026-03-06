@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,6 +18,18 @@ namespace UI.Interactable
         /// Is interaction enabled
         /// </summary>
         public bool active = true;
+
+
+        /// <summary>
+        /// Ensure child components are enabled or disabled
+        /// </summary>
+        public void Start()
+        {
+            if(active)
+                Enable();
+            else
+                Disable();
+        }
         
         /// <summary>
         /// Enable interaction
@@ -24,6 +37,8 @@ namespace UI.Interactable
         public void Enable()
         {
             active = true;
+            foreach (Transform child in transform)
+                child.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -33,6 +48,8 @@ namespace UI.Interactable
         {
             active = false;
             InteractableInvoker.Instance.ClearRange(this);
+            foreach (Transform child in transform)
+                child.gameObject.SetActive(false);
         }
         
         /// <summary>

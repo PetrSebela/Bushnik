@@ -38,8 +38,7 @@ namespace UI.Missions
             
             var originFlat = new Vector3(mission.Origin.transform.position.x, 0, mission.Origin.transform.position.z);
             var destinationFlat = new Vector3(mission.Destination.transform.position.x, 0, mission.Destination.transform.position.z);
-
-
+            
             var angle = Vector3.SignedAngle(Vector3.forward, destinationFlat - originFlat, Vector3.up);
             if (angle < 0)
                 angle += 360;

@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 11c78dd7a33e16aa59368f112cdc70cf, type: 2}
   minSpacing: 5000
   airportPrefab: {fileID: 7623817571459275596, guid: c688b81f3716bb00fbde4a2146baa1bb, type: 3}
+  hangarPrefab: {fileID: 8390277876504326630, guid: c448047e57b041f5384551b5f009811d, type: 3}

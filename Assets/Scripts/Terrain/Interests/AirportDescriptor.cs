@@ -13,6 +13,8 @@ namespace Terrain.Interests
         [SerializeField] private List<MissionTemplate> missions;
         [SerializeField] private float minSpacing;
         [SerializeField] private GameObject airportPrefab;
+        [SerializeField] private GameObject hangarPrefab;
+        
         private bool TryAddRunway(ref List<PointOfInterest> runways, Vector3 approach, float heading)
         {
             const int runwaySamples = 10;
@@ -58,7 +60,6 @@ namespace Terrain.Interests
             if (totalDiff / runwaySamples > 1)
                 return false;
             
-            
             var airport = Instantiate(airportPrefab).GetComponent<Airport>();
             airport.Init(airportName, center, missions);
             
@@ -71,6 +72,13 @@ namespace Terrain.Interests
             
             airport.TerrainAffectors.Add(affector);
             runways.Add(airport);
+
+            var hangarRotation = Quaternion.AngleAxis(heading + 90, Vector3.up);
+            var hangarPosition = approachPoint + hangarRotation * Vector3.forward * 35; 
+            
+            var hangar = Instantiate(hangarPrefab, airport.transform);
+            hangar.transform.position = hangarPosition;
+            hangar.transform.rotation = hangarRotation;
             return true;
         }
         

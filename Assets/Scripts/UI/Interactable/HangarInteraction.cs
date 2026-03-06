@@ -16,11 +16,11 @@ namespace UI.Interactable
             MissionView.Instance.Show();
         }
 
-        public void Start()
+        public void Awake()
         {
             MissionManager.Instance.onMissionChanged.AddListener(StatusUpdate);
         }
-
+        
         private void StatusUpdate(Mission mission)
         {
             if (mission == null)
