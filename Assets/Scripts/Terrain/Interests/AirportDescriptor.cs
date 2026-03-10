@@ -3,6 +3,7 @@ using System.Linq;
 using Game.Mission;
 using UI.Map;
 using UnityEngine;
+using Utility;
 
 namespace Terrain.Interests
 {
@@ -14,6 +15,7 @@ namespace Terrain.Interests
         [SerializeField] private float minSpacing;
         [SerializeField] private GameObject airportPrefab;
         [SerializeField] private GameObject hangarPrefab;
+        [SerializeField] private GameObject windTurbinePrefab;
         
         private bool TryAddRunway(ref List<PointOfInterest> runways, Vector3 approach, float heading)
         {
@@ -79,6 +81,29 @@ namespace Terrain.Interests
             var hangar = Instantiate(hangarPrefab, airport.transform);
             hangar.transform.position = hangarPosition;
             hangar.transform.rotation = hangarRotation;
+            
+            var positions = RandomProvider.GetRandomPointsIn(center, 1000, 25);
+            ComputeProxy.Instance.SamplePoints(ref positions);
+            List<Vector3> occupied = new(){hangarPosition};
+            
+            foreach (var point in positions)
+            {
+                var relative = point - approachPoint;
+                var headingDirection = departurePoint - approachPoint;
+                
+                var projected = Vector3.Dot(relative, headingDirection) / headingDirection.sqrMagnitude;
+                
+                if(Vector3.Distance(approachPoint + headingDirection * projected, point) < 100)
+                    continue;
+
+                if (occupied.Any(taken => Vector3.Distance(taken, point) < 25))
+                    continue;
+                
+                occupied.Add(point);
+                var turbine = Instantiate(windTurbinePrefab, airport.transform);
+                turbine.transform.position = point;
+            }
+            
             return true;
         }
         

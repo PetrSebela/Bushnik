@@ -18,3 +18,4 @@ MonoBehaviour:
   minSpacing: 5000
   airportPrefab: {fileID: 7623817571459275596, guid: c688b81f3716bb00fbde4a2146baa1bb, type: 3}
   hangarPrefab: {fileID: 8390277876504326630, guid: c448047e57b041f5384551b5f009811d, type: 3}
+  windTurbinePrefab: {fileID: 2474211241014544020, guid: 4d367cf986df0521a969c784d8a9a262, type: 3}

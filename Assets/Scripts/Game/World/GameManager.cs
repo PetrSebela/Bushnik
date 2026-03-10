@@ -67,7 +67,7 @@ namespace Game.World
         /// </summary>
         void SpawnPlayer()
         {
-            var spawnPoint = TerrainFeatureManager.Instance.Interests[0].transform.position;
+            var spawnPoint = TerrainFeatureManager.Instance.Interests[0].TerrainAffectors[0].From;
             player.position = spawnPoint + Vector3.up;
             MapMarkerUtility.Instance.PlacePlayerMarker(player.transform);
         }

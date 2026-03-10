@@ -29,14 +29,11 @@ namespace Terrain.Foliage
             
             float area = Mathf.Pow(FoliageManager.Instance.foliageSettings.chunkSize, 2);
             
-            Vector3 minCube = position - Vector3.one * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
-            Vector3 maxCube = position + Vector3.one * (FoliageManager.Instance.foliageSettings.chunkSize / 2);
-            
             for (int i = 0; i < modelCount; i++)
             {
                 float density = FoliageManager.Instance.PlacedObjects[i].density;
                 int count = Mathf.CeilToInt(area * density);
-                Vector3[] samples = Utility.RandomProvider.GetRandomPointsIn(minCube, maxCube, count);
+                Vector3[] samples = Utility.RandomProvider.GetRandomPointsIn(position, FoliageManager.Instance.foliageSettings.chunkSize, count);
                 
                 _instances[i] = new(FoliageManager.Instance.PlacedObjects[i], samples);
             }

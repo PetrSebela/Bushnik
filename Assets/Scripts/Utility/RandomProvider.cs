@@ -7,29 +7,22 @@ namespace Utility
     /// </summary>
     public static class RandomProvider
     {
+
         /// <summary>
-        /// Returns array of random points in cube specified by provided parameters
+        /// Generates random points in square area
         /// </summary>
-        /// <param name="min">Min corner of cube</param>
-        /// <param name="max">Max corner of cube</param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public static Vector3[] GetRandomPointsIn(Vector3 min, Vector3 max, int count)
+        /// <param name="center">Square center</param>
+        /// <param name="side">Square side</param>
+        /// <param name="count">Number of samples</param>
+        /// <returns>Array of samples</returns>
+        public static Vector3[] GetRandomPointsIn(Vector3 center, float side, int count)
         {
             Vector3[] samples = new Vector3[count];
-            Vector3 delta = max - min;
-            
             for (int i = 0; i < count; i++)
             {
-                var position = min;
-
-                position.x += Random.Range(-0.5f, 0.5f) * delta.x;
-                
-                if(delta.y != 0)
-                    position.y += Random.Range(-0.5f, 0.5f) * delta.y;
-                
-                position.z += Random.Range(-0.5f, 0.5f) * delta.z;
-
+                var position = center;
+                position.x += Random.Range(-0.5f, 0.5f) * side;
+                position.z += Random.Range(-0.5f, 0.5f) * side;
                 samples[i] = position;
             }
             

@@ -117,7 +117,7 @@ TerrainMaterialOverride ApplyRunways(float2 position, float value)
             override.distance = d;
         
         /// Level ground around runway
-        float fadeProgress = (d - 50) / 150;
+        float fadeProgress = (d - 25) / 100;
         fadeProgress = clamp(fadeProgress, 0, 1);
         fadeProgress = SmoothEase(fadeProgress) * 0.9 + 0.1;
         override.height = runwayPoint.y / TerrainHeight * (1 - fadeProgress) + override.height * fadeProgress;
@@ -293,7 +293,7 @@ void SamplePoints(uint3 id : SV_DispatchThreadID)
     if (angle < AngleLimit)
     {
         TerrainMaterialOverride terrain = GetTerrainHeight(worldPosition);
-
+        
         float height = terrain.height * TerrainHeight;
         
         if (height > MaxHeight && MaxHeight != 0)
