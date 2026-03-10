@@ -4,9 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Terrain.Data;
-using Unity.Mathematics;
-using UnityEngine.Rendering;
 using Utility;
 
 namespace Terrain
@@ -174,7 +171,7 @@ namespace Terrain
             {
                 TerrainComputeShader.SetInt("AirstripBufferSize", 0);
                 _airstripBuffer?.Dispose();
-                _airstripBuffer = new ComputeBuffer(1, 1);
+                _airstripBuffer = new ComputeBuffer(1, 4);
                 SetBufferToAllKernels(_airstripBuffer, "AirstripBuffer");
             }            
         }

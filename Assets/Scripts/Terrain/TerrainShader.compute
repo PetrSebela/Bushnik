@@ -46,7 +46,7 @@ RWStructuredBuffer<Runway> AirstripBuffer;
 // === Helper functions ===
 float Gaussian(float t, float center = 0.5f, float falloff = 0.1f)
 {
-    return exp(-pow(t - center, 2) / pow(falloff, 2));
+    return exp(-pow(abs(t - center), 2) / pow(falloff, 2));
 }
 
 
@@ -55,7 +55,7 @@ float SmoothEase(float t)
 {
     if (t < 0.5)
         return 4 * pow(t, 3);
-    return 1 - pow(-2 * t + 2, 3) / 2;
+    return 1 - pow(abs(-2 * t + 2), 3) / 2;
 }
 
 float Sigmoid(float t, float center, float steepness)
@@ -168,7 +168,7 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
     sample /= amplitude_sum;
     
 
-    sample = pow(sample, mountain_mask * 4 + 2);
+    sample = pow(abs(sample), mountain_mask * 4 + 2);
     sample -= FalloffMap(position);
     
     return ApplyRunways(position, sample);
