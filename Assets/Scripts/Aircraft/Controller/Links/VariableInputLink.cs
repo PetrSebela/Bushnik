@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Aircraft.Controller
+namespace Aircraft.Controller.Links
 {
     /// <summary>
     /// Link for recieving data from multiple InputSources

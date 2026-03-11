@@ -1,7 +1,7 @@
 using Aircraft.Controller.Assistants;
 using UnityEngine;
 
-namespace Aircraft.Controller
+namespace Aircraft.Controller.Links
 {
     public class SmoothingLink : InputLink
     {

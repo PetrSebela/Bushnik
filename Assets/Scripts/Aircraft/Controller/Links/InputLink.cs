@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Aircraft.Controller
+namespace Aircraft.Controller.Links
 {
     /// <summary>
     /// Base class forming input signal chain
