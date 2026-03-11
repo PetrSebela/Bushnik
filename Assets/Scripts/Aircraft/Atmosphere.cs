@@ -14,8 +14,9 @@ namespace Aircraft
         /// <returns>Air density</returns>
         public static float GetDensityAtPoint(Vector3 point)
         {
-            // TODO: Add propper model 
-            return 0.1255f;
+            // return 0.1255f;
+            var height = point.y / 1000;
+            return 1.255f * (20 - height) / (20 + height);
         }
     }
 }

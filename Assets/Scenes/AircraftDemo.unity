@@ -2852,6 +2852,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2564208024721242581, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
+      propertyPath: MaxForce
+      value: 12500
+      objectReference: {fileID: 0}
     - target: {fileID: 2938122790345781542, guid: ba9e6bb46e023ce029063a08ed1d99ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -96.897
