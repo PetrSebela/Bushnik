@@ -32,6 +32,7 @@ namespace Aircraft.Controller.Assistants
         void Start()
         {
             _aircraft = Utility.Generic.LocateObjectTowardsRoot<Aircraft>(transform.parent);
+            SetAttitude();
         }
         
         /// <summary>
@@ -46,7 +47,9 @@ namespace Aircraft.Controller.Assistants
             var rotatedAngle = Vector3.Angle(rotated, Vector3.up);
             var delta = rotatedAngle - referenceAngle;
             
-            UpdateController(delta);
+            var horizonAngle = Vector3.Angle(transform.forward, Vector3.up);
+            
+            UpdateController(horizonAngle, delta);
         }
 
         /// <summary>
@@ -75,6 +78,13 @@ namespace Aircraft.Controller.Assistants
             if(!gameObject.activeInHierarchy)
                 return 0;
             return _controllerOutput * GetModifier();
+        }
+
+
+        public void SetAttitude()
+        {
+            var horizonAngle = Vector3.Angle(transform.forward, Vector3.up);
+            SetTarget(horizonAngle);
         }
     }
 }

@@ -1120,13 +1120,22 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ThrottleBrakeCombo"",
+                    ""name"": ""KeyboardThrottle"",
                     ""type"": ""Value"",
                     ""id"": ""529ee053-a3e1-41c5-8b9c-961e085e4241"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""KeyboardBrake"",
+                    ""type"": ""Button"",
+                    ""id"": ""67725d3e-8272-4669-9057-8c1a90145aac"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1291,7 +1300,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ThrottleBrakeCombo"",
+                    ""action"": ""KeyboardThrottle"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -1302,7 +1311,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ThrottleBrakeCombo"",
+                    ""action"": ""KeyboardThrottle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1313,7 +1322,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ThrottleBrakeCombo"",
+                    ""action"": ""KeyboardThrottle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1325,6 +1334,17 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b309d3d-42f4-4adf-862f-bdcd6df0393d"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""KeyboardBrake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1435,7 +1455,8 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Aircraft_Yaw = m_Aircraft.FindAction("Yaw", throwIfNotFound: true);
         m_Aircraft_Look = m_Aircraft.FindAction("Look", throwIfNotFound: true);
         m_Aircraft_Brake = m_Aircraft.FindAction("Brake", throwIfNotFound: true);
-        m_Aircraft_ThrottleBrakeCombo = m_Aircraft.FindAction("ThrottleBrakeCombo", throwIfNotFound: true);
+        m_Aircraft_KeyboardThrottle = m_Aircraft.FindAction("KeyboardThrottle", throwIfNotFound: true);
+        m_Aircraft_KeyboardBrake = m_Aircraft.FindAction("KeyboardBrake", throwIfNotFound: true);
         // Map
         m_Map = asset.FindActionMap("Map", throwIfNotFound: true);
         m_Map_Drag = m_Map.FindAction("Drag", throwIfNotFound: true);
@@ -1942,7 +1963,8 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Aircraft_Yaw;
     private readonly InputAction m_Aircraft_Look;
     private readonly InputAction m_Aircraft_Brake;
-    private readonly InputAction m_Aircraft_ThrottleBrakeCombo;
+    private readonly InputAction m_Aircraft_KeyboardThrottle;
+    private readonly InputAction m_Aircraft_KeyboardBrake;
     /// <summary>
     /// Provides access to input actions defined in input action map "Aircraft".
     /// </summary>
@@ -1979,9 +2001,13 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Brake => m_Wrapper.m_Aircraft_Brake;
         /// <summary>
-        /// Provides access to the underlying input action "Aircraft/ThrottleBrakeCombo".
+        /// Provides access to the underlying input action "Aircraft/KeyboardThrottle".
         /// </summary>
-        public InputAction @ThrottleBrakeCombo => m_Wrapper.m_Aircraft_ThrottleBrakeCombo;
+        public InputAction @KeyboardThrottle => m_Wrapper.m_Aircraft_KeyboardThrottle;
+        /// <summary>
+        /// Provides access to the underlying input action "Aircraft/KeyboardBrake".
+        /// </summary>
+        public InputAction @KeyboardBrake => m_Wrapper.m_Aircraft_KeyboardBrake;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2026,9 +2052,12 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Brake.started += instance.OnBrake;
             @Brake.performed += instance.OnBrake;
             @Brake.canceled += instance.OnBrake;
-            @ThrottleBrakeCombo.started += instance.OnThrottleBrakeCombo;
-            @ThrottleBrakeCombo.performed += instance.OnThrottleBrakeCombo;
-            @ThrottleBrakeCombo.canceled += instance.OnThrottleBrakeCombo;
+            @KeyboardThrottle.started += instance.OnKeyboardThrottle;
+            @KeyboardThrottle.performed += instance.OnKeyboardThrottle;
+            @KeyboardThrottle.canceled += instance.OnKeyboardThrottle;
+            @KeyboardBrake.started += instance.OnKeyboardBrake;
+            @KeyboardBrake.performed += instance.OnKeyboardBrake;
+            @KeyboardBrake.canceled += instance.OnKeyboardBrake;
         }
 
         /// <summary>
@@ -2058,9 +2087,12 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Brake.started -= instance.OnBrake;
             @Brake.performed -= instance.OnBrake;
             @Brake.canceled -= instance.OnBrake;
-            @ThrottleBrakeCombo.started -= instance.OnThrottleBrakeCombo;
-            @ThrottleBrakeCombo.performed -= instance.OnThrottleBrakeCombo;
-            @ThrottleBrakeCombo.canceled -= instance.OnThrottleBrakeCombo;
+            @KeyboardThrottle.started -= instance.OnKeyboardThrottle;
+            @KeyboardThrottle.performed -= instance.OnKeyboardThrottle;
+            @KeyboardThrottle.canceled -= instance.OnKeyboardThrottle;
+            @KeyboardBrake.started -= instance.OnKeyboardBrake;
+            @KeyboardBrake.performed -= instance.OnKeyboardBrake;
+            @KeyboardBrake.canceled -= instance.OnKeyboardBrake;
         }
 
         /// <summary>
@@ -2432,12 +2464,19 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBrake(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "ThrottleBrakeCombo" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "KeyboardThrottle" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnThrottleBrakeCombo(InputAction.CallbackContext context);
+        void OnKeyboardThrottle(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "KeyboardBrake" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnKeyboardBrake(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Map" which allows adding and removing callbacks.

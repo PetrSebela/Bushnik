@@ -19,8 +19,13 @@ namespace UI
         /// Canvas group for managing visibility
         /// </summary>
         [SerializeField] private CanvasGroup canvasGroup;
+
         
-        
+        private void Start()
+        {
+            canvasGroup.alpha = 0;
+        }
+
         /// <summary>
         /// Displays message on the hud
         /// </summary>

@@ -1034,13 +1034,22 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ThrottleBrakeCombo",
+                    "name": "KeyboardThrottle",
                     "type": "Value",
                     "id": "529ee053-a3e1-41c5-8b9c-961e085e4241",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "KeyboardBrake",
+                    "type": "Button",
+                    "id": "67725d3e-8272-4669-9057-8c1a90145aac",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1205,7 +1214,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ThrottleBrakeCombo",
+                    "action": "KeyboardThrottle",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1216,7 +1225,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ThrottleBrakeCombo",
+                    "action": "KeyboardThrottle",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1227,7 +1236,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ThrottleBrakeCombo",
+                    "action": "KeyboardThrottle",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1239,6 +1248,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Throttle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0b309d3d-42f4-4adf-862f-bdcd6df0393d",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "KeyboardBrake",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -41,12 +41,7 @@ namespace Utility
         /// Error accumulator
         /// </summary>
         private float _accumulator;
-
-        /// <summary>
-        /// Last error value
-        /// </summary>
-        private float _lastError;
-
+        
         /// <summary>
         /// Target value
         /// </summary>
@@ -55,16 +50,11 @@ namespace Utility
         /// <summary>
         /// Updates the PID controller value (should be called only once per frame)
         /// </summary>
-        protected void UpdateController(float current)
+        protected void UpdateController(float current, float velocity)
         {
             var error = _target - current;
-            
             _accumulator = Mathf.Clamp(_accumulator + error * errorGain, -accumulatorSize, accumulatorSize);
-            
-            var derivative = (error * errorGain - _lastError) / Time.fixedDeltaTime;
-            _lastError = error * errorGain;
-            
-            var output = error * errorGain + _accumulator * offsetGain - derivative * damping;
+            var output = error * errorGain + _accumulator * offsetGain - velocity * damping;
             _controllerOutput = Mathf.Clamp(output, outputRange.x, outputRange.y);
         }
 
@@ -74,6 +64,7 @@ namespace Utility
         /// <param name="target">target value</param>
         public void SetTarget(float target)
         {
+            _accumulator = 0;
             _target = target;
         }
     }
