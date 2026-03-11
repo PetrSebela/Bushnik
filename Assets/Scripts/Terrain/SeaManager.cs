@@ -18,7 +18,7 @@ namespace Terrain
         /// </summary>
         public void Init()
         {
-            transform.localScale = new Vector3(0.1f, 1, 0.1f) * TerrainManager.Instance.terrainSettings.size;
+            transform.localScale = Vector3.one * TerrainManager.Instance.terrainSettings.size;
         }
     }
 }

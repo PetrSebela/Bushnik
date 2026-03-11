@@ -2587,7 +2587,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Metallic",
     "m_StageCapability": 2,
-    "m_Value": 1.0,
+    "m_Value": 0.949999988079071,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -3718,8 +3718,8 @@
     "m_ObjectId": "d64cc065e43b4932a7e9afbc1af0c4f4",
     "m_Title": "Ripples",
     "m_Position": {
-        "x": -3411.000244140625,
-        "y": -340.00006103515627
+        "x": -3410.99951171875,
+        "y": -339.9999694824219
     }
 }
 
@@ -4080,7 +4080,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Smoothness",
     "m_StageCapability": 2,
-    "m_Value": 1.0,
+    "m_Value": 0.949999988079071,
     "m_DefaultValue": 0.5,
     "m_Labels": []
 }
