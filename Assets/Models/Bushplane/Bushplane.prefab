@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 6886467834627848113}
-  MaxForce: 12500
+  MaxForce: 7000
   propeller: {fileID: 8265283556605614647}
   idle: 500
   redline: 2250
@@ -1944,7 +1944,7 @@ Transform:
   m_GameObject: {fileID: 3220143110579948906}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15499997, z: -0.719}
+  m_LocalPosition: {x: 0, y: 0.15499997, z: -1.088}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1962,9 +1962,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e8f6056c1316786aa5b92ef0024dad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0.075
-  height: 0.075
-  length: 0.5
+  width: 0.75
+  height: 1.09
+  length: 3.81
 --- !u!1 &3322829709955253062
 GameObject:
   m_ObjectHideFlags: 0
