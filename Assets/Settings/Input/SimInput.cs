@@ -1136,6 +1136,15 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Flap toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""5bcf74b2-6fe8-4cb1-ad6f-7646f056ba8d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1347,6 +1356,28 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""action"": ""KeyboardBrake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a6a949a5-1078-4d19-bf14-5ce34e0c9861"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flap toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54366e50-7629-44db-9640-c10e28629ef8"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flap toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1457,6 +1488,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Aircraft_Brake = m_Aircraft.FindAction("Brake", throwIfNotFound: true);
         m_Aircraft_KeyboardThrottle = m_Aircraft.FindAction("KeyboardThrottle", throwIfNotFound: true);
         m_Aircraft_KeyboardBrake = m_Aircraft.FindAction("KeyboardBrake", throwIfNotFound: true);
+        m_Aircraft_Flaptoggle = m_Aircraft.FindAction("Flap toggle", throwIfNotFound: true);
         // Map
         m_Map = asset.FindActionMap("Map", throwIfNotFound: true);
         m_Map_Drag = m_Map.FindAction("Drag", throwIfNotFound: true);
@@ -1965,6 +1997,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Aircraft_Brake;
     private readonly InputAction m_Aircraft_KeyboardThrottle;
     private readonly InputAction m_Aircraft_KeyboardBrake;
+    private readonly InputAction m_Aircraft_Flaptoggle;
     /// <summary>
     /// Provides access to input actions defined in input action map "Aircraft".
     /// </summary>
@@ -2008,6 +2041,10 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Aircraft/KeyboardBrake".
         /// </summary>
         public InputAction @KeyboardBrake => m_Wrapper.m_Aircraft_KeyboardBrake;
+        /// <summary>
+        /// Provides access to the underlying input action "Aircraft/Flaptoggle".
+        /// </summary>
+        public InputAction @Flaptoggle => m_Wrapper.m_Aircraft_Flaptoggle;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2058,6 +2095,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @KeyboardBrake.started += instance.OnKeyboardBrake;
             @KeyboardBrake.performed += instance.OnKeyboardBrake;
             @KeyboardBrake.canceled += instance.OnKeyboardBrake;
+            @Flaptoggle.started += instance.OnFlaptoggle;
+            @Flaptoggle.performed += instance.OnFlaptoggle;
+            @Flaptoggle.canceled += instance.OnFlaptoggle;
         }
 
         /// <summary>
@@ -2093,6 +2133,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @KeyboardBrake.started -= instance.OnKeyboardBrake;
             @KeyboardBrake.performed -= instance.OnKeyboardBrake;
             @KeyboardBrake.canceled -= instance.OnKeyboardBrake;
+            @Flaptoggle.started -= instance.OnFlaptoggle;
+            @Flaptoggle.performed -= instance.OnFlaptoggle;
+            @Flaptoggle.canceled -= instance.OnFlaptoggle;
         }
 
         /// <summary>
@@ -2477,6 +2520,13 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnKeyboardBrake(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Flap toggle" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFlaptoggle(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Map" which allows adding and removing callbacks.

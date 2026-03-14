@@ -23,11 +23,6 @@ namespace Aircraft.Components
         [SerializeField] private Transform visual;
 
         /// <summary>
-        /// How fast the flap reacts to input
-        /// </summary>
-        [SerializeField] private float responsiveness;
-        
-        /// <summary>
         /// Original element rotation
         /// </summary>
         private Quaternion _rotationOffset;
@@ -50,6 +45,13 @@ namespace Aircraft.Components
         public void SetInput(float input)
         {
             var rotation = Quaternion.AngleAxis(input * maxDeflection, Vector3.right);
+            transform.localRotation = _rotationOffset * rotation;
+            visual.localRotation = _visualRotationOffset * rotation;
+        }
+
+        public void SetAngle(float angle)
+        {
+            var rotation = Quaternion.AngleAxis(angle, Vector3.right);
             transform.localRotation = _rotationOffset * rotation;
             visual.localRotation = _visualRotationOffset * rotation;
         }

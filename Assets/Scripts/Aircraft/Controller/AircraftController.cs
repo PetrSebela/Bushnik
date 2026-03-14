@@ -45,6 +45,11 @@ namespace Aircraft.Controller
         /// Brake input channel
         /// </summary>
         [SerializeField] private InputLink brakeInput;
+
+        /// <summary>
+        /// Flap input channel
+        /// </summary>
+        [SerializeField] private InputLink flapInput;
         
         /// <summary>
         /// Throttle input ( needs to be exposed for UI )
@@ -61,6 +66,7 @@ namespace Aircraft.Controller
             aircraft.SetPitchInput(pitchInput.GetOutput());
             aircraft.SetRollInput(rollInput.GetOutput());
             aircraft.SetYawInput(yawInput.GetOutput());
+            aircraft.SetFlapAngle(flapInput.GetOutput());
             
             aircraft.SetThrottleInput(throttle);
             aircraft.SetBrakeInput(brake, brake);

@@ -51,6 +51,16 @@ namespace Aircraft
         public Flap rudder;
         
         /// <summary>
+        /// Left flap 
+        /// </summary>
+        public Flap leftFlap;
+        
+        /// <summary>
+        /// Right flap
+        /// </summary>
+        public Flap rightFlap;
+        
+        /// <summary>
         /// Engine
         /// </summary>
         public Engine engine;
@@ -114,6 +124,16 @@ namespace Aircraft
         {
             leftGear.SetBrakeInput(leftBrake);
             rightGear.SetBrakeInput(rightBrake);
+        }
+        
+        /// <summary>
+        /// Sets flap angle
+        /// </summary>
+        /// <param name="angle">Angle of flaps</param>
+        public void SetFlapAngle(float angle)
+        {
+            leftFlap.SetAngle(angle);
+            rightFlap.SetAngle(angle);
         }
         
         /// <summary>
