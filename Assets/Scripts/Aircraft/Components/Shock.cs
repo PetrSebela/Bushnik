@@ -61,6 +61,7 @@ namespace Aircraft.Components
         /// </summary>
         private Rigidbody _aircraftBody;
         
+        private float _wheelRotationVelocity = 0;
         
         void Awake()
         {
@@ -140,6 +141,29 @@ namespace Aircraft.Components
         }
 
         /// <summary>
+        /// Updates wheel velocity
+        /// </summary>
+        private void UpdateWheelVelocity()
+        {
+            if (!Physics.SphereCast(ShockOrigin, wheelRadius, -ShockDirection, out RaycastHit hit, travel, groundMask))
+            {
+                if (_wheelRotationVelocity < 0.025f)
+                    _wheelRotationVelocity = 0;
+                _wheelRotationVelocity = Mathf.Max(0, _wheelRotationVelocity * 0.975f);
+                return;
+            }
+            
+            var worldVelocity = _aircraftBody.GetPointVelocity(hit.point);
+            var radiusVelocity = Vector3.ProjectOnPlane(worldVelocity, transform.right).magnitude;
+            _wheelRotationVelocity = radiusVelocity / (2 * Mathf.PI * wheelRadius);
+        }
+        
+        /// <summary>
+        /// Get wheel velocity
+        /// </summary>
+        public float WheelRotationVelocity => _wheelRotationVelocity;
+        
+        /// <summary>
         /// Checks where attached tire touches the ground (or not)
         /// </summary>
         /// <returns>Wheel position in world space</returns>
@@ -156,6 +180,8 @@ namespace Aircraft.Components
         /// </summary>
         void FixedUpdate()
         {
+            UpdateWheelVelocity();
+            
             if (!Physics.SphereCast(ShockOrigin, wheelRadius, -ShockDirection, out RaycastHit hit, travel, groundMask))
                 return;
             
@@ -166,6 +192,8 @@ namespace Aircraft.Components
             _aircraftBody.AddForceAtPosition(sum, hit.point);
         }
 
+
+        
         /// <summary>
         /// Draw debug gizmos
         /// </summary>

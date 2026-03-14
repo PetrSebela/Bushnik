@@ -28,6 +28,11 @@ namespace Aircraft.Components
         /// </summary>
         [SerializeField] private Transform suspensionAssembly;
         
+        /// <summary>
+        /// Wheel transform
+        /// </summary>
+        [SerializeField] private Transform wheel;
+        
         
         /// <summary>
         /// Rotates suspension component along front axis to solve the suspension kinematics
@@ -50,6 +55,9 @@ namespace Aircraft.Components
             LookAtPosition(shockBody, wheelPosition);
             LookAtPosition(shockStrut, wheelPosition);
             LookAtPosition(suspensionAssembly, wheelPosition);
+
+            var wheelVelocity = shock.WheelRotationVelocity;
+            wheel.localRotation *= Quaternion.AngleAxis(wheelVelocity, -Vector3.forward);
         }
     }
 }

@@ -2036,6 +2036,7 @@ MonoBehaviour:
   shockBody: {fileID: 5246219086716931620}
   shockStrut: {fileID: 8497850069612543183}
   suspensionAssembly: {fileID: 2619905602538429654}
+  wheel: {fileID: 6713775952412341781}
 --- !u!1 &3401616771611088081
 GameObject:
   m_ObjectHideFlags: 0
@@ -3982,6 +3983,7 @@ MonoBehaviour:
   shockBody: {fileID: 151341165217802824}
   shockStrut: {fileID: 4887710060491463314}
   suspensionAssembly: {fileID: 708024910604731441}
+  wheel: {fileID: 5288294036621460826}
 --- !u!1 &5268769405971280978
 GameObject:
   m_ObjectHideFlags: 0
@@ -7302,9 +7304,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4399511551991438695, guid: 29c2316632efe1a49b74b451733f498a, type: 3}
   m_PrefabInstance: {fileID: 8484891670000587587}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &5288294036621460826 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4369528945036351001, guid: 29c2316632efe1a49b74b451733f498a, type: 3}
+  m_PrefabInstance: {fileID: 8484891670000587587}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6492634938888619422 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5775271587381946659, guid: 29c2316632efe1a49b74b451733f498a, type: 3}
+  m_PrefabInstance: {fileID: 8484891670000587587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6713775952412341781 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2948867836918277462, guid: 29c2316632efe1a49b74b451733f498a, type: 3}
   m_PrefabInstance: {fileID: 8484891670000587587}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &6787173462333444858 stripped
