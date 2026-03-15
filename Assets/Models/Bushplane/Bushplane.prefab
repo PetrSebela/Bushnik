@@ -3688,7 +3688,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputAction: {fileID: 5590663526796474155, guid: 10f0394cb40a8aca185ab69df0dc02c2, type: 3}
   link: {fileID: 3882954993506000313}
-  sensitivity: 2
+  sensitivity: 0.75
 --- !u!114 &3882954993506000313
 MonoBehaviour:
   m_ObjectHideFlags: 0

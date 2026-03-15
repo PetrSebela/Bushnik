@@ -73,7 +73,6 @@ namespace Terrain.Demo
         /// If camera is zoomed in
         /// </summary>
         private bool _zoomed = false;
-
         
         /// <summary>
         /// Unzoomed camera FOV
