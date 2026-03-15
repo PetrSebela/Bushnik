@@ -44,13 +44,5 @@ namespace Terrain.Foliage
             foreach (var instances in _instances)
                 instances.Render();
         }
-
-        // private void OnDrawGizmos()
-        // {
-        //     Gizmos.color = Color.white;
-        //     float size = FoliageManager.Instance.foliageSettings.chunkSize;
-        //     Gizmos.DrawCube(transform.position, new Vector3(size, size, size));
-        //     Gizmos.DrawWireCube(transform.position, new Vector3(size, size, size));
-        // }
     }
 }

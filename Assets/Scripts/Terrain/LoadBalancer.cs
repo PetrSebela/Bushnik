@@ -32,7 +32,7 @@ namespace Terrain
         
         public int RequestCount => _terrainMeshRequests.Count;
 
-        public bool AllFinished => _terrainMeshRequests.Count == 0 && ComputeProxy.Instance.AllWorkersFree;
+        public bool AllFinished => _terrainMeshRequests.Count == 0 && _pointRequests.Count == 0 && ComputeProxy.Instance.AllWorkersFree;
         
         public Action OnRequestDispatched;
         

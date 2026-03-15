@@ -141,7 +141,6 @@ namespace Terrain.Foliage
         /// <summary>
         /// Generates foliage chunks
         /// </summary>
-        /// TODO: If performance on generation is issus (which it will be), convert this into coroutine and split load across multiple frames 
         public void Start()
         {
             Vector3 origin = new(
