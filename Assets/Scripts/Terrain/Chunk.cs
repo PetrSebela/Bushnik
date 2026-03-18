@@ -7,6 +7,7 @@ namespace Terrain
 {
     /// <summary>
     /// Chunk representing node of LOD tree
+    /// NOTE: cannot destroy chunk while it is being processed by generation pipeline, otherwise it will get clogged
     /// </summary>
     public class Chunk : MonoBehaviour
     {
@@ -75,12 +76,19 @@ namespace Terrain
         /// </summary>
         private Chunk _parent;
 
+        /// <summary>
+        /// Terrain mesh
+        /// </summary>
         private Mesh _mesh;
         
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
         private MeshCollider _collider;
 
+        /// <summary>
+        /// If chunks is scheduled for destruction
+        /// NOTE: cannot destroy chunk while it is being processed by generation pipeline, otherwise it will get clogged
+        /// </summary>
         private bool _terminated = false;
         
         public bool HasCollider => _collider != null;
@@ -190,6 +198,9 @@ namespace Terrain
             return true;
         }
 
+        /// <summary>
+        /// Cleans up terrain mesh memory (unity caches it otherwise)
+        /// </summary>
         private void OnDestroy()
         {
             if (!_mesh)
@@ -199,7 +210,9 @@ namespace Terrain
             Destroy(_mesh);
         }
 
-
+        /// <summary>
+        /// Unloads child chunks and returns to state before fragmentation
+        /// </summary>
         private void Dissolve()
         {
             if(_forced)
@@ -241,9 +254,7 @@ namespace Terrain
             if (Vector3.SqrMagnitude(flatPosition - transform.position) > Mathf.Pow(_size, 2) && !_forced)
             {
                 EnableTerrain();
-                Dissolve();
-                // foreach(var child in _children)
-                    // child?.gameObject.SetActive(false);
+                
                 return;
             }
 
@@ -294,6 +305,8 @@ namespace Terrain
             
             if(_collider)
                 _collider.enabled = true;
+            
+            Dissolve();
         }
 
         /// <summary>

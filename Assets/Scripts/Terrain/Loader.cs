@@ -2,24 +2,15 @@ using System.Collections;
 using Terrain.Foliage;
 using UnityEngine;
 using UnityEngine.Events;
+using Utility;
 
 namespace Terrain
 {
     /// <summary>
     /// Class responsible for sequencing of actions that are necessary for correct terrain loading
     /// </summary>
-    public class Loader : MonoBehaviour
+    public class Loader : Singleton<Loader>
     {
-        /// <summary>
-        /// Loader instance
-        /// </summary>
-        private static Loader _instance;
-        
-        /// <summary>
-        /// Instance getter
-        /// </summary>
-        public static Loader Instance => _instance;
-        
         /// <summary>
         /// What actions should be performed as part of pipeline initialization
         /// </summary>
@@ -29,11 +20,6 @@ namespace Terrain
         /// What actions should be performed after generation
         /// </summary>
         public UnityEvent afterLoading; 
-        
-        private void Awake()
-        {
-            _instance = this;
-        }
         
         /// <summary>
         /// Begins pipeline initialization
