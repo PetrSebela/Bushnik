@@ -87,7 +87,7 @@ namespace Aircraft.Controller
             {
                 var desired = Quaternion.LookRotation( _controller.transform.forward, Vector3.up);
                 _rotation = Quaternion.Slerp(_rotation, desired, followSmoothing * Time.deltaTime);
-                _rotation = Quaternion.LookRotation(_rotation * Vector3.forward, Vector3.up);
+                _rotation = Quaternion.LookRotation(_rotation * Vector3.forward, Vector3.up); // Keeps camera horizon aligned at all times
                 _targetOffset = _rotation.eulerAngles; // Offset is related to the original follow direction
             }
             transform.rotation = _rotation;

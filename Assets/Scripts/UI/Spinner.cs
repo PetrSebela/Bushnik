@@ -8,13 +8,13 @@ namespace UI
     public class Spinner : MonoBehaviour
     {
         /// <summary>
-        /// Rotation speed
+        /// Rotation animation speed
         /// </summary>
-        [SerializeField] private float velocity;
+        [SerializeField] private AnimationCurve velocity;
         
         void Update()
         {
-            transform.localRotation *= Quaternion.AngleAxis(velocity * Time.deltaTime, Vector3.forward);
+            transform.localRotation *= Quaternion.AngleAxis(velocity.Evaluate(Time.realtimeSinceStartup) * Time.deltaTime, Vector3.forward);
         }
     }
 }

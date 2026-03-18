@@ -60,7 +60,7 @@ namespace Aircraft.Components
         /// </summary>
         private void Update()
         {
-            propeller.localRotation *= Quaternion.AngleAxis(-EngineSpeed * Time.deltaTime, Vector3.forward);
+            propeller.localRotation *= Quaternion.AngleAxis(-EngineSpeed * 6 * Time.deltaTime, Vector3.forward);
         }
 
         /// <summary>

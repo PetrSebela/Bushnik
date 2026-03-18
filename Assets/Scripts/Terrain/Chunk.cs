@@ -222,18 +222,6 @@ namespace Terrain
         /// </summary>
         void OnDrawGizmos()
         {
-            // if(!gameObject.activeSelf || _forced)
-                // return;
-            
-            // Vector3 flatPosition = new Vector3(Terrain.Instance.player.position.x, 0, Terrain.Instance.player.position.z);
-            // Gizmos.color = Vector3.SqrMagnitude(flatPosition - transform.position) > Mathf.Pow(_size, 2) ? Color.red : Color.cyan;
-            // Gizmos.DrawLine(transform.position, Terrain.Instance.player.position);
-            
-            
-            // float r = _depth * 1233123876 % 255f / 255f * 0.75f;
-            // float g = _depth * 75340123123 % 255f / 255f * 0.75f;
-            // float b = _depth * 820002012312 % 255f / 255f * 0.75f;
-
             if (_forced)
                 return;
             
