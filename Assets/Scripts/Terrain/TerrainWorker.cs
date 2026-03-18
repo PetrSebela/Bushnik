@@ -130,7 +130,8 @@ namespace Terrain
                 vertices = verticesRequest.Result,
                 triangles = indicesRequest.Result,
                 normals = normalsRequest.Result,
-                uv2 = dataRequest.Result
+                uv2 = dataRequest.Result,
+                name = "Terrain mesh"
             };
             
             mesh.RecalculateTangents();

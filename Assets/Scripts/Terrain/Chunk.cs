@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game;
 using UnityEngine;
 
@@ -73,10 +74,14 @@ namespace Terrain
         /// Parent chunk
         /// </summary>
         private Chunk _parent;
+
+        private Mesh _mesh;
         
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
         private MeshCollider _collider;
+
+        private bool _terminated = false;
         
         public bool HasCollider => _collider != null;
         
@@ -146,6 +151,14 @@ namespace Terrain
         /// <param name="mesh"> Mesh to be set </param>
         public void SetMesh(Mesh mesh)
         {
+            _mesh = mesh;
+            
+            if (_terminated)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             _meshFilter.sharedMesh = mesh;
             _isReady = true;
             
@@ -176,6 +189,36 @@ namespace Terrain
 
             return true;
         }
+
+        private void OnDestroy()
+        {
+            if (!_mesh)
+                return;
+            
+            _mesh.Clear();
+            Destroy(_mesh);
+        }
+
+
+        private void Dissolve()
+        {
+            if(_forced)
+                return;
+            
+            _fragmented = false;
+            _canDisable = false;
+
+            foreach (var child in _children)
+            {
+                if(!child)
+                    continue;
+                
+                if(child.IsReady)
+                    Destroy(child.gameObject);
+                else
+                    child._terminated = true;
+            }
+        }
         
         /// <summary>
         /// Updates LOD tree structure so that the highest LOD is rendered close to the 'position'
@@ -198,8 +241,9 @@ namespace Terrain
             if (Vector3.SqrMagnitude(flatPosition - transform.position) > Mathf.Pow(_size, 2) && !_forced)
             {
                 EnableTerrain();
-                foreach(var child in _children)
-                    child?.gameObject.SetActive(false);
+                Dissolve();
+                // foreach(var child in _children)
+                    // child?.gameObject.SetActive(false);
                 return;
             }
 

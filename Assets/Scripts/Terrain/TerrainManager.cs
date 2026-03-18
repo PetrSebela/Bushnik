@@ -94,18 +94,16 @@ namespace Terrain
         private void Update()
         {
             var currentPosition = GetChunkPosition(Terrain.Instance.player.position);
+            
             if (currentPosition != _chunkPosition)
-            {
                 _terrainRoot.UpdateLOD(Terrain.Instance.player.position);
-                StaticBatchingUtility.Combine(_terrainRoot.gameObject);
-            }
+         
             _chunkPosition = currentPosition;
         }
 
         public void ForceUpdate(Chunk from)
         {
             from.UpdateLOD(Terrain.Instance.player.position);
-            StaticBatchingUtility.Combine(_terrainRoot.gameObject);
         }
     }
 }

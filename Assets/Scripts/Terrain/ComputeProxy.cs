@@ -189,7 +189,7 @@ namespace Terrain
         }
         
         public bool HasFreeWorker => _freeWorkers.Count > 0;
-
+        
         /// <summary>
         /// Seizes single worker and tasks it with computing terrain mesh for said chunk
         /// </summary>
