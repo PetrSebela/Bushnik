@@ -18,16 +18,19 @@ namespace Aircraft.Components
         [SerializeField] private float maxDeflection;
         
         /// <summary>
-        /// Visual representation of the flap
+        /// Current flap angle
         /// </summary>
-        [SerializeField] private Transform visual;
-
+        private float _angle = 0;
+        
+        /// <summary>
+        /// Current flap angle
+        /// </summary>
+        public float Angle => _angle;
+        
         /// <summary>
         /// Original element rotation
         /// </summary>
         private Quaternion _rotationOffset;
-        
-        private Quaternion _visualRotationOffset;
         
         /// <summary>
         /// Caches the original wing rotation
@@ -35,7 +38,6 @@ namespace Aircraft.Components
         public void Awake()
         {
             _rotationOffset = transform.localRotation;
-            _visualRotationOffset = visual.localRotation;
         }
         
         /// <summary>
@@ -44,16 +46,20 @@ namespace Aircraft.Components
         /// <param name="input">Surface deflection (-1, 1)</param>
         public void SetInput(float input)
         {
-            var rotation = Quaternion.AngleAxis(input * maxDeflection, Vector3.right);
+            _angle = Mathf.Clamp(input * maxDeflection,-maxDeflection, maxDeflection);
+            var rotation = Quaternion.AngleAxis(_angle, Vector3.right);
             transform.localRotation = _rotationOffset * rotation;
-            visual.localRotation = _visualRotationOffset * rotation;
         }
 
+        /// <summary>
+        /// Rotates the wing element to specified angle
+        /// </summary>
+        /// <param name="angle"></param>
         public void SetAngle(float angle)
         {
-            var rotation = Quaternion.AngleAxis(angle, Vector3.right);
+            _angle = Mathf.Clamp(angle,-maxDeflection, maxDeflection);
+            var rotation = Quaternion.AngleAxis(_angle, Vector3.right);
             transform.localRotation = _rotationOffset * rotation;
-            visual.localRotation = _visualRotationOffset * rotation;
         }
     }
 }

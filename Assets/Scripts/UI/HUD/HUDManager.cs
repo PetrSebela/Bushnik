@@ -59,8 +59,8 @@ namespace UI.HUD
             
             _speedDial.SetValue(_aircraftBody.linearVelocity.magnitude);
             _altimeter.value = _aircraftBody.position.y;
-            _engineSpeed.SetValue(_aircraft.engine.EngineSpeed);
-            _throttleDisplay.SetValue(_aircraft.engine.Throttle);
+            _engineSpeed.SetValue(_aircraft.EngineSpeed);
+            _throttleDisplay.SetValue(_aircraft.EngineThrottle);
         }
     }
 }

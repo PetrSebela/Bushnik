@@ -16,56 +16,6 @@ namespace Aircraft
         [SerializeField] private Rigidbody aircraftBody;
         
         /// <summary>
-        /// Aircraft tail wheel
-        /// </summary>
-        public Tailwheel tailwheel;
-
-        /// <summary>
-        /// Left front landing gear
-        /// </summary>
-        public Shock leftGear;
-        
-        /// <summary>
-        /// Left front landing gear
-        /// </summary>
-        public Shock rightGear;
-        
-        /// <summary>
-        /// Left aileron
-        /// </summary>
-        public Flap left;
-        
-        /// <summary>
-        /// Right aileron
-        /// </summary>
-        public Flap right;
-        
-        /// <summary>
-        /// Elevator
-        /// </summary>
-        public Flap elevator;
-        
-        /// <summary>
-        /// Rudder
-        /// </summary>
-        public Flap rudder;
-        
-        /// <summary>
-        /// Left flap 
-        /// </summary>
-        public Flap leftFlap;
-        
-        /// <summary>
-        /// Right flap
-        /// </summary>
-        public Flap rightFlap;
-        
-        /// <summary>
-        /// Engine
-        /// </summary>
-        public Engine engine;
-        
-        /// <summary>
         /// Aircraft velocity in knots
         /// </summary>
         public float VelocityKnots => aircraftBody.linearVelocity.magnitude * 1.9438445f;
@@ -75,66 +25,57 @@ namespace Aircraft
         /// </summary>
         public float Velocity => aircraftBody.linearVelocity.magnitude;
         
+        /// <summary>
+        /// Aircraft angular velocity
+        /// </summary>
         public Quaternion AngularVelocity => Quaternion.Euler(aircraftBody.angularVelocity);
-        
+
         /// <summary>
         /// Sets engine throttle input
         /// </summary>
-        /// <param name="input">Surface deflection (-1, 1)</param>
-        public void SetThrottleInput(float input)
-        {
-            engine.SetThrottle(input);
-        }
+        /// <param name="input">Throttle percentage (0, 1)</param>
+        public virtual void SetThrottleInput(float input) { }
         
         /// <summary>
         /// Sets pitch controls surface angle
         /// </summary>
         /// <param name="input">Surface deflection (-1, 1)</param>
-        public void SetPitchInput(float input)
-        {
-            elevator.SetInput(-input);
-        }
-        
+        public virtual void SetPitchInput(float input) { }
+
         /// <summary>
         /// Sets roll controls surface angle
         /// </summary>
         /// <param name="input">Surface deflection (-1, 1)</param>
-        public void SetRollInput(float input)
-        {
-            left.SetInput(-input);
-            right.SetInput(input);
-        }
+        public virtual void SetRollInput(float input) { }
 
         /// <summary>
         /// Sets yaw controls surface angle
         /// </summary>
         /// <param name="input">Surface deflection (-1, 1)</param>
-        public void SetYawInput(float input)
-        {
-            tailwheel.SetSteerInput(-input);
-            rudder.SetInput(input);
-        }
+        public virtual void SetYawInput(float input) { }
 
+        /// <summary>
+        /// Aircraft engine speed
+        /// </summary>
+        public virtual float EngineSpeed => 0f;
+        
+        /// <summary>
+        /// Aircraft engine throttle
+        /// </summary>
+        public virtual float EngineThrottle => 0f;
+        
         /// <summary>
         /// Sets brake input for left and right wheels of front landing gear
         /// </summary>
         /// <param name="leftBrake">Left brake input</param>
         /// <param name="rightBrake">Right brake input</param>
-        public void SetBrakeInput(float leftBrake, float rightBrake)
-        {
-            leftGear.SetBrakeInput(leftBrake);
-            rightGear.SetBrakeInput(rightBrake);
-        }
+        public virtual void SetBrakeInput(float leftBrake, float rightBrake) { }
         
         /// <summary>
         /// Sets flap angle
         /// </summary>
         /// <param name="angle">Angle of flaps</param>
-        public void SetFlapAngle(float angle)
-        {
-            leftFlap.SetAngle(angle);
-            rightFlap.SetAngle(angle);
-        }
+        public virtual void SetFlapAngle(float angle) { }
         
         /// <summary>
         /// Returns airfrafts average center of pressure during forward level flight

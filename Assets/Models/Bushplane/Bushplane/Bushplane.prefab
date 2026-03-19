@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 3443760804921319561}
   - component: {fileID: 4080446344469598471}
   - component: {fileID: 4397625147105592324}
+  - component: {fileID: 6712675093328927946}
   m_Layer: 7
   m_Name: Right flap
   m_TagString: Untagged
@@ -243,6 +244,20 @@ MonoBehaviour:
   airfoil: {fileID: 11400000, guid: 4274ad5c20d25e3aa89c428f52f197f9, type: 2}
   chordLength: 0.65
   wingSpan: 2
+--- !u!114 &6712675093328927946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521989507034318656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503c2cd5033a92046b444302eb8b0553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 1, y: 0, z: 0}
+  flapModel: {fileID: 6955716368471322436}
 --- !u!1 &996760185631965384
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,7 +1186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8010582625107566219}
   - component: {fileID: 6886467834627848113}
-  - component: {fileID: 9091534808665603839}
+  - component: {fileID: 4277050622455764212}
   - component: {fileID: 4084576040971950852}
   m_Layer: 7
   m_Name: Bushplane
@@ -1226,7 +1241,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &9091534808665603839
+--- !u!114 &4277050622455764212
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1235,7 +1250,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2237264483778095023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84d6cb3f4002cbac68dea9db284d469d, type: 3}
+  m_Script: {fileID: 11500000, guid: 132f6198f994cc14fb3f75508dbb04a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   aircraftBody: {fileID: 6886467834627848113}
@@ -1261,7 +1276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ffa4c6eada8df8b8a54a62b06a9b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aircraft: {fileID: 9091534808665603839}
+  aircraft: {fileID: 4277050622455764212}
   pitchInput: {fileID: 7161673240104516472}
   rollInput: {fileID: 8317663012343969091}
   yawInput: {fileID: 7922519695770174864}
@@ -1814,6 +1829,7 @@ GameObject:
   - component: {fileID: 144848118930841439}
   - component: {fileID: 8337962280346154732}
   - component: {fileID: 2541759866797602401}
+  - component: {fileID: 2587946471944691165}
   m_Layer: 7
   m_Name: Elevator
   m_TagString: Untagged
@@ -1865,6 +1881,20 @@ MonoBehaviour:
   airfoil: {fileID: 11400000, guid: 4274ad5c20d25e3aa89c428f52f197f9, type: 2}
   chordLength: 0.65
   wingSpan: 2.8
+--- !u!114 &2587946471944691165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3180557936015230090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503c2cd5033a92046b444302eb8b0553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 1, y: 0, z: 0}
+  flapModel: {fileID: 3686555230490164019}
 --- !u!1 &3207659811298294053
 GameObject:
   m_ObjectHideFlags: 0
@@ -2189,7 +2219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 8273760194570680651}
   _aircraftBody: {fileID: 6886467834627848113}
-  _aircraft: {fileID: 9091534808665603839}
+  _aircraft: {fileID: 4277050622455764212}
   _compass: {fileID: 7844486838352799026}
   _speedDial: {fileID: 5275275833226380563}
   _altimeter: {fileID: 3192985551930228557}
@@ -3575,6 +3605,7 @@ GameObject:
   - component: {fileID: 7925688610720010196}
   - component: {fileID: 5904496002416447612}
   - component: {fileID: 5051728567139679296}
+  - component: {fileID: 2327906746312712774}
   m_Layer: 7
   m_Name: Left aileron
   m_TagString: Untagged
@@ -3626,6 +3657,20 @@ MonoBehaviour:
   airfoil: {fileID: 11400000, guid: 4274ad5c20d25e3aa89c428f52f197f9, type: 2}
   chordLength: 0.65
   wingSpan: 2.8
+--- !u!114 &2327906746312712774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668293830193520886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503c2cd5033a92046b444302eb8b0553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 1, y: 0, z: 0}
+  flapModel: {fileID: 6787173462333444858}
 --- !u!1 &4767401987817043705
 GameObject:
   m_ObjectHideFlags: 0
@@ -4352,6 +4397,7 @@ GameObject:
   - component: {fileID: 3983594343928291477}
   - component: {fileID: 8216302732824915787}
   - component: {fileID: 3182298489808668740}
+  - component: {fileID: 3667543843367920032}
   m_Layer: 7
   m_Name: Right aileron
   m_TagString: Untagged
@@ -4403,6 +4449,20 @@ MonoBehaviour:
   airfoil: {fileID: 11400000, guid: 4274ad5c20d25e3aa89c428f52f197f9, type: 2}
   chordLength: 0.65
   wingSpan: 2.8
+--- !u!114 &3667543843367920032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5684516067746298524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503c2cd5033a92046b444302eb8b0553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 1, y: 0, z: 0}
+  flapModel: {fileID: 1008981477308551420}
 --- !u!1 &5692881693991999581
 GameObject:
   m_ObjectHideFlags: 0
@@ -5814,6 +5874,7 @@ GameObject:
   - component: {fileID: 6616135047143740766}
   - component: {fileID: 4111209036409114878}
   - component: {fileID: 8527434749468678664}
+  - component: {fileID: 9013495106682959293}
   m_Layer: 7
   m_Name: Left flap
   m_TagString: Untagged
@@ -5865,6 +5926,20 @@ MonoBehaviour:
   airfoil: {fileID: 11400000, guid: 4274ad5c20d25e3aa89c428f52f197f9, type: 2}
   chordLength: 0.65
   wingSpan: 2
+--- !u!114 &9013495106682959293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7335096535369211750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503c2cd5033a92046b444302eb8b0553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 1, y: 0, z: 0}
+  flapModel: {fileID: 3422287193601175490}
 --- !u!1 &7706879028523997669
 GameObject:
   m_ObjectHideFlags: 0
@@ -6374,6 +6449,7 @@ GameObject:
   - component: {fileID: 6019432166552790300}
   - component: {fileID: 5274854677358221200}
   - component: {fileID: 8210910847461954983}
+  - component: {fileID: 6287148129616010828}
   m_Layer: 7
   m_Name: Rudder
   m_TagString: Untagged
@@ -6425,6 +6501,20 @@ MonoBehaviour:
   airfoil: {fileID: 11400000, guid: 4274ad5c20d25e3aa89c428f52f197f9, type: 2}
   chordLength: 0.65
   wingSpan: 1.15
+--- !u!114 &6287148129616010828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8237049475887496243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503c2cd5033a92046b444302eb8b0553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 1, y: 0, z: 0}
+  flapModel: {fileID: 6492634938888619422}
 --- !u!1 &8258323473045394879
 GameObject:
   m_ObjectHideFlags: 0
