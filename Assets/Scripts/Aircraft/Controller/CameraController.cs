@@ -1,3 +1,4 @@
+using Game.World;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using User;
@@ -27,7 +28,7 @@ namespace Aircraft.Controller
         /// <summary>
         /// Reference to related aircraft controller
         /// </summary>
-        private AircraftController _controller;
+        private Aircraft _tracked;
         
         /// <summary>
         /// Targeted offset 
@@ -56,8 +57,16 @@ namespace Aircraft.Controller
         
         void Start()
         {
-            _controller = Utility.Generic.LocateObjectTowardsRoot<AircraftController>(transform.parent);
             RegisterInput();
+
+            if (!GameManager.Instance)
+            {
+                Debug.Log("Using fallback AC");
+                _tracked = Utility.Generic.GetComponentInScene<Aircraft>();
+                return;
+            }
+            
+            _tracked = GameManager.Instance.Aircraft;
         }
         
         /// <summary>
@@ -66,7 +75,7 @@ namespace Aircraft.Controller
         /// <returns>true if offset should be applied, false otherwise</returns>
         bool GetOffsetActive()
         {
-            if(_controller.Aircraft.Velocity < 1f)
+            if(_tracked.Velocity < 1f)
                 return true;
             
             if(_offsetActive && Time.realtimeSinceStartupAsDouble - _lastOffsetChangeTime > alightAfter)
@@ -85,12 +94,13 @@ namespace Aircraft.Controller
             }
             else
             {
-                var desired = Quaternion.LookRotation( _controller.transform.forward, Vector3.up);
+                var desired = Quaternion.LookRotation( _tracked.transform.forward, Vector3.up);
                 _rotation = Quaternion.Slerp(_rotation, desired, followSmoothing * Time.deltaTime);
                 _rotation = Quaternion.LookRotation(_rotation * Vector3.forward, Vector3.up); // Keeps camera horizon aligned at all times
                 _targetOffset = _rotation.eulerAngles; // Offset is related to the original follow direction
             }
             transform.rotation = _rotation;
+            transform.position = _tracked.transform.position;
         }
 
         /// <summary>

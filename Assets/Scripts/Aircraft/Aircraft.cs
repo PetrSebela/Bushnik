@@ -65,6 +65,11 @@ namespace Aircraft
         public virtual float EngineThrottle => 0f;
         
         /// <summary>
+        /// Current brake percentage
+        /// </summary>
+        public virtual float Brake => 0f;
+        
+        /// <summary>
         /// Sets brake input for left and right wheels of front landing gear
         /// </summary>
         /// <param name="leftBrake">Left brake input</param>

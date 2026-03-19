@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Utility
 {
@@ -25,7 +26,24 @@ namespace Utility
             
             return LocateObjectTowardsRoot<T>(parent.parent);
         }
-
+        
+        public static T GetComponentInScene<T>(bool includeInactive=false) where T : Component
+        {
+            foreach(var root in SceneManager.GetActiveScene().GetRootGameObjects())
+            {
+                var local = root.GetComponent<T>();
+                
+                if(local && (local.gameObject.activeInHierarchy ||  includeInactive))
+                    return local;
+                
+                var children = root.GetComponentInChildren<T>();
+                if(children&& (children.gameObject.activeInHierarchy ||  includeInactive))
+                    return children;
+            }
+            return null;
+        }
+        
+        
         /// <summary>
         /// Draws transform axis (for some reason unity does not correctly show the axis when the component has no mesh filter and renderer )
         /// </summary>

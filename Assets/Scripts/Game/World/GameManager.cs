@@ -6,13 +6,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using User;
+using Utility;
 
 namespace Game.World
 {
     /// <summary>
     /// Class responsible for management of general game behavior such as spawning the player of pause/unpause logic
     /// </summary>
-    public class GameManager : MonoBehaviour
+    public class GameManager : Singleton<GameManager>
     {
         /// <summary>
         /// Reference to player rigidbody
@@ -20,6 +21,10 @@ namespace Game.World
         [SerializeField] private Rigidbody player;
         
         public Rigidbody Player => player;
+
+        [SerializeField] private Aircraft.Aircraft _aircraft;
+        
+        public Aircraft.Aircraft Aircraft => _aircraft;
         
         /// <summary>
         /// Is the game paused
@@ -31,22 +36,7 @@ namespace Game.World
         /// </summary>
         public bool IsPaused => _isPaused;
         
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        private static GameManager _instance;
-        
-        /// <summary>
-        /// Singleton
-        /// </summary>
-        public static GameManager Instance => _instance;
-
         public PointOfInterest landedAt = null;
-
-        void Awake()
-        {
-            _instance = this;
-        }
         
         /// <summary>
         /// Loads the terrain and spawns the player

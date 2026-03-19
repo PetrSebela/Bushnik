@@ -30,12 +30,7 @@ namespace UI.HUD
         /// Text displaying the current throttle/brake value
         /// </summary>
         [SerializeField] private TMP_Text readoutText;
-        
-        /// <summary>
-        /// Aircraft controller
-        /// </summary>
-        [SerializeField] private AircraftController controller;
-        
+
         private RectTransform _container;
 
         void Awake()
@@ -43,13 +38,13 @@ namespace UI.HUD
             _container = GetComponent<RectTransform>();
         }
 
-        public void SetValue(float value)
+        public void SetValue(float throttle, float brake)
         {
-            throttleBar.sizeDelta = new Vector2(throttleBar.sizeDelta.x, controller.throttle * throttleBarPercentage * _container.sizeDelta.y );
-            brakeBar.sizeDelta = new Vector2(brakeBar.sizeDelta.x, controller.brake * brakeBarPercentage * _container.sizeDelta.y );
+            throttleBar.sizeDelta = new Vector2(throttleBar.sizeDelta.x, throttle * throttleBarPercentage * _container.sizeDelta.y );
+            brakeBar.sizeDelta = new Vector2(brakeBar.sizeDelta.x, brake * brakeBarPercentage * _container.sizeDelta.y );
             
-            readoutText.text = ((int)(value * 100)).ToString();
-            if(controller.brake != 0)
+            readoutText.text = ((int)(throttle * 100)).ToString();
+            if(brake != 0)
                 readoutText.text = "BRK";
         }
     }

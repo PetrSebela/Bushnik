@@ -62,6 +62,9 @@ namespace Aircraft.Variants
         
         public override float EngineThrottle => engine.Throttle;
 
+        private float _brake = 0;
+        public override float Brake => _brake;
+
         public override void SetThrottleInput(float input)
         {
             engine.SetThrottle(input);
@@ -86,6 +89,7 @@ namespace Aircraft.Variants
         
         public override void SetBrakeInput(float leftBrake, float rightBrake)
         {
+            _brake = (leftBrake + rightBrake) / 2;
             leftGear.SetBrakeInput(leftBrake);
             rightGear.SetBrakeInput(rightBrake);
         }

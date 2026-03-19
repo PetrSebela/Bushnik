@@ -1,3 +1,4 @@
+using Game.World;
 using UnityEngine;
 
 namespace UI.HUD
@@ -15,12 +16,12 @@ namespace UI.HUD
         /// <summary>
         /// Aircraft rigidbody
         /// </summary>
-        [SerializeField] private Rigidbody _aircraftBody;
+        private Rigidbody _aircraftBody;
         
         /// <summary>
         /// Aircraft object
         /// </summary>
-        [SerializeField] private Aircraft.Aircraft _aircraft;
+        private Aircraft.Aircraft _aircraft;
         
         /// <summary>
         /// Compass HUD element
@@ -46,12 +47,26 @@ namespace UI.HUD
         /// Throttle display
         /// </summary>
         [SerializeField] private ThrottleDisplay _throttleDisplay;
-        
+
+
+        private void Awake()
+        {
+            if (!GameManager.Instance)
+            {
+                UnityEngine.Debug.Log("Using fallback objects");
+                _aircraft = Utility.Generic.GetComponentInScene<Aircraft.Aircraft>();
+                _aircraftBody = _aircraft.GetComponent<Rigidbody>();
+                return;
+            }
+            
+            _aircraft = GameManager.Instance.Aircraft;
+            _aircraftBody = GameManager.Instance.Player;
+        }
         
         /// <summary>
         /// Updates values of individual HUD elements
         /// </summary>
-        void Update()
+        private void Update()
         {
             var cameraDirection = Vector3.ProjectOnPlane(_camera.forward, Vector3.up).normalized;
             var heading = Vector3.SignedAngle(Vector3.forward, cameraDirection, Vector3.up);
@@ -60,7 +75,7 @@ namespace UI.HUD
             _speedDial.SetValue(_aircraftBody.linearVelocity.magnitude);
             _altimeter.value = _aircraftBody.position.y;
             _engineSpeed.SetValue(_aircraft.EngineSpeed);
-            _throttleDisplay.SetValue(_aircraft.EngineThrottle);
+            _throttleDisplay.SetValue(_aircraft.EngineThrottle, _aircraft.Brake);
         }
     }
 }
