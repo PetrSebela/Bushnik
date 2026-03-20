@@ -83,8 +83,8 @@ namespace Game.Options
             resolutionDropdown.AddOptions(GetResolutionOptions());
             
             var currentResolutionIndex = PlayerPrefs.GetInt(PrefKey, GetCurrentResolutionIndex());
-            resolutionDropdown.SetValueWithoutNotify(currentResolutionIndex);
             resolutionDropdown.onValueChanged.AddListener(SetResolution);
+            resolutionDropdown.value = currentResolutionIndex;
         }
         
         /// <summary>

@@ -32,8 +32,8 @@ namespace Game.Options
             frameRateDropdown.AddOptions(_frameRateOptions);
             
             var currentFramerate = PlayerPrefs.GetInt(PrefKey, 0);
-            frameRateDropdown.SetValueWithoutNotify(currentFramerate);
             frameRateDropdown.onValueChanged.AddListener(SetRefreshRate);
+            frameRateDropdown.value = currentFramerate;
         }
         
         private void SetRefreshRate(int targetRefreshRate)

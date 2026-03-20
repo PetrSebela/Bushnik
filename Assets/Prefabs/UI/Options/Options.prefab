@@ -3379,8 +3379,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c07bc01bea385047a55db2c974aad14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _distanceSlider: {fileID: 3973688884900660374}
-  _currentFoliageDistance: {fileID: 6644610737694138187}
+  distanceSlider: {fileID: 3973688884900660374}
+  currentFoliageDistance: {fileID: 6644610737694138187}
 --- !u!1 &7300794498350592261
 GameObject:
   m_ObjectHideFlags: 0
