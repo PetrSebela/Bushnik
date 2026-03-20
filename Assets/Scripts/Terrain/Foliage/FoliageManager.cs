@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utility;
 
 namespace Terrain.Foliage
 {
     /// <summary>
     /// Class responsible for management and generation of foliage
     /// </summary>
-    public class FoliageManager : MonoBehaviour
+    public class FoliageManager : Singleton<FoliageManager>
     {
         /// <summary>
         /// Foliage settings
@@ -20,17 +21,7 @@ namespace Terrain.Foliage
         /// Parent for foliage chunks (just to keep hierarchy clean)
         /// </summary>
         private GameObject _foliageParent;
-
-        /// <summary>
-        /// Private singleton instance
-        /// </summary>
-        private static FoliageManager _instance;
-
-        /// <summary>
-        /// Singleton getter
-        /// </summary>
-        public static FoliageManager Instance => _instance;
-
+        
         private Dictionary<Vector3, FoliageChunk> _chunks = new();
 
         /// <summary>
@@ -66,11 +57,6 @@ namespace Terrain.Foliage
             _foliageParent = new GameObject("Foliage");
             _foliageParent.transform.SetParent(transform);
             _foliageParent.transform.localPosition = Vector3.zero;
-
-            if (_instance == null)
-                _instance = this;
-            else
-                throw new Exception("Duplicate instance of foliage manager");
         }
 
 
