@@ -35,7 +35,7 @@ namespace Terrain.Interests
             if (landed)
                 return;
 
-            if (GameManager.Instance.Player.linearVelocity.magnitude > 5f)
+            if (GameManager.Instance.AircraftRigidbody.linearVelocity.magnitude > 5f)
                 return;
             
             GameManager.Instance.landedAt = this;

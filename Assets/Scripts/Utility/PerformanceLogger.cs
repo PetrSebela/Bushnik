@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Terrain;
+using Terrain.Foliage;
+using TMPro;
 using Unity.Profiling.Memory;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -32,6 +34,9 @@ namespace Utility
 
         void StartLogging()
         {
+            _logFile.WriteLine($"World size: {TerrainManager.Instance.terrainSettings.size}m");
+            _logFile.WriteLine($"Tree render distance: {FoliageManager.Instance.RenderDistance}m");
+            _logFile.WriteLine();
             _logFile.WriteLine($"Loaded in: {Time.realtimeSinceStartup - _loadingStartTime}");
             _logFile.WriteLine();
             _logFile.WriteLine("=== performance log ===");

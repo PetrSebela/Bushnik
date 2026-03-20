@@ -24,5 +24,6 @@ namespace Terrain
         public float baseNoiseFrequency = 0.00005f;
         public float frequencyDecay = 1.35f;
         public float amplitudeDecay = 0.65f;
+        public string seed;
     }
 }

@@ -1,3 +1,4 @@
+using Game.Options;
 using Terrain;
 using Terrain.Data;
 using Terrain.Interests;
@@ -15,15 +16,14 @@ namespace Game.World
     /// </summary>
     public class GameManager : Singleton<GameManager>
     {
+        [SerializeField] private GameConfig gameConfig;
         /// <summary>
         /// Reference to player rigidbody
         /// </summary>
-        [SerializeField] private Rigidbody player;
-        
-        public Rigidbody Player => player;
+        private Rigidbody _aircraftRigidbody;
+        public Rigidbody AircraftRigidbody => _aircraftRigidbody;
 
-        [SerializeField] private Aircraft.Aircraft _aircraft;
-        
+        private Aircraft.Aircraft _aircraft;
         public Aircraft.Aircraft Aircraft => _aircraft;
         
         /// <summary>
@@ -37,14 +37,22 @@ namespace Game.World
         public bool IsPaused => _isPaused;
         
         public PointOfInterest landedAt = null;
+
+        private void Awake()
+        {
+            var aircraft = Instantiate(gameConfig.defaultAircraft);
+            _aircraftRigidbody = aircraft.GetComponent<Rigidbody>();
+            _aircraft = aircraft.GetComponent<Aircraft.Aircraft>();
+            Terrain.Terrain.Instance.player = aircraft.transform;
+        }
         
         /// <summary>
         /// Loads the terrain and spawns the player
         /// </summary>
-        void Start()
+        private void Start()
         {
-            player.isKinematic = true;
-            Loader.Instance.afterPregeneration.AddListener(SpawnPlayer);
+            _aircraftRigidbody.isKinematic = true;
+            Loader.Instance.afterPregeneration.AddListener(MovePlayerToDefaultLocation);
             Loader.Instance.afterLoading.AddListener(AfterLoad);
             Loader.Instance.Load();
             
@@ -55,25 +63,25 @@ namespace Game.World
         /// <summary>
         /// Places player on the desired spot
         /// </summary>
-        void SpawnPlayer()
+        private void MovePlayerToDefaultLocation()
         {
             var spawnPoint = TerrainFeatureManager.Instance.Interests[0].TerrainAffectors[0].From;
-            player.position = spawnPoint + Vector3.up;
-            MapMarkerUtility.Instance.PlacePlayerMarker(player.transform);
+            _aircraftRigidbody.position = spawnPoint + Vector3.up;
+            MapMarkerUtility.Instance.PlacePlayerMarker(_aircraftRigidbody.transform);
         }
 
         /// <summary>
         /// Enables player movement
         /// </summary>
-        void AfterLoad()
+        private void AfterLoad()
         {
-            player.isKinematic = false;
+            _aircraftRigidbody.isKinematic = false;
         }
         
         /// <summary>
         /// Sets timescale back to one to avoid issues while transitioning to other scenes
         /// </summary>
-        void OnDestroy()
+        private void OnDestroy()
         {
             Time.timeScale = 1;
         }

@@ -49,7 +49,7 @@ namespace UI.HUD
         [SerializeField] private ThrottleDisplay _throttleDisplay;
 
 
-        private void Awake()
+        private void Start()
         {
             if (!GameManager.Instance)
             {
@@ -60,7 +60,7 @@ namespace UI.HUD
             }
             
             _aircraft = GameManager.Instance.Aircraft;
-            _aircraftBody = GameManager.Instance.Player;
+            _aircraftBody = GameManager.Instance.AircraftRigidbody;
         }
         
         /// <summary>

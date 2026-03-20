@@ -1,18 +1,11 @@
 using System;
 using UnityEngine;
+using Utility;
 
 namespace Terrain
 {
-    public class Terrain : MonoBehaviour
+    public class Terrain : Singleton<Terrain>
     {
         public Transform player;
-        
-        private static Terrain _instance;
-        public static Terrain Instance => _instance;
-        
-        void Awake()
-        {
-            _instance = this;
-        }
     }
 }

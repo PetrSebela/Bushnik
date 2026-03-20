@@ -22,7 +22,7 @@ namespace Utility
             {
                 if(_instance == null)
                     _instance = FindAnyObjectByType<T>();
-
+                
                 return _instance;
             }
         }
