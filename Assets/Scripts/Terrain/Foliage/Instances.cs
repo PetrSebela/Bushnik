@@ -53,12 +53,6 @@ namespace Terrain.Foliage
             if(_matrices == null || _matrices.Length == 0)
                 return;
             
-            // Graphics.DrawMeshInstanced(
-            //     _mesh,
-            //     0,
-            //     _material,
-            //     _matrices);
-            
             Graphics.RenderMeshInstanced(
                 _renderParams,
                 _mesh, 

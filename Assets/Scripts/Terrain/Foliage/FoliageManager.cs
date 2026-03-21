@@ -24,6 +24,8 @@ namespace Terrain.Foliage
         
         private Dictionary<Vector3, FoliageChunk> _chunks = new();
 
+        [SerializeField] private Camera camera;
+        
         /// <summary>
         /// Generated foliage
         /// </summary>
@@ -109,9 +111,12 @@ namespace Terrain.Foliage
                 var active = GetGrid(origin);
                 UpdateChunks(active);
             }
+
+            var frustum = GeometryUtility.CalculateFrustumPlanes(camera); 
             
             foreach (var chunk in _chunks.Values)
-                chunk.Render();
+                if (GeometryUtility.TestPlanesAABB(frustum, chunk.Bounds))
+                    chunk.Render();
         }
 
         void CreateChunks(IEnumerable<Vector3> create)
