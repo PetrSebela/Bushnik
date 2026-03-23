@@ -1281,7 +1281,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1234617477029881020}
   MaxForce: 350000
-  propeller: {fileID: 0}
   idle: 500
   redline: 2250
 --- !u!1 &4235551304642220526
@@ -1858,6 +1857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aircraftBody: {fileID: 1234617477029881020}
+  cameraOffset: {x: 0, y: 3, z: -15}
   leftAileron: {fileID: 2977549015464042448}
   rightAileron: {fileID: 5279391286591318081}
   elevator: {fileID: 969884862139683777}
@@ -1933,7 +1933,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1234617477029881020}
   MaxForce: 350000
-  propeller: {fileID: 0}
   idle: 500
   redline: 2250
 --- !u!1 &5701510681838232408

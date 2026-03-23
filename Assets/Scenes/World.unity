@@ -2186,6 +2186,7 @@ MonoBehaviour:
   followSmoothing: 2.5
   mouseSensitivity: 0.125
   alightAfter: 2.5
+  cameraTransform: {fileID: 873926524}
 --- !u!4 &1886747245
 Transform:
   m_ObjectHideFlags: 0

@@ -663,6 +663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aircraftBody: {fileID: 6886467834627848113}
+  cameraOffset: {x: 0, y: 2.5, z: -10}
   tailwheel: {fileID: 1912973334464704294}
   leftGear: {fileID: 6323819898086110778}
   rightGear: {fileID: 688865081979490336}

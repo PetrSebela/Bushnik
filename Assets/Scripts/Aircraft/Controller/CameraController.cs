@@ -25,6 +25,8 @@ namespace Aircraft.Controller
         /// </summary>
         [SerializeField] private float alightAfter = 1f;
         
+        [SerializeField] private Transform cameraTransform;
+        
         /// <summary>
         /// Reference to related aircraft controller
         /// </summary>
@@ -63,10 +65,11 @@ namespace Aircraft.Controller
             {
                 Debug.Log("Using fallback AC");
                 _tracked = Utility.Generic.GetComponentInScene<Aircraft>();
-                return;
             }
+            else
+                _tracked = GameManager.Instance.Aircraft;
             
-            _tracked = GameManager.Instance.Aircraft;
+            cameraTransform.localPosition = _tracked.cameraOffset;
         }
         
         /// <summary>

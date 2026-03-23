@@ -21,6 +21,11 @@ namespace Aircraft
         public float VelocityKnots => aircraftBody.linearVelocity.magnitude * 1.9438445f;
 
         /// <summary>
+        /// Aircraft camera offset
+        /// </summary>
+        public Vector3 cameraOffset;
+        
+        /// <summary>
         /// Aircraft velocity in mps
         /// </summary>
         public float Velocity => aircraftBody.linearVelocity.magnitude;
