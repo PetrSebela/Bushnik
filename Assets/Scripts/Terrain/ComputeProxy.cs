@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Utility;
+using Random = UnityEngine.Random;
 
 namespace Terrain
 {
@@ -165,6 +166,15 @@ namespace Terrain
             TerrainComputeShader.SetFloat("BaseNoiseFrequency", terrainSettings.baseNoiseFrequency);
             TerrainComputeShader.SetFloat("FrequencyDecay", terrainSettings.frequencyDecay);
             TerrainComputeShader.SetFloat("AmplitudeDecay", terrainSettings.amplitudeDecay);
+            
+            Random.InitState(terrainSettings.seed.GetHashCode());
+            var seedVector = new float[]
+            {
+                Random.Range(0, terrainSettings.size),
+                Random.Range(0, terrainSettings.size)
+            };
+            
+            TerrainComputeShader.SetFloats("SeedVector", seedVector);
             
             // Default terrain does not account for runways and other affectors
             if (_airstripBuffer == null)

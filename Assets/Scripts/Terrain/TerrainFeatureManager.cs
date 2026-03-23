@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Terrain.Interests;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Terrain
 {
@@ -58,6 +59,7 @@ namespace Terrain
         /// </summary>
         public void Init()
         {
+            Random.InitState(TerrainManager.Instance.terrainSettings.seed.GetHashCode());
             foreach (var feature in features)
             {
                 var pois = feature.GetPointOfInterest();
