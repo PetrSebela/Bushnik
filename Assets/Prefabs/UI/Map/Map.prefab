@@ -2342,6 +2342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapCanvas: {fileID: 0}
+  screen: {fileID: 1413232238794757889}
   mapImage: {fileID: 5681810685750663261}
   mapResolution: 16384
   mapTransform: {fileID: 8868490949786406037}

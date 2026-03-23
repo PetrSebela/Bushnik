@@ -80,6 +80,11 @@ namespace UI.Map
         private readonly List<MarkerPair> _markers = new();
 
         /// <summary>
+        /// Last mouse position
+        /// </summary>
+        private Vector2 _lastMousePosition = Vector2.zero;
+        
+        /// <summary>
         /// Struct containing data used for rendering map markers
         /// </summary>
         private struct MarkerPair
@@ -87,7 +92,6 @@ namespace UI.Map
             public Transform Tracked;
             public RectTransform Marker;
         }
-        
         
         private void Awake()
         {
@@ -124,6 +128,7 @@ namespace UI.Map
         /// </summary>
         private void Update()
         {
+
             foreach (var marker in _markers)
             {
                 marker.Marker.anchoredPosition = WorldToMapCoordinates(marker.Tracked.position);
@@ -191,9 +196,16 @@ namespace UI.Map
         /// </summary>
         private void OnMoveDeltaPerformed(InputAction.CallbackContext context)
         {
-            var delta = context.ReadValue<Vector2>();
-            if(_isDragging && _isMouseOver)
+            // For some reason input system started to return wrong delta values
+            // Fine, ill do it myself
+
+            var current = Mouse.current.position.ReadValue(); 
+            var delta = current - _lastMousePosition;
+            _lastMousePosition = current;
+        
+            if (_isDragging && _isMouseOver)
                 MoveMap(delta / mapCanvas.scaleFactor);
+        
         }
         
         /// <summary>
