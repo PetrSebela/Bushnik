@@ -1145,6 +1145,15 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reset"",
+                    ""type"": ""Button"",
+                    ""id"": ""a3b9ffe5-3ddc-4ae5-a11e-3e177ce0ea6b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1378,6 +1387,28 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
                     ""action"": ""Flap toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""40f76522-8fe2-47d0-943b-227d4ddc6b64"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2143761d-9c0b-4a1f-a6b3-539c8f6c6163"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1489,6 +1520,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         m_Aircraft_KeyboardThrottle = m_Aircraft.FindAction("KeyboardThrottle", throwIfNotFound: true);
         m_Aircraft_KeyboardBrake = m_Aircraft.FindAction("KeyboardBrake", throwIfNotFound: true);
         m_Aircraft_Flaptoggle = m_Aircraft.FindAction("Flap toggle", throwIfNotFound: true);
+        m_Aircraft_Reset = m_Aircraft.FindAction("Reset", throwIfNotFound: true);
         // Map
         m_Map = asset.FindActionMap("Map", throwIfNotFound: true);
         m_Map_Drag = m_Map.FindAction("Drag", throwIfNotFound: true);
@@ -1998,6 +2030,7 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Aircraft_KeyboardThrottle;
     private readonly InputAction m_Aircraft_KeyboardBrake;
     private readonly InputAction m_Aircraft_Flaptoggle;
+    private readonly InputAction m_Aircraft_Reset;
     /// <summary>
     /// Provides access to input actions defined in input action map "Aircraft".
     /// </summary>
@@ -2045,6 +2078,10 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Aircraft/Flaptoggle".
         /// </summary>
         public InputAction @Flaptoggle => m_Wrapper.m_Aircraft_Flaptoggle;
+        /// <summary>
+        /// Provides access to the underlying input action "Aircraft/Reset".
+        /// </summary>
+        public InputAction @Reset => m_Wrapper.m_Aircraft_Reset;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2098,6 +2135,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Flaptoggle.started += instance.OnFlaptoggle;
             @Flaptoggle.performed += instance.OnFlaptoggle;
             @Flaptoggle.canceled += instance.OnFlaptoggle;
+            @Reset.started += instance.OnReset;
+            @Reset.performed += instance.OnReset;
+            @Reset.canceled += instance.OnReset;
         }
 
         /// <summary>
@@ -2136,6 +2176,9 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
             @Flaptoggle.started -= instance.OnFlaptoggle;
             @Flaptoggle.performed -= instance.OnFlaptoggle;
             @Flaptoggle.canceled -= instance.OnFlaptoggle;
+            @Reset.started -= instance.OnReset;
+            @Reset.performed -= instance.OnReset;
+            @Reset.canceled -= instance.OnReset;
         }
 
         /// <summary>
@@ -2527,6 +2570,13 @@ public partial class @SimInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnFlaptoggle(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Reset" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnReset(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Map" which allows adding and removing callbacks.

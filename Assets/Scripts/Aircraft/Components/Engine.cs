@@ -51,7 +51,6 @@ namespace Aircraft.Components
         {
             _throttle = Mathf.Clamp01(input);
         }
-
         
         /// <summary>
         /// Applies engine (prop) force

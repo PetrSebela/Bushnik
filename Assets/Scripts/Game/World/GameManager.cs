@@ -58,6 +58,19 @@ namespace Game.World
             
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            InputProvider.Instance.Input.Aircraft.Reset.performed += _ => FlipAircraft();
+        }
+
+        /// <summary>
+        /// Flips aircraft to correct orientation
+        /// </summary>
+        private void FlipAircraft()
+        {
+            var heading = Vector3.ProjectOnPlane(_aircraft.transform.forward, Vector3.up).normalized;
+            var correctOrientation = Quaternion.LookRotation(heading, Vector3.up);
+            var position = _aircraft.transform.position + Vector3.up;
+            _aircraftRigidbody.Move(position, correctOrientation);
         }
         
         /// <summary>

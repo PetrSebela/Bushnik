@@ -20,7 +20,6 @@ namespace User
         /// </summary>
         public SimInput Input => _input;
         
-        
         /// <summary>
         /// Private singleton reference
         /// </summary>
