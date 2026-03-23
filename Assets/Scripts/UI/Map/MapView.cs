@@ -128,7 +128,6 @@ namespace UI.Map
         /// </summary>
         private void Update()
         {
-
             foreach (var marker in _markers)
             {
                 marker.Marker.anchoredPosition = WorldToMapCoordinates(marker.Tracked.position);

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utility;
 
 namespace Terrain.Foliage
@@ -24,7 +25,7 @@ namespace Terrain.Foliage
         
         private Dictionary<Vector3, FoliageChunk> _chunks = new();
 
-        [SerializeField] private Camera camera;
+        [SerializeField] private Camera mainCamera;
         
         /// <summary>
         /// Generated foliage
@@ -112,7 +113,7 @@ namespace Terrain.Foliage
                 UpdateChunks(active);
             }
 
-            var frustum = GeometryUtility.CalculateFrustumPlanes(camera); 
+            var frustum = GeometryUtility.CalculateFrustumPlanes(mainCamera); 
             
             foreach (var chunk in _chunks.Values)
                 if (GeometryUtility.TestPlanesAABB(frustum, chunk.Bounds))

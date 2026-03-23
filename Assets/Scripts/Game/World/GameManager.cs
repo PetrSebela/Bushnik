@@ -79,7 +79,7 @@ namespace Game.World
         private void MovePlayerToDefaultLocation()
         {
             var spawnPoint = TerrainFeatureManager.Instance.Interests[0].TerrainAffectors[0].From;
-            _aircraftRigidbody.position = spawnPoint + Vector3.up;
+            _aircraftRigidbody.position = spawnPoint + Vector3.up * 2f;
             MapMarkerUtility.Instance.PlacePlayerMarker(_aircraftRigidbody.transform);
         }
 
