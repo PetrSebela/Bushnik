@@ -1,5 +1,6 @@
 using Aircraft.Components;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Aircraft.Variants
 {
@@ -11,7 +12,7 @@ namespace Aircraft.Variants
         /// <summary>
         /// Aircraft tail wheel
         /// </summary>
-        public Tailwheel tailwheel;
+        public SteerableWheel tailwheel;
 
         /// <summary>
         /// Left front landing gear
@@ -83,7 +84,7 @@ namespace Aircraft.Variants
 
         public override void SetYawInput(float input)
         {
-            tailwheel.SetSteerInput(-input);
+            tailwheel.SetSteerInput(input);
             rudder.SetInput(input);
         }
         

@@ -192,6 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7225084250153172015}
   - component: {fileID: 2564208024721242581}
+  - component: {fileID: 4731640481410279701}
   m_Layer: 7
   m_Name: Engine
   m_TagString: Untagged
@@ -228,9 +229,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 6886467834627848113}
   MaxForce: 7000
-  propeller: {fileID: 8265283556605614647}
   idle: 500
   redline: 2250
+--- !u!114 &4731640481410279701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029325718855338553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe9b6751ad4aa04abbf944e87a2c307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 0, y: 0, z: 1}
+  propellerTransform: {fileID: 8265283556605614647}
 --- !u!1 &1196866023466911294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1415,6 +1429,7 @@ GameObject:
   m_Component:
   - component: {fileID: 231579991910554789}
   - component: {fileID: 1912973334464704294}
+  - component: {fileID: 5251154883362201988}
   m_Layer: 7
   m_Name: Tail shock
   m_TagString: Untagged
@@ -1431,7 +1446,7 @@ Transform:
   m_GameObject: {fileID: 4112636938115442497}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.039000034, z: -5.22}
+  m_LocalPosition: {x: 0, y: -0.039000034, z: -5.236}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1452,15 +1467,28 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 119
-  wheelRadius: 0.4
+  wheelRadius: 0.19
   travel: 0.5
-  springRate: 2000
+  springRate: 20000
   damping: 250
   tireGrip: 50
   drag: 750
   maxBrakeForce: 0
   maxAngle: 50
-  visualization: {fileID: 3873890027530420264}
+--- !u!114 &5251154883362201988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4112636938115442497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f47e2a30d448f24094465de65184d59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 0, y: 0, z: -1}
+  flapModel: {fileID: 3873890027530420264}
 --- !u!1 &4142956145894201991
 GameObject:
   m_ObjectHideFlags: 0

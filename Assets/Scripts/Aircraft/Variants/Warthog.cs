@@ -22,7 +22,7 @@ namespace Aircraft.Variants
         
         public Engine rightEngine;
         
-        public Tailwheel noseWheel;
+        public SteerableWheel noseWheel;
 
         public Shock leftLandingGear;
         

@@ -5,7 +5,7 @@ namespace Aircraft.Components
     /// <summary>
     /// Tail wheel component
     /// </summary>
-    public class Tailwheel : Shock
+    public class SteerableWheel : Shock
     {
         /// <summary>
         /// Maximum steer angle
@@ -15,7 +15,11 @@ namespace Aircraft.Components
         /// <summary>
         /// Tail wheel visualization
         /// </summary>
-        [SerializeField] private Transform visualization;
+        // [SerializeField] private Transform visualization;
+        
+        private float _currentAngle;
+        
+        public float CurrentAngle => _currentAngle;
         
         /// <summary>
         /// Sets tail wheel steer input
@@ -23,8 +27,9 @@ namespace Aircraft.Components
         /// <param name="input">Steer input</param>
         public void SetSteerInput(float input)
         {
-            transform.localRotation = Quaternion.Euler(0f, -input * maxAngle, 0f);  
-            visualization.localRotation = Quaternion.Euler(0f, 0f, input * maxAngle);
+            transform.localRotation = Quaternion.Euler(0f, input * maxAngle, 0f);  
+            _currentAngle = input * maxAngle;
+            // visualization.localRotation = Quaternion.Euler(0f, 0f, input * maxAngle);
         }
     }
 }

@@ -249,7 +249,7 @@ Transform:
   m_GameObject: {fileID: 751135260680953897}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.45, y: -0.96, z: -0.4}
+  m_LocalPosition: {x: 2.45, y: -1.95, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -272,8 +272,8 @@ MonoBehaviour:
     m_Bits: 119
   wheelRadius: 0.42
   travel: 1.5
-  springRate: 35000
-  damping: 250
+  springRate: 3500000
+  damping: 25000
   tireGrip: 25
   drag: 50
   maxBrakeForce: 750
@@ -546,7 +546,7 @@ Transform:
   m_GameObject: {fileID: 2049769472140258953}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.45, y: -0.96000004, z: -0.39999962}
+  m_LocalPosition: {x: -2.45, y: -1.95, z: -0.39999962}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -569,7 +569,7 @@ MonoBehaviour:
     m_Bits: 119
   wheelRadius: 0.42
   travel: 1.5
-  springRate: 35000
+  springRate: 3500000
   damping: 250
   tireGrip: 25
   drag: 50
@@ -1280,7 +1280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1234617477029881020}
-  MaxForce: 4500
+  MaxForce: 350000
   propeller: {fileID: 0}
   idle: 500
   redline: 2250
@@ -1826,10 +1826,10 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5068646597195038323}
   serializedVersion: 4
-  m_Mass: 250
+  m_Mass: 12000
   m_Drag: 0
   m_AngularDrag: 1
-  m_CenterOfMass: {x: 0, y: 0.2, z: -0.3}
+  m_CenterOfMass: {x: 0, y: 0.2, z: 0.75}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
@@ -1932,7 +1932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1234617477029881020}
-  MaxForce: 4500
+  MaxForce: 350000
   propeller: {fileID: 0}
   idle: 500
   redline: 2250
@@ -2225,6 +2225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1115388129801804822}
   - component: {fileID: 2438648977666175899}
+  - component: {fileID: 4168942954319575171}
   m_Layer: 7
   m_Name: nose shock
   m_TagString: Untagged
@@ -2241,7 +2242,7 @@ Transform:
   m_GameObject: {fileID: 6789770867342466949}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.77, z: 5.06}
+  m_LocalPosition: {x: 0, y: -1.98, z: 5.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2264,13 +2265,26 @@ MonoBehaviour:
     m_Bits: 119
   wheelRadius: 0.4
   travel: 0.5
-  springRate: 2000
-  damping: 250
+  springRate: 3500000
+  damping: 25000
   tireGrip: 50
   drag: 50
   maxBrakeForce: 0
   maxAngle: 50
-  visualization: {fileID: 5663023922273896597}
+--- !u!114 &4168942954319575171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6789770867342466949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f47e2a30d448f24094465de65184d59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationAxis: {x: 0, y: 0, z: -1}
+  flapModel: {fileID: 5663023922273896597}
 --- !u!1 &6792694351595180869
 GameObject:
   m_ObjectHideFlags: 0

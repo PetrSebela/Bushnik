@@ -18,11 +18,6 @@ namespace Aircraft.Components
         /// Maximum engine thrust
         /// </summary>
         [SerializeField] private float MaxForce;
-
-        /// <summary>
-        /// Propeller object
-        /// </summary>
-        [SerializeField] private Transform propeller;
         
         /// <summary>
         /// Engine idle rpm
@@ -45,6 +40,8 @@ namespace Aircraft.Components
         public float EngineSpeed => idle + _throttle * (redline - idle);
         
         public float Throttle => _throttle;
+
+        public float CrankshaftAngularVelocity => EngineSpeed * 6;
         
         /// <summary>
         /// Sets throttle input
@@ -55,17 +52,7 @@ namespace Aircraft.Components
             _throttle = Mathf.Clamp01(input);
         }
 
-        /// <summary>
-        /// Spins the prop
-        /// </summary>
-        private void Update()
-        {
-            if(!propeller)
-                return;
-            
-            propeller.localRotation *= Quaternion.AngleAxis(-EngineSpeed * 6 * Time.deltaTime, Vector3.forward);
-        }
-
+        
         /// <summary>
         /// Applies engine (prop) force
         /// </summary>

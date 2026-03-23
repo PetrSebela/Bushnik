@@ -199,6 +199,16 @@ namespace Aircraft.Components
         /// </summary>
         private void OnDrawGizmos()
         {
+
+            var origin = ShockOrigin;
+            var wheel = GetWheelPosition();
+            
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(origin, wheel);
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(wheel, wheelRadius);
+            
             if (!Application.isPlaying) 
                 return;
 
