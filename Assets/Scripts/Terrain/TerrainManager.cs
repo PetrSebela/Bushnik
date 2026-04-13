@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace Terrain
@@ -99,6 +100,7 @@ namespace Terrain
                 _terrainRoot.UpdateLOD(Terrain.Instance.player.position);
          
             _chunkPosition = currentPosition;
+            Resources.UnloadUnusedAssets();
         }
 
         public void ForceUpdate(Chunk from)

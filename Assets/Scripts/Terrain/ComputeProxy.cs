@@ -170,14 +170,14 @@ namespace Terrain
             Random.InitState(terrainSettings.seed.GetHashCode());
             var seedVector = new float[]
             {
-                Random.Range(0, terrainSettings.size),
-                Random.Range(0, terrainSettings.size)
+                Random.Range(0, terrainSettings.size * 2),
+                Random.Range(0, terrainSettings.size * 2)
             };
             
             TerrainComputeShader.SetFloats("SeedVector", seedVector);
             
             // Default terrain does not account for runways and other affectors
-            if (_airstripBuffer == null)
+            if (_airstripBuffer == null || !Application.isPlaying)
             {
                 TerrainComputeShader.SetInt("AirstripBufferSize", 0);
                 _airstripBuffer?.Dispose();

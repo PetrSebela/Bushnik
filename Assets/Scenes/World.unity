@@ -242,7 +242,7 @@ PrefabInstance:
     - target: {fileID: 2810715424391151083, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1332352666}
     - target: {fileID: 2810715424391151083, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UI.Page, Assembly-CSharp

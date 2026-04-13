@@ -111,6 +111,7 @@ namespace Terrain.Interests
         {
             List<PointOfInterest> airports = new();
 
+            // TODO: add max iteration safeguard
             while (true)
             {
                 int sampleCount = 12;

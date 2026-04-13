@@ -81,10 +81,25 @@ float CreaseNoise(float2 position)
 
 // Returns sample of falloff map
 float FalloffMap(float2 position)
-{
-    // Squircle equation 
-    float p = 3;
-    return abs(pow(abs(position.x) / (TerrainSize / 2), p)) + abs(pow(abs(position.y) / (TerrainSize / 2), p));
+{    
+    // Square
+    // return (abs(position.x - position.y) + abs(position.x + position.y))/ (TerrainSize * 0.9);
+    
+    // Squircle equation
+    // return Sigmoid(length(position) - TerrainSize * 0.45, 0 ,0.0005) ; 
+    
+    // float p = 3;
+    // return abs(pow(abs(position.x) / (TerrainSize / 2), p)) + abs(pow(abs(position.y) / (TerrainSize / 2), p));
+    
+    // return 0;
+    
+    float distance = length(position);
+    float2 direction = normalize(position);
+    float shoreDepth = 0.25;
+    float shoreDistance =  (1 - shoreDepth + NormalizedNoise(direction * 2)  * shoreDepth) * TerrainSize / 2;
+    float progress = 1 - (shoreDistance - distance) / 5000;
+    float falloff = Sigmoid(progress, 0, 1);
+    return falloff;
 }
 
 TerrainMaterialOverride ApplyRunways(float2 position, float value)
@@ -168,8 +183,10 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
     // Post processing
     sample /= amplitude_sum;
     
-    sample = pow(abs(sample), mountain_mask * 4 + 2);
+    // sample = pow(abs(sample), mountain_mask * 4 + 2);
     sample -= FalloffMap(position);
+    
+    // return sample;
     
     return ApplyRunways(position, sample);
 }
@@ -177,10 +194,10 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
 
 float3 GetTerrainNormal(float2 position, float delta)
 {
-    float right = GetTerrainHeight(position + float2(1, 0) * delta).height * 1500;
-    float left = GetTerrainHeight(position + float2(-1, 0) * delta).height * 1500;
-    float front = GetTerrainHeight(position + float2(0, 1) * delta).height * 1500;
-    float back = GetTerrainHeight(position + float2(0, -1) * delta).height * 1500;
+    float right = GetTerrainHeight(position + float2(1, 0) * delta).height * TerrainHeight;
+    float left = GetTerrainHeight(position + float2(-1, 0) * delta).height * TerrainHeight;
+    float front = GetTerrainHeight(position + float2(0, 1) * delta).height * TerrainHeight;
+    float back = GetTerrainHeight(position + float2(0, -1) * delta).height * TerrainHeight;
     
     float3 normal  = float3(
         (left - right) / (2.0 * delta),
@@ -256,17 +273,36 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
 {
     float2 normalizedPosition = float2(id.x / (float)PreviewSize, id.z / (float)PreviewSize) - float2(0.5f, 0.5f);
     float2 flatWorldPosition = normalizedPosition * TerrainSize;
-
-    float value = GetTerrainHeight(flatWorldPosition).height;
-    float step = 25;
-    float3 lowest = float3(0.27f, 0.2f, 0.15f);
-    float3 max = float3(1, 0.9f, 0.75f);
-    float3 color = lerp(lowest, max, round(value * step) / step);
     
-    if (value <= 0)
-        HeightmapPreview[id.xz] = float4(0,0,0,0);
-    else
-        HeightmapPreview[id.xz] = float4(color, 1);
+    float c = FalloffMap(flatWorldPosition);
+    HeightmapPreview[id.xz] = float4(c,c,c, 1);
+    return;
+    
+    float value = 1 - GetTerrainHeight(flatWorldPosition).height;
+    HeightmapPreview[id.xz] = float4(value, value,value, 1);
+    
+    // float step = 25;
+    // float3 lowest = float3(0,0,0);
+    // float3 max = float3(1, 1, 1);
+    // float3 color = lerp(lowest, max, round(value * step) / step);
+    //
+    // if (value <= 0)
+    //     HeightmapPreview[id.xz] = float4(0,0,0,0);
+    // else
+    //     HeightmapPreview[id.xz] = float4(value, 1);
+    
+    
+    // Stylized
+    // float value = GetTerrainHeight(flatWorldPosition).height;
+    // float step = 25;
+    // float3 lowest = float3(0.27f, 0.2f, 0.15f);
+    // float3 max = float3(1, 0.9f, 0.75f);
+    // float3 color = lerp(lowest, max, round(value * step) / step);
+    //
+    // if (value <= 0)
+    //     HeightmapPreview[id.xz] = float4(0,0,0,0);
+    // else
+    //     HeightmapPreview[id.xz] = float4(color, 1);
 }
 
 // === Sample points ===
