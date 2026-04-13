@@ -98,8 +98,11 @@ float FalloffMap(float2 position)
     float shoreDepth = 0.25;
     float shoreDistance =  (1 - shoreDepth + NormalizedNoise(direction * 2)  * shoreDepth) * TerrainSize / 2;
     float progress = 1 - (shoreDistance - distance) / 5000;
+    
     float falloff = Sigmoid(progress, 0, 1);
-    return falloff;
+    
+    // Fixes weird sigmoid behavior at the center of the map
+    return max(distance / TerrainSize / 2, falloff);
 }
 
 TerrainMaterialOverride ApplyRunways(float2 position, float value)
@@ -183,7 +186,7 @@ TerrainMaterialOverride GetTerrainHeight(float2 position)
     // Post processing
     sample /= amplitude_sum;
     
-    // sample = pow(abs(sample), mountain_mask * 4 + 2);
+    sample = pow(abs(sample), mountain_mask * 4 + 2);
     sample -= FalloffMap(position);
     
     // return sample;
@@ -274,12 +277,12 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
     float2 normalizedPosition = float2(id.x / (float)PreviewSize, id.z / (float)PreviewSize) - float2(0.5f, 0.5f);
     float2 flatWorldPosition = normalizedPosition * TerrainSize;
     
-    float c = FalloffMap(flatWorldPosition);
-    HeightmapPreview[id.xz] = float4(c,c,c, 1);
-    return;
-    
-    float value = 1 - GetTerrainHeight(flatWorldPosition).height;
-    HeightmapPreview[id.xz] = float4(value, value,value, 1);
+    // float c = FalloffMap(flatWorldPosition);
+    // HeightmapPreview[id.xz] = float4(c,c,c, 1);
+    // return;
+    //
+    // float value = 1 - GetTerrainHeight(flatWorldPosition).height;
+    // HeightmapPreview[id.xz] = float4(value, value,value, 1);
     
     // float step = 25;
     // float3 lowest = float3(0,0,0);
@@ -293,16 +296,16 @@ void PreviewHeightmap(uint3 id : SV_DispatchThreadID)
     
     
     // Stylized
-    // float value = GetTerrainHeight(flatWorldPosition).height;
-    // float step = 25;
-    // float3 lowest = float3(0.27f, 0.2f, 0.15f);
-    // float3 max = float3(1, 0.9f, 0.75f);
-    // float3 color = lerp(lowest, max, round(value * step) / step);
-    //
-    // if (value <= 0)
-    //     HeightmapPreview[id.xz] = float4(0,0,0,0);
-    // else
-    //     HeightmapPreview[id.xz] = float4(color, 1);
+    float value = GetTerrainHeight(flatWorldPosition).height;
+    float step = 25;
+    float3 lowest = float3(0.27f, 0.2f, 0.15f);
+    float3 max = float3(1, 0.9f, 0.75f);
+    float3 color = lerp(lowest, max, round(value * step) / step);
+    
+    if (value <= 0)
+        HeightmapPreview[id.xz] = float4(0,0,0,0);
+    else
+        HeightmapPreview[id.xz] = float4(color, 1);
 }
 
 // === Sample points ===
