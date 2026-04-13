@@ -93,16 +93,20 @@ float FalloffMap(float2 position)
     
     // return 0;
     
+    
+    
     float distance = length(position);
     float2 direction = normalize(position);
+    if (distance < 5)
+        direction = float2(0, 1);
+        
     float shoreDepth = 0.25;
     float shoreDistance =  (1 - shoreDepth + NormalizedNoise(direction * 2)  * shoreDepth) * TerrainSize / 2;
+    
     float progress = 1 - (shoreDistance - distance) / 5000;
-    
     float falloff = Sigmoid(progress, 0, 1);
-    
-    // Fixes weird sigmoid behavior at the center of the map
-    return max(distance / TerrainSize / 2, falloff);
+        
+    return lerp(clamp((distance - 1000) / 100,0,1), 0, 1 - falloff);
 }
 
 TerrainMaterialOverride ApplyRunways(float2 position, float value)
