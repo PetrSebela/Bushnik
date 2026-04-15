@@ -285,6 +285,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2413145693951656260, guid: e7f93714f9f5e7882a766f285662ece7, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2740927600321291657, guid: e7f93714f9f5e7882a766f285662ece7, type: 3}
       propertyPath: period
       value: 2
@@ -3179,7 +3183,7 @@ PrefabInstance:
     - target: {fileID: 8644977796265030366, guid: f95ddbfcaded0aad5ba473d426157985, type: 3}
       propertyPath: precedingPage
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1332352666}
     - target: {fileID: 8644977796265030366, guid: f95ddbfcaded0aad5ba473d426157985, type: 3}
       propertyPath: onShow.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 

@@ -1,28 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Terrain;
 using Terrain.Foliage;
-using TMPro;
-using Unity.Profiling.Memory;
 using UnityEngine;
 using UnityEngine.Profiling;
-using Debug = UnityEngine.Debug;
 
 namespace Utility
 {
     public class PerformanceLogger : MonoBehaviour
     {
-        #if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if !UNITY_EDITOR
         private StreamWriter _logFile;
         private readonly List<float> _frameTimes = new();
         private double _loadingStartTime;
         
         void Awake()
         {
-            var logFilePath = Path.Combine(Application.dataPath, "performance.log");
+            var logFilePath = Path.Combine(Application.dataPath, $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.perflog");
             _logFile = new StreamWriter(logFilePath);
             _logFile.WriteLine($"CPU: {SystemInfo.processorModel} ( {SystemInfo.processorCount} cores @ {SystemInfo.processorFrequency} MHz )");
             _logFile.WriteLine($"GPU: {SystemInfo.graphicsDeviceName} ( {SystemInfo.graphicsMemorySize} MB )");
@@ -68,6 +64,6 @@ namespace Utility
             _logFile.WriteLine($"{avg},{min},{max},{memory}");
             _frameTimes.Clear();
         }
-        #endif
+#endif
     }
 }

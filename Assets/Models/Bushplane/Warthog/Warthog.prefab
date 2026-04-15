@@ -1290,7 +1290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1234617477029881020}
-  MaxForce: 150000
+  MaxForce: 185000
   idle: 500
   redline: 2250
 --- !u!1 &4056838982061246307
@@ -1995,7 +1995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1234617477029881020}
-  MaxForce: 150000
+  MaxForce: 185000
   idle: 500
   redline: 2250
 --- !u!1 &5701510681838232408

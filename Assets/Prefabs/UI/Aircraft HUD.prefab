@@ -1085,8 +1085,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 0}
-  _aircraftBody: {fileID: 0}
-  _aircraft: {fileID: 0}
   _compass: {fileID: 5331395833010784224}
   _speedDial: {fileID: 7787937751198640065}
   _altimeter: {fileID: 679507007046458783}
@@ -3640,7 +3638,6 @@ MonoBehaviour:
   throttleBar: {fileID: 5489597452074229492}
   brakeBar: {fileID: 8194962558602878430}
   readoutText: {fileID: 1771839254605274567}
-  controller: {fileID: 0}
 --- !u!1 &9018223170221116097
 GameObject:
   m_ObjectHideFlags: 0
