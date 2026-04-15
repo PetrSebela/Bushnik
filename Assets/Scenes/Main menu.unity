@@ -1617,18 +1617,18 @@ PrefabInstance:
     - target: {fileID: 2810715424391151083, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 989797360}
     - target: {fileID: 2810715424391151083, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2810715424391151083, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: QuitGame
+      value: Quit
       objectReference: {fileID: 0}
     - target: {fileID: 2810715424391151083, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Game.MainMenuManager, Assembly-CSharp
+      value: UI.MainMenu, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2810715424391151083, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1791,6 +1791,10 @@ PrefabInstance:
     - target: {fileID: 187644461505303583, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_text
       value: Start game
+      objectReference: {fileID: 0}
+    - target: {fileID: 187644461505303583, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1502093106904277346, guid: b6be685b63132b5c79cea5c1f35cee54, type: 3}
       propertyPath: m_Name
