@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Terrain;
 using Terrain.Foliage;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Utility
 {
     public class PerformanceLogger : MonoBehaviour
     {
-#if !UNITY_EDITOR
+#if UNITY_EDITOR
         private StreamWriter _logFile;
         private readonly List<float> _frameTimes = new();
         private double _loadingStartTime;
@@ -20,6 +21,8 @@ namespace Utility
         {
             var logFilePath = Path.Combine(Application.dataPath, $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.perflog");
             _logFile = new StreamWriter(logFilePath);
+            
+            _logFile.WriteLine($"OS: {RuntimeInformation.OSDescription}");
             _logFile.WriteLine($"CPU: {SystemInfo.processorModel} ( {SystemInfo.processorCount} cores @ {SystemInfo.processorFrequency} MHz )");
             _logFile.WriteLine($"GPU: {SystemInfo.graphicsDeviceName} ( {SystemInfo.graphicsMemorySize} MB )");
             _logFile.WriteLine($"Memory: {SystemInfo.systemMemorySize} MB");
